@@ -64,6 +64,7 @@ cvar_t *r_allowSoftwareGL; // Don't abort out if a hardware visual can't be obta
 cvar_t *r_allowResize; // make window resizable
 cvar_t *r_centerWindow;
 cvar_t *r_sdlDriver;
+cvar_t *r_allowHighDPI;
 
 int qglMajorVersion, qglMinorVersion;
 int qglesMajorVersion, qglesMinorVersion;
@@ -555,7 +556,10 @@ static int GLimp_SetMode(int mode, qboolean fullscreen, qboolean noborder, qbool
 
 	if( fullscreen )
 	{
-		flags |= SDL_WINDOW_FULLSCREEN;
+		if( noborder )
+			flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
+		else
+			flags |= SDL_WINDOW_FULLSCREEN;
 		glConfig.isFullscreen = qtrue;
 	}
 	else
@@ -565,6 +569,9 @@ static int GLimp_SetMode(int mode, qboolean fullscreen, qboolean noborder, qbool
 
 		glConfig.isFullscreen = qfalse;
 	}
+
+	if( r_allowHighDPI && r_allowHighDPI->integer )
+		flags |= SDL_WINDOW_ALLOW_HIGHDPI;
 
 	colorBits = r_colorbits->value;
 	if ((!colorBits) || (colorBits >= 32))
@@ -821,6 +828,20 @@ static int GLimp_SetMode(int mode, qboolean fullscreen, qboolean noborder, qbool
 	}
 
 	SDL_FreeSurface( icon );
+
+	// Query actual drawable size for HiDPI displays
+	if( SDL_window && r_allowHighDPI && r_allowHighDPI->integer )
+	{
+		int drawableW, drawableH;
+		SDL_GL_GetDrawableSize( SDL_window, &drawableW, &drawableH );
+		if( drawableW != glConfig.vidWidth || drawableH != glConfig.vidHeight )
+		{
+			ri.Printf( PRINT_ALL, "HiDPI: drawable %dx%d, window %dx%d\n",
+					drawableW, drawableH, glConfig.vidWidth, glConfig.vidHeight );
+			glConfig.vidWidth = drawableW;
+			glConfig.vidHeight = drawableH;
+		}
+	}
 
 	if( !SDL_window )
 	{
@@ -1113,6 +1134,7 @@ void GLimp_Init( qboolean fixedFunction )
 	r_sdlDriver = ri.Cvar_Get( "r_sdlDriver", "", CVAR_ROM );
 	r_allowResize = ri.Cvar_Get( "r_allowResize", "0", CVAR_ARCHIVE | CVAR_LATCH );
 	r_centerWindow = ri.Cvar_Get( "r_centerWindow", "0", CVAR_ARCHIVE | CVAR_LATCH );
+	r_allowHighDPI = ri.Cvar_Get( "r_allowHighDPI", "1", CVAR_ARCHIVE | CVAR_LATCH );
 
 	if( ri.Cvar_VariableIntegerValue( "com_abnormalExit" ) )
 	{
@@ -1227,7 +1249,7 @@ void GLimp_EndFrame( void )
 		qboolean    needToToggle;
 
 		// Find out the current state
-		fullscreen = !!( SDL_GetWindowFlags( SDL_window ) & SDL_WINDOW_FULLSCREEN );
+		fullscreen = !!( SDL_GetWindowFlags( SDL_window ) & ( SDL_WINDOW_FULLSCREEN | SDL_WINDOW_FULLSCREEN_DESKTOP ) );
 
 		if( r_fullscreen->integer && ri.Cvar_VariableIntegerValue( "in_nograb" ) )
 		{
