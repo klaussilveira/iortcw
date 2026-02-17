@@ -891,7 +891,7 @@ void SV_Init( void ) {
 	sv_rconPassword = Cvar_Get( "rconPassword", "", CVAR_TEMP );
 	sv_privatePassword = Cvar_Get( "sv_privatePassword", "", CVAR_TEMP );
 #ifndef UPDATE_SERVER
-	sv_fps = Cvar_Get( "sv_fps", "20", CVAR_TEMP );
+	sv_fps = Cvar_Get( "sv_fps", "40", CVAR_TEMP );
 #else
 	sv_fps = Cvar_Get( "sv_fps", "60", CVAR_TEMP ); // this allows faster downloads
 #endif
