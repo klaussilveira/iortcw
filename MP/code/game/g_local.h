@@ -516,7 +516,7 @@ typedef struct {
 	int servertime;
 } clientMarker_t;
 
-#define MAX_CLIENT_MARKERS 10
+#define MAX_CLIENT_MARKERS 20
 
 #define LT_SPECIAL_PICKUP_MOD   3       // JPW NERVE # of times (minus one for modulo) LT must drop ammo before scoring a point
 #define MEDIC_SPECIAL_PICKUP_MOD    4   // JPW NERVE same thing for medic

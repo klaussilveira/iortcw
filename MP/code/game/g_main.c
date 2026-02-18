@@ -294,7 +294,7 @@ cvarTable_t gameCvarTable[] = {
 	// configured by the server admin, points to the web pages for the server
 	{&url, "URL", "", CVAR_SERVERINFO | CVAR_ARCHIVE, 0, qfalse},
 
-	{&g_antilag, "g_antilag", "0", CVAR_SERVERINFO | CVAR_ARCHIVE, 0, qfalse},
+	{&g_antilag, "g_antilag", "1", CVAR_SERVERINFO | CVAR_ARCHIVE, 0, qfalse},
 
 	{&g_dbgRevive, "g_dbgRevive", "0", 0, 0, qfalse},
 
