@@ -4538,6 +4538,73 @@ void CG_FireWeapon( centity_t *cent ) {
 	// RF, kick angles
 	if ( ent->number == cg.snap->ps.clientNum ) {
 		CG_WeaponFireRecoil( ent->weapon );
+
+		// client-side predicted impacts
+		// trace from the predicted viewpoint and show the hit effect
+		// immediately instead of waiting for the server event
+		switch ( ent->weapon ) {
+		case WP_KNIFE:
+		case WP_KNIFE2:
+		{
+			trace_t tr;
+			vec3_t muzzle, forward, end;
+
+			AngleVectors( cg.predictedPlayerState.viewangles, forward, NULL, NULL );
+			VectorCopy( cg.predictedPlayerState.origin, muzzle );
+			muzzle[2] += cg.predictedPlayerState.viewheight;
+			VectorMA( muzzle, 48, forward, end );
+			CG_Trace( &tr, muzzle, NULL, NULL, end, cg.predictedPlayerState.clientNum, MASK_SHOT );
+
+			if ( tr.fraction < 1.0f ) {
+				// If we hit a player, bleed instantly
+				if ( tr.entityNum < MAX_CLIENTS ) {
+					CG_Bleed( tr.endpos, tr.entityNum );
+				} else {
+					CG_MissileHitWall( ent->weapon, 0, tr.endpos, tr.plane.normal, 0 );
+				}
+			}
+
+			break;
+		}
+		case WP_LUGER:
+		case WP_SILENCER:
+		case WP_COLT:
+		case WP_AKIMBO:
+		case WP_MP40:
+		case WP_THOMPSON:
+		case WP_STEN:
+		case WP_MAUSER:
+		case WP_GARAND:
+		case WP_SNIPERRIFLE:
+		case WP_SNOOPERSCOPE:
+		case WP_FG42:
+		case WP_FG42SCOPE:
+		case WP_BAR:
+		case WP_BAR2:
+		case WP_VENOM:
+		{
+			trace_t tr;
+			vec3_t muzzle, forward, end;
+
+			AngleVectors( cg.predictedPlayerState.viewangles, forward, NULL, NULL );
+			VectorCopy( cg.predictedPlayerState.origin, muzzle );
+			muzzle[2] += cg.predictedPlayerState.viewheight;
+			VectorMA( muzzle, 8192, forward, end );
+			CG_Trace( &tr, muzzle, NULL, NULL, end, cg.predictedPlayerState.clientNum, MASK_SHOT );
+
+			if ( tr.fraction < 1.0f ) {
+				// If we hit a player, bleed instantly
+				if ( tr.entityNum < MAX_CLIENTS ) {
+					CG_Bleed( tr.endpos, tr.entityNum );
+				} else {
+					CG_MissileHitWall( ent->weapon, 1, tr.endpos, tr.plane.normal, tr.surfaceFlags );
+				}
+			}
+			break;
+		}
+		default:
+			break;
+		}
 	}
 
 	// lightning gun only does this this on initial press

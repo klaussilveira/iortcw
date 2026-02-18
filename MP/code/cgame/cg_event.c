@@ -2094,6 +2094,10 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 
 	case EV_BULLET_HIT_WALL:
 		DEBUGNAME( "EV_BULLET_HIT_WALL" );
+		// skip for local player: predicted in CG_FireWeapon
+		if ( es->otherEntityNum == cg.snap->ps.clientNum ) {
+			break;
+		}
 		ByteToDir( es->eventParm, dir );
 		CG_Bullet( es->pos.trBase, es->otherEntityNum, dir, qfalse, ENTITYNUM_WORLD, qfalse, es->otherEntityNum2, 0 );
 		break;
