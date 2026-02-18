@@ -1902,7 +1902,7 @@ qboolean VenomPellet( vec3_t start, vec3_t end, gentity_t *ent ) {
 	int damage;
 	gentity_t       *traceEnt;
 
-	trap_Trace( &tr, start, NULL, NULL, end, ent->s.number, MASK_SHOT );
+	G_HistoricalTrace( ent, &tr, start, NULL, NULL, end, ent->s.number, MASK_SHOT );
 	traceEnt = &g_entities[ tr.entityNum ];
 
 	// send bullet impact
