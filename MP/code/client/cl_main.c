@@ -4122,7 +4122,7 @@ void CL_Init( void ) {
 
 	// userinfo
 	Cvar_Get( "name", "WolfPlayer", CVAR_USERINFO | CVAR_ARCHIVE );
-	cl_rate = Cvar_Get( "rate", "25000", CVAR_USERINFO | CVAR_ARCHIVE );     // NERVE - SMF - changed from 3000
+	cl_rate = Cvar_Get( "rate", "90000", CVAR_USERINFO | CVAR_ARCHIVE );
 	Cvar_Get( "snaps", "40", CVAR_USERINFO | CVAR_ARCHIVE );
 	Cvar_Get( "model", "multi", CVAR_USERINFO | CVAR_ARCHIVE );
 	Cvar_Get( "head", "default", CVAR_USERINFO | CVAR_ARCHIVE );
