@@ -1423,7 +1423,7 @@ static void CG_Efx( centity_t *cent ) {
 
 		for ( i = 0; i < MAX_TESLA_BOLTS; i++ ) {
 
-			if ( cent->boltCrawlDirs[0] ) {
+			if ( VectorLengthSquared( cent->boltCrawlDirs[0] ) ) {
 				VectorMA( cent->boltLocs[i], cent->boltTimes[i] - cg.time, cent->boltCrawlDirs[i], perpvec );
 			} else {
 				VectorCopy( cent->boltLocs[i], perpvec );

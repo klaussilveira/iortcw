@@ -71,6 +71,15 @@ endif()
 
 set(SHLIBNAME "${FILE_ARCH}.${SHLIBEXT}")
 
+# Game module naming: Windows uses underscores, Unix uses dots
+if(WIN32)
+  set(MP_GAMEMOD_SHLIBNAME "_mp_${SHLIBNAME}")
+  set(SP_GAMEMOD_SHLIBNAME "_sp_${SHLIBNAME}")
+else()
+  set(MP_GAMEMOD_SHLIBNAME ".mp.${SHLIBNAME}")
+  set(SP_GAMEMOD_SHLIBNAME ".sp.${SHLIBNAME}")
+endif()
+
 message(STATUS "Platform: ${PLATFORM}")
 message(STATUS "Architecture: ${ARCH}")
 message(STATUS "Shared library suffix: ${SHLIBNAME}")
@@ -102,8 +111,11 @@ elseif(WIN32)
   set(SHLIBCFLAGS "")
 endif()
 
-# Internal libraries (built once, shared by SP and MP)
-add_subdirectory(libs)
+# Static MinGW runtime for distributable Windows builds
+if(WIN32 AND MINGW)
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static")
+  set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -static")
+endif()
 
 # Find external libraries
 
@@ -168,6 +180,16 @@ if(NEED_OPUS AND NOT USE_INTERNAL_OPUS)
   if(NOT OPUS_FOUND)
     message(STATUS "System opus not found, using internal")
     set(USE_INTERNAL_OPUS ON CACHE BOOL "" FORCE)
+  else()
+    # opus.pc reports -I.../include/opus but code uses <opus/opus.h>
+    # Add parent directories so the subdirectory-style includes work
+    set(_opus_extra_dirs)
+    foreach(dir ${OPUS_INCLUDE_DIRS})
+      get_filename_component(parent "${dir}" DIRECTORY)
+      list(APPEND _opus_extra_dirs "${parent}")
+    endforeach()
+    list(APPEND OPUS_INCLUDE_DIRS ${_opus_extra_dirs})
+    list(REMOVE_DUPLICATES OPUS_INCLUDE_DIRS)
   endif()
 endif()
 
@@ -190,6 +212,21 @@ if(NEED_OGG AND NOT USE_INTERNAL_OGG)
     set(USE_INTERNAL_OGG ON CACHE BOOL "" FORCE)
   endif()
 endif()
+
+# pkg-config library dirs (needed on macOS where Homebrew paths are non-default)
+if(OPUS_LIBRARY_DIRS)
+  link_directories(${OPUS_LIBRARY_DIRS})
+endif()
+if(VORBIS_LIBRARY_DIRS)
+  link_directories(${VORBIS_LIBRARY_DIRS})
+endif()
+if(OGG_LIBRARY_DIRS)
+  link_directories(${OGG_LIBRARY_DIRS})
+endif()
+
+# Internal libraries (built once, shared by SP and MP)
+# NOTE: must come after detection above so USE_INTERNAL_* flags are final
+add_subdirectory(libs)
 
 # Helper functions (used by both MP/ and SP/ CMakeLists.txt)
 

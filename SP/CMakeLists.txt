@@ -541,6 +541,7 @@ if(SP_BUILD_CLIENT AND USE_RENDERER_DLOPEN)
     PREFIX ""
     SUFFIX ""
     LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}"
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}"
   )
   target_include_directories(renderer_sp_opengl1 PRIVATE
     code/renderer code/sdl code/qcommon code/client code/server code/sys
@@ -575,6 +576,7 @@ if(SP_BUILD_CLIENT AND SP_BUILD_RENDERER_REND2 AND USE_RENDERER_DLOPEN)
     PREFIX ""
     SUFFIX ""
     LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}"
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}"
   )
   target_include_directories(renderer_sp_rend2 PRIVATE
     code/rend2 code/renderer code/sdl code/qcommon code/client code/server code/sys
@@ -615,7 +617,7 @@ if(SP_BUILD_CLIENT)
   target_include_directories(iowolfsp PRIVATE
     code/client code/server code/renderer code/rend2 code/qcommon code/sdl
     code/sys code/botlib code/splines
-    ${PROJECT_SOURCE_DIR}/libs/zlib-1.2.11 ${PROJECT_SOURCE_DIR}/libs/AL
+    ${PROJECT_SOURCE_DIR}/libs/zlib-1.2.11 ${PROJECT_SOURCE_DIR}/libs
     ${SDL2_INCLUDE_DIR}
   )
   target_compile_options(iowolfsp PRIVATE ${SP_BASE_CFLAGS})
@@ -684,10 +686,11 @@ if(SP_BUILD_GAME_SO)
   # cgame
   add_library(cgame_sp SHARED ${SP_CGAME_SRC})
   set_target_properties(cgame_sp PROPERTIES
-    OUTPUT_NAME "cgame.sp.${SHLIBNAME}"
+    OUTPUT_NAME "cgame${SP_GAMEMOD_SHLIBNAME}"
     PREFIX ""
     SUFFIX ""
     LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/main"
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/main"
   )
   target_include_directories(cgame_sp PRIVATE code/cgame code/game code/ui code/qcommon)
   target_compile_options(cgame_sp PRIVATE ${SP_BASE_CFLAGS} ${SHLIBCFLAGS})
@@ -699,10 +702,11 @@ if(SP_BUILD_GAME_SO)
   # qagame
   add_library(qagame_sp SHARED ${SP_GAME_SRC})
   set_target_properties(qagame_sp PROPERTIES
-    OUTPUT_NAME "qagame.sp.${SHLIBNAME}"
+    OUTPUT_NAME "qagame${SP_GAMEMOD_SHLIBNAME}"
     PREFIX ""
     SUFFIX ""
     LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/main"
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/main"
   )
   target_include_directories(qagame_sp PRIVATE code/game code/qcommon code/botlib)
   target_compile_options(qagame_sp PRIVATE ${SP_BASE_CFLAGS} ${SHLIBCFLAGS})
@@ -714,10 +718,11 @@ if(SP_BUILD_GAME_SO)
   # ui
   add_library(ui_sp SHARED ${SP_UI_SRC})
   set_target_properties(ui_sp PROPERTIES
-    OUTPUT_NAME "ui.sp.${SHLIBNAME}"
+    OUTPUT_NAME "ui${SP_GAMEMOD_SHLIBNAME}"
     PREFIX ""
     SUFFIX ""
     LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/main"
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/main"
   )
   target_include_directories(ui_sp PRIVATE code/ui code/game code/qcommon)
   target_compile_options(ui_sp PRIVATE ${SP_BASE_CFLAGS} ${SHLIBCFLAGS})

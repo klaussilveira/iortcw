@@ -1,0 +1,45 @@
+name: Linux
+on: [push, pull_request]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Linux x86_64
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            build-essential cmake pkg-config \
+            libsdl2-dev libgl1-mesa-dev \
+            libcurl4-openssl-dev \
+            libopus-dev libopusfile-dev \
+            libogg-dev libvorbis-dev
+
+      - name: Configure
+        run: >
+          cmake -S . -B build
+          -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build
+        run: cmake --build build --parallel $(nproc)
+
+      - name: Prepare artifact
+        run: |
+          mkdir -p artifact/main
+          cp build/iowolfsp.* build/iowolfmp.* build/iowolfded.* artifact/
+          cp build/renderer_*.so artifact/
+          cp build/main/*.so artifact/main/
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: iortcw-linux-x86_64
+          path: artifact/

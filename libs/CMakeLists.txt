@@ -160,12 +160,27 @@ if(USE_INTERNAL_VORBIS)
   )
   if(USE_INTERNAL_OGG)
     target_link_libraries(internal_vorbis PRIVATE internal_ogg)
+  else()
+    target_include_directories(internal_vorbis PRIVATE ${OGG_INCLUDE_DIRS})
+    target_link_libraries(internal_vorbis PRIVATE ${OGG_LIBRARIES})
   endif()
   set_target_properties(internal_vorbis PROPERTIES POSITION_INDEPENDENT_CODE ON)
 endif()
 
 # Opus
 if(USE_INTERNAL_OPUS)
+  # Create opus/ subdirectory structure so <opus/opus.h> includes work
+  set(_opus_inc_dir ${CMAKE_CURRENT_BINARY_DIR}/include)
+  file(MAKE_DIRECTORY ${_opus_inc_dir}/opus)
+  file(GLOB _opus_hdrs ${CMAKE_CURRENT_SOURCE_DIR}/opus-1.2.1/include/*.h)
+  foreach(hdr ${_opus_hdrs})
+    get_filename_component(name ${hdr} NAME)
+    configure_file(${hdr} ${_opus_inc_dir}/opus/${name} COPYONLY)
+  endforeach()
+  configure_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/opusfile-0.9/include/opusfile.h
+    ${_opus_inc_dir}/opus/opusfile.h COPYONLY)
+
   add_library(internal_opus STATIC
     # src/
     opus-1.2.1/src/opus.c
@@ -305,11 +320,9 @@ if(USE_INTERNAL_OPUS)
     opus-1.2.1/silk/float/schur_FLP.c
     opus-1.2.1/silk/float/sort_FLP.c
   )
-  target_include_directories(internal_opus PUBLIC
-    opus-1.2.1/include
-    opus-1.2.1/celt
-    opus-1.2.1/silk
-    opus-1.2.1/silk/float
+  target_include_directories(internal_opus
+    PUBLIC ${_opus_inc_dir} ${_opus_inc_dir}/opus
+    PRIVATE opus-1.2.1/include opus-1.2.1/celt opus-1.2.1/silk opus-1.2.1/silk/float
   )
   target_compile_definitions(internal_opus PRIVATE
     OPUS_BUILD
@@ -330,13 +343,19 @@ if(USE_INTERNAL_OPUS)
     opusfile-0.9/src/stream.c
     opusfile-0.9/src/http.c
   )
-  target_include_directories(internal_opusfile PUBLIC opusfile-0.9/include)
+  target_include_directories(internal_opusfile PRIVATE
+    opusfile-0.9/include
+    opus-1.2.1/include    # for <opus_multistream.h> included by opusfile.h
+  )
   if(WIN32)
     target_sources(internal_opusfile PRIVATE opusfile-0.9/src/wincerts.c)
   endif()
   target_link_libraries(internal_opusfile PRIVATE internal_opus)
   if(USE_INTERNAL_OGG)
     target_link_libraries(internal_opusfile PRIVATE internal_ogg)
+  else()
+    target_include_directories(internal_opusfile PRIVATE ${OGG_INCLUDE_DIRS})
+    target_link_libraries(internal_opusfile PRIVATE ${OGG_LIBRARIES})
   endif()
   set_target_properties(internal_opusfile PROPERTIES POSITION_INDEPENDENT_CODE ON)
 endif()
