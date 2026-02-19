@@ -3612,7 +3612,7 @@ static void FS_Startup( const char *gameName )
 
 	fs_steampath = Cvar_Get ("fs_steampath", Sys_SteamPath(), CVAR_INIT|CVAR_PROTECTED );
 	if (fs_steampath->string[0]) {
-		FS_AddGameDirectory( fs_steampath->string, gameName );
+		FS_AddGameDirectory( fs_steampath->string, "Main" );
 	}
 #endif
 

@@ -68,7 +68,7 @@ If you have questions concerning this license or the applicable additional terms
   #define HOMEPATH_NAME_UNIX		".wolf"
 #endif
   #define HOMEPATH_NAME_WIN		"RTCW"
-  #define STEAMPATH_NAME		"Return To Castle Wolfenstein"
+  #define STEAMPATH_NAME		"Return to Castle Wolfenstein"
   #define STEAMPATH_APPID		"9010"
   #define GOGPATH_ID			"1441704976"
   #define HOMEPATH_NAME_MACOSX		HOMEPATH_NAME_WIN

@@ -1,114 +1,88 @@
- ![iortcw logo](https://raw.githubusercontent.com/iortcw/iortcw/master/MP/misc/wolf128.png)                       
-                               
+## neortcw
+[![linux](https://github.com/klaussilveira/neortcw/actions/workflows/linux.yml/badge.svg?branch=master)](https://github.com/klaussilveira/neortcw/actions/workflows/linux.yml)
+[![macos](https://github.com/klaussilveira/neortcw/actions/workflows/macos.yml/badge.svg?branch=master)](https://github.com/klaussilveira/neortcw/actions/workflows/macos.yml)
+[![windows](https://github.com/klaussilveira/neortcw/actions/workflows/windows.yml/badge.svg?branch=master)](https://github.com/klaussilveira/neortcw/actions/workflows/windows.yml)
+[![GitHub Release](https://img.shields.io/github/release/klaussilveira/neortcw.svg)](https://github.com/klaussilveira/neortcw/releases/latest)
+[![License](https://img.shields.io/github/license/klaussilveira/neortcw)](https://github.com/klaussilveira/neortcw/blob/master/LICENSE)
 
-## iortcw
+**neortcw** is a Return to Castle Wolfenstein source port, based on iortcw and ioq3. It aims to provide a smoother experience, both for players and developers.
 
-The intent of this project is to provide a baseline RTCW which may be used
-for further development and fun. 
-Some of the major features currently implemented are:
+### Recent Changes
 
-  * SDL backend
-  * OpenAL sound API support (multiple speaker support and better sound
-    quality)
-  * Full x86_64 support
-  * VoIP support, both in-game and external support through Mumble.
-  * MinGW compilation support on Windows and cross compilation support on Linux
-  * AVI video capture of demos
-  * Much improved console autocompletion
-  * Persistent console history
-  * Colorized terminal output
-  * Optional Ogg Vorbis support
-  * Much improved QVM tools
-  * Support for various esoteric operating systems
-  * cl_guid support
-  * HTTP/FTP download redirection (using cURL)
-  * Multiuser support on Windows systems (user specific game data
-    is stored in "My Documents\RTCW")
-  * PNG support
-  * Many, many bug fixes
+This fork includes the following changes on top of upstream iortcw:
 
-The map editor and associated compiling tools are not included. We suggest you use a modern copy from http://icculus.org/gtkradiant/.
-
-The original id software readme that accompanied the RTCW source release is named README.txt and is contained within the source tree of both MP and SP games.
+  * **Unified build**: Replaced the legacy Makefiles with a unified CMake build that produces both SP and MP binaries
+  * **Steam**: Automatically detects game files from Steam on all platforms
+  * **Higher tick rate**: Bumped server tick rate for smoother gameplay, with client snaps synced accordingly
+  * **Client-side prediction**: Locally predicts some gameplay events so the game feels more responsive
+  * **Antilag overhaul**: Moved away from OSP-style antilag to a Valve-style approach. Antilag is now enabled by default with more markers, and covers knife and minigun in addition to other hitscan weapons
+  * **Widescreen auto-detection**: Automatically detects and applies widescreen settings based on resolution
+  * **High quality out of the box**: Bumped default visual quality settings for a better experience
 
 ### Quick Start Guide
 
-  1. If you have not already done so, install Return to Castle Wolfenstein and remember the target installation directory.
-  2. Browse to the iortcw project release folder: https://github.com/iortcw/iortcw/releases. 
-  3. Download the latest release file for your operating system, as well as patch-data-141.zip.  As of this writing, the latest version of the iortcw release file is v1.51c.
-  4. Extract the latest release zip into a location where you would like to have your installation going forward (For example: c:\Games\iortcw\ in Windows or /home/joe/Games/iortcw/ in Linux).
-  5. Go to the location of your original existing installation, open the “Main” folder, and copy the following files over to your iortcw's  “Main” folder for the single player campaign: **pak0.pk3, sp_pak1.pk3, sp_pak2.pk3, and sp_pak3.pk3**. For multiplayer, copy the following files to your iortcw's “Main” folder: **mp_bin.pk3, mp_pak0.pk3, mp_pak1.pk3, mp_pak2.pk3, mp_pak3.pk3, mp_pak4.pk3, mp_pak5.pk3, mp_pakmaps0.pk3, mp_pakmaps1.pk3, mp_pakmaps2.pk3, mp_pakmaps3.pk3, mp_pakmaps4.pk3, mp_pakmaps5.pk3, and mp_pakmaps6.pk3**.  
-  6. Extract the contents of patch-data-141.zip (or a newer version in the meantime) into your iortcw folder and merge patch-data-141's content into your iortcw folder.  For German, Spanish, French or Italian language support in-game, also extract the contents of one of the respective "patch-data-SP-language" zip files into your iortcw's "Main" folder.
-  7. Go to your iortcw installation folder and start either the “iowolfsp*” file for single player or “iowolfmp*” for multiplayer.  If your system uses a 64-bit processor, run the single player or multiplayer file that ends with **x64**. 
+  1. Install Return to Castle Wolfenstein and note the installation directory.
+  2. Clone this repository and build from source (requires CMake >= 3.12 and SDL2):
+
+    $ git clone <repo-url> && cd iortcw
+    $ cmake -B build
+    $ cmake --build build
+
+  3. Copy the game data from your RTCW installation's “Main” folder into the `Main` folder next to the built binaries. For singleplayer: **pak0.pk3, sp_pak1.pk3, sp_pak2.pk3, sp_pak3.pk3**. For multiplayer: **mp_bin.pk3, mp_pak0.pk3, mp_pak1.pk3, mp_pak2.pk3, mp_pak3.pk3, mp_pak4.pk3, mp_pak5.pk3, mp_pakmaps0.pk3, mp_pakmaps1.pk3, mp_pakmaps2.pk3, mp_pakmaps3.pk3, mp_pakmaps4.pk3, mp_pakmaps5.pk3, mp_pakmaps6.pk3**.
+  4. Run `iowolfsp` for singleplayer or `iowolfmp` for multiplayer from the build output directory.
 
 ### Compilation and installation
 
-##### For *nix
-  1. Change to the directory containing this readme.
-  2. Run 'make'.
+The build system uses CMake (>= 3.12) and builds both singleplayer and multiplayer targets from the project root.
 
-##### For Windows,
-  1. Please refer to the HOWTO-Build.txt file contained within this repository.
+##### Prerequisites
 
-##### For Mac OS X, building a Universal Binary
-  1. Install MacOSX SDK packages from XCode.  For maximum compatibility, use XCode 3.2.6 on 10.6 Snow Leopard with MacOSX10.5sdk.
-  2. Change to the directory containing the game source you wish to build.
-  3. Run './make-macosx-ub.sh'
-  4. Copy the resulting iowolfmp.app or iowolfsp.app in /build/release-darwin-ub to your /Applications/iortcw folder.
+  * CMake 3.12 or later
+  * GCC, Clang, MSVC or MinGW
+  * SDL2
 
-##### Installation, for *nix
-  1. Set the COPYDIR variable in the shell to be where you installed RTCW
-     to. By default it will be /usr/local/games/wolf if you haven't set it.
-     This is the path as used by the original Linux RTCW installer and subsequent point releases.
-  2. Run 'make copyfiles'.
+Optional system libraries (bundled versions are used automatically if not found):
+zlib, libjpeg, FreeType, OpenAL, libogg, libvorbis, Opus.
 
-It is also possible to cross compile for Windows under *nix and Cygwin using MinGW. Your distribution may have mingw32 packages available. You will need to install 'mingw-w64'.
+##### Building on Linux / macOS
 
-Thereafter, cross compiling is simply a case running:
+    $ cmake -S . -B build
+    $ cmake --build build
 
-'PLATFORM=mingw32 ARCH=x86 make' in place of 'make'.
+Binaries will be placed under `build/MP/` and `build/SP/`.
 
-(ARCH may also be set to x86_64.)
+##### Building on Windows (MinGW or MSVC)
 
-The following variables may be set, either on the command line or in
-Makefile.local:
+    $ cmake -B build -G "Visual Studio 17"
+    $ cmake --build build --config Release
 
-  * CFLAGS              - use this for custom CFLAGS
-  * V                   - set to show cc command line when building
-  * DEFAULT_BASEDIR     - extra path to search for main and such
-  * BUILD_SERVER        - build the 'iowolfded' server binary
-  * BUILD_CLIENT        - build the 'iowolfmp' or 'iowolfsp' client binary
-  * BUILD_BASEGAME      - build the 'main' binaries
-  * BUILD_GAME_SO       - build the game shared libraries
-  * BUILD_GAME_QVM      - build the game qvms
-  * BUILD_STANDALONE    - build binaries suited for stand-alone games
-  * SERVERBIN           - rename 'iowolfded' server binary
-  * CLIENTBIN           - rename 'iowolfmp' or 'iowolfsp' client binary
-  * USE_RENDERER_DLOPEN - build and use the renderer in a library
-  * USE_YACC            - use yacc to update code/tools/lcc/lburg/gram.c
-  * BASEGAME            - rename 'main'
-  * BASEGAME_CFLAGS     - custom CFLAGS for basegame
-  * USE_OPENAL          - use OpenAL where available
-  * USE_OPENAL_DLOPEN   - link with OpenAL at runtime
-  * USE_CURL            - use libcurl for http/ftp download support
-  * USE_CURL_DLOPEN     - link with libcurl at runtime
-  * USE_CODEC_VORBIS    - enable Ogg Vorbis support
-  * USE_CODEC_OPUS      - enable Ogg Opus support
-  * USE_MUMBLE          - enable Mumble support
-  * USE_VOIP            - enable built-in VoIP support
-  * USE_INTERNAL_LIBS   - build internal libraries instead of dynamically linking against system libraries; this just sets the default for USE_INTERNAL_OPUS etc. and USE_LOCAL_HEADERS
-  * USE_FREETYPE        - enable FreeType support for rendering fonts
-  * USE_INTERNAL_ZLIB   - build and link against internal zlib
-  * USE_INTERNAL_JPEG   - build and link against internal JPEG library
-  * USE_INTERNAL_OGG    - build and link against internal ogg library
-  * USE_INTERNAL_OPUS   - build and link against internal opus/opusfile libraries
-  * USE_INTERNAL_VORBIS  - build and link against internal Vorbis library
-  * USE_LOCAL_HEADERS   - use headers contained within this source tree instead of system ones
-  * DEBUG_CFLAGS        - C compiler flags to use for building debug version
-  * COPYDIR             - the target installation directory
-  * TEMPDIR             - specify user defined directory for temp files
+##### CMake options
 
-The defaults for these variables differ depending on the target platform.
+The following options can be passed to `cmake` via `-D<OPTION>=ON|OFF`:
+
+  * `BUILD_MP`                - Build multiplayer targets (default: ON)
+  * `BUILD_SP`                - Build singleplayer targets (default: ON)
+  * `USE_RENDERER_DLOPEN`     - Load renderer as shared library (default: ON)
+  * `USE_OPENAL`              - Use OpenAL for sound (default: ON)
+  * `USE_OPENAL_DLOPEN`       - dlopen OpenAL at runtime (default: ON)
+  * `USE_CODEC_VORBIS`        - Enable Ogg Vorbis codec (default: ON)
+  * `USE_CODEC_OPUS`          - Enable Opus codec (default: ON)
+  * `USE_VOIP`                - Enable VoIP support (default: ON)
+  * `USE_MUMBLE`              - Enable Mumble link support (default: ON)
+  * `USE_FREETYPE`            - Enable FreeType font rendering (default: ON)
+  * `USE_BLOOM`               - Enable bloom rendering effect (default: ON)
+  * `USE_INTERNAL_LIBS`       - Use all bundled libraries (default: OFF)
+  * `USE_INTERNAL_ZLIB`       - Use bundled zlib (default: OFF)
+  * `USE_INTERNAL_JPEG`       - Use bundled libjpeg (default: OFF)
+  * `USE_INTERNAL_FREETYPE`   - Use bundled FreeType (default: OFF)
+  * `USE_INTERNAL_OGG`        - Use bundled libogg (default: OFF)
+  * `USE_INTERNAL_VORBIS`     - Use bundled libvorbis (default: OFF)
+  * `USE_INTERNAL_OPUS`       - Use bundled Opus (default: OFF)
+
+For example, to build only multiplayer with all bundled libraries:
+
+    $ cmake -S . -B build -DBUILD_SP=OFF -DUSE_INTERNAL_LIBS=ON
+    $ cmake --build build
 
 
 ### Console
