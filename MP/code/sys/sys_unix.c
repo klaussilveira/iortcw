@@ -127,20 +127,30 @@ Sys_SteamPath
 */
 char *Sys_SteamPath( void )
 {
-	// Disabled since Steam doesn't let you install RTCW on Mac/Linux
-#if 0
 	char *p;
 
 	if( ( p = getenv( "HOME" ) ) != NULL )
 	{
 #ifdef __APPLE__
-		char *steamPathEnd = "/Library/Application Support/Steam/SteamApps/common/" STEAMPATH_NAME;
+		const char *steamDirs[] = {
+			"/Library/Application Support/Steam/steamapps/common/" STEAMPATH_NAME,
+		};
 #else
-		char *steamPathEnd = "/.steam/steam/SteamApps/common/" STEAMPATH_NAME;
+		const char *steamDirs[] = {
+			"/.steam/root/steamapps/common/" STEAMPATH_NAME,
+			"/.var/app/com.valvesoftware.Steam/data/Steam/steamapps/common/" STEAMPATH_NAME,
+		};
 #endif
-		Com_sprintf(steamPath, sizeof(steamPath), "%s%s", p, steamPathEnd);
+		int i;
+		for( i = 0; i < ARRAY_LEN( steamDirs ); i++ )
+		{
+			Com_sprintf( steamPath, sizeof(steamPath), "%s%s", p, steamDirs[i] );
+			if( access( steamPath, R_OK ) == 0 )
+				return steamPath;
+		}
+
+		steamPath[0] = '\0';
 	}
-#endif
 
 	return steamPath;
 }

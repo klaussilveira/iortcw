@@ -3607,7 +3607,7 @@ static void FS_Startup( const char *gameName ) {
 
 	fs_steampath = Cvar_Get ("fs_steampath", Sys_SteamPath(), CVAR_INIT|CVAR_PROTECTED );
 	if (fs_steampath->string[0]) {
-		FS_AddGameDirectory( fs_steampath->string, gameName, qtrue );
+		FS_AddGameDirectory( fs_steampath->string, "Main", qtrue );
 	}
 #endif
 
@@ -3621,7 +3621,7 @@ static void FS_Startup( const char *gameName ) {
 	if (fs_apppath->string[0])
 		FS_AddGameDirectory(fs_apppath->string, gameName, qtrue);
 #endif
-	
+
 	// NOTE: same filtering below for mods and basegame
 	if (fs_homepath->string[0] && Q_stricmp(fs_homepath->string,fs_basepath->string)) {
 		FS_CreatePath ( fs_homepath->string );
