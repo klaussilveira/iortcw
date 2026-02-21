@@ -105,7 +105,7 @@ For example, to build only multiplayer with all bundled libraries:
 
 * in_availableJoysticks - list of available Joysticks
 * in_keyboardDebug - print keyboard debug info
- 
+
 * j_forward - Joystick analogue to m_forward, for forward movement speed/direction.
 * j_side - Joystick analogue to m_side, for side movement speed/direction.
 * j_up - Joystick up movement speed/direction.
@@ -169,13 +169,13 @@ For example, to build only multiplayer with all bundled libraries:
 * net_mcastiface - outgoing interface to use for scan
 * net_enabled - enable networking, bitmask. Add up number for option to enable it:
 
-	Enable IPv4 networking:    1
+  Enable IPv4 networking:    1
 
-	Enable IPv6 networking:    2
+  Enable IPv6 networking:    2
 
-	Prioritize IPv6 over IPv4: 4
+  Prioritize IPv6 over IPv4: 4
 
-	Disable multicast support: 8
+  Disable multicast support: 8
 
 
 * r_allowResize - make window resizable
@@ -185,12 +185,12 @@ For example, to build only multiplayer with all bundled libraries:
 * r_stereoEnabled - enable stereo rendering for techniques like shutter glasses (untested)
 * r_anaglyphMode - Enable rendering of anaglyph images
 
-	red-cyan glasses:    1
-	red-blue:            2
-	red-green:           3
-	green-magenta:       4
-    
-	To swap the colors for left and right eye just add 4 to the value for the wanted color combination. For red-blue and red-green you probably want to enable r_greyscale
+  red-cyan glasses:    1
+  red-blue:            2
+  red-green:           3
+  green-magenta:       4
+
+  To swap the colors for left and right eye just add 4 to the value for the wanted color combination. For red-blue and red-green you probably want to enable r_greyscale
 
 * r_stereoSeparation - Control eye separation. Resulting separation is r_zProj divided by this value in quake3 standard units. See also http://wiki.ioquake3.org/Stereo_Rendering for more information
 * r_marksOnTriangleMeshes - Support impact marks on md3 models, MOD developers should increase the mark triangle limits in cg_marks.c if they intend to use this.
@@ -253,11 +253,11 @@ missing "test.pk3", it will attempt to download from the URL
 
 * sv_allowDownload's value is now a bitmask made up of the following flags:
 
-	1 - ENABLE
-    
-  	4 - do not use UDP downloads
-    
-	8 - do not ask the client to disconnect when using HTTP/FTP
+  1 - ENABLE
+
+    4 - do not use UDP downloads
+
+  8 - do not ask the client to disconnect when using HTTP/FTP
 
 
 Server operators who are concerned about potential "leeching" from their HTTP servers from other iortcw servers can make use of the HTTP_REFERER that iortcw sets which is "ioQ3://{SERVER_IP}:{SERVER_PORT}". For example, Apache's mod_rewrite can restrict access based on HTTP_REFERER.
@@ -269,9 +269,9 @@ Simply setting cl_allowDownload to 1 will enable HTTP/FTP downloads
 assuming iortcw was compiled with USE_CURL=1 (the default).
 
 * Like sv_allowDownload, cl_allowDownload also uses a bitmask value supporting the following flags:
-	1 - ENABLE
-	2 - do not use HTTP/FTP downloads
-	4 - do not use UDP downloads
+  1 - ENABLE
+  2 - do not use HTTP/FTP downloads
+  4 - do not use UDP downloads
 
 When iortcw is built with USE_CURL_DLOPEN=1 (default), it will use the value of the cvar cl_cURLLib as the filename of the cURL library to dynamically load.
 
@@ -286,12 +286,12 @@ On Windows Vista, Windows 7, and Windows 10 will use a directory like:
 
 You can revert to the old single-user behaviour by setting the fs_homepath cvar to the directory where iortcw is installed.  For example:
 
-	ioWolfMP.exe +set fs_homepath "c:\iortcw"
-    
+  ioWolfMP.exe +set fs_homepath "c:\iortcw"
+
 or
 
-	ioWolfSP.exe +set fs_homepath "c:\iortcw"
-    
+  ioWolfSP.exe +set fs_homepath "c:\iortcw"
+
 Note that this cvar MUST be set as a command line parameter.
 
 ###### SDL Keyboard Differences
@@ -365,7 +365,7 @@ typedef int intptr_t;
 * Creating standalone games
 
 
-Have you finished the daunting task of removing all dependencies on the RTCW game data? You probably now want to give your users the opportunity to play the game without owning a copy of RTCW, which consequently means removing cd-key and authentication server checks. 
+Have you finished the daunting task of removing all dependencies on the RTCW game data? You probably now want to give your users the opportunity to play the game without owning a copy of RTCW, which consequently means removing cd-key and authentication server checks.
 
 
 In addition to being a straightforward RTCW client, iortcw also purports to be a reliable and stable code base on which to base your game project.
@@ -377,23 +377,23 @@ However, before you start compiling your own version of iortcw, you have to ask 
 If your answer to this question is "no", it probably makes no sense to build your own binaries. Instead, you can just use the pre-built binaries on the website. Just make sure the game is called with:
 
     +set com_basegame <yournewbase>
-    
+
 in any links/scripts you install for your users to start the game. The binary must not detect any original RTCW game pak files. If this
 condition is met, the game will set com_standalone to 1 and is then running in stand alone mode.
-  
-  
+
+
 If you want the engine to use a different directory in your homepath than e.g. "My Documents\RTCW" on Windows or ".wolf" on Linux, then set a new name at startup by adding
-  
+
     +set com_homepath <homedirname>
-  
+
 to the command line. You can also control which game name to use when talking to the master server:
-  
+
     +set com_gamename <gamename>
-  
+
 So clients requesting a server list will only receive servers that have a matching game name.
-  
+
 Example line:
-  
+
     +set com_basegame basefoo +set com_homepath .foo
     +set com_gamename foo
 
@@ -413,11 +413,11 @@ This does NOT mean that you cannot market this game commercially. The GPL does n
 ###### Network protocols
 There are now two cvars that give you some degree of freedom over the reported protocol versions between clients and servers:
 
-	"com_protocol"
+  "com_protocol"
 and
 
-	"com_legacyprotocol"
-    
+  "com_legacyprotocol"
+
 The reason for this is that some standalone games increased the protocol number even though nothing really changed in their protocol and the iortcw engine is still fully compatible.
 
 In order to harden the network protocol against UDP spoofing attacks a new network protocol was introduced that defends against such attacks.
@@ -430,10 +430,10 @@ Luckily, iortcw has backwards compatibility, on the client as well as on the ser
 The cvar "com_protocol" denotes the protocol version for the new hardened protocol, whereas the "com_legacyprotocol" cvar denotes the protocol version for the legacy protocol.
 
 If the value for "com_protocol" and "com_legacyprotocol" is identical, then the legacy protocol is always used. If "com_legacyprotocol" is set to 0, then support for the legacy protocol is disabled.
-  
+
 Mods that use a standalone engine obviously do not require dual protocol support, and it is turned off if the engine is compiled with STANDALONE per default. If you desire backwards compatibility to older versions of your game you can still enable it in q_shared.h by defining
 
-	LEGACY_PROTOCOL
+  LEGACY_PROTOCOL
 
 
 ###### cl_guid Support
