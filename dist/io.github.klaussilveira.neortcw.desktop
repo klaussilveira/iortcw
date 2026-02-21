@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Return to Castle Wolfenstein
+Comment=Play Return to Castle Wolfenstein
+Exec=iortcw.sh
+Icon=io.github.klaussilveira.neortcw
+Categories=Game;ActionGame;
+Terminal=false

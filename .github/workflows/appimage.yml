@@ -1,0 +1,84 @@
+name: AppImage
+on:
+  push:
+    branches: ['**']
+  pull_request:
+  workflow_call:
+
+concurrency:
+  group: appimage-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: AppImage x86_64
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            build-essential cmake pkg-config \
+            libsdl2-dev libgl1-mesa-dev \
+            libcurl4-openssl-dev \
+            libfuse2
+
+      - name: Configure
+        run: >
+          cmake -S . -B build
+          -DCMAKE_BUILD_TYPE=Release
+          -DUSE_INTERNAL_LIBS=ON
+
+      - name: Build
+        run: cmake --build build --parallel $(nproc)
+
+      - name: Create AppDir
+        run: |
+          mkdir -p AppDir/usr/bin/main
+          mkdir -p AppDir/usr/share/applications
+          mkdir -p AppDir/usr/share/icons/hicolor/scalable/apps
+          mkdir -p AppDir/usr/share/metainfo
+
+          # Binaries
+          cp build/iowolfsp.x86_64 AppDir/usr/bin/
+          cp build/iowolfmp.x86_64 AppDir/usr/bin/
+          cp build/iowolfded.x86_64 AppDir/usr/bin/
+
+          # Renderers
+          cp build/renderer_*.so AppDir/usr/bin/
+
+          # Game modules
+          cp build/main/*.so AppDir/usr/bin/main/
+
+          # Wrapper script
+          cp dist/iortcw.sh AppDir/usr/bin/
+          chmod +x AppDir/usr/bin/iortcw.sh
+
+          # Desktop file and metadata
+          cp dist/io.github.klaussilveira.neortcw.desktop AppDir/usr/share/applications/
+          cp dist/io.github.klaussilveira.neortcw.metainfo.xml AppDir/usr/share/metainfo/
+
+          # Icon
+          cp MP/misc/iortcw.svg AppDir/usr/share/icons/hicolor/scalable/apps/io.github.klaussilveira.neortcw.svg
+
+      - name: Build AppImage
+        run: |
+          wget -q https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
+          chmod +x linuxdeploy-x86_64.AppImage
+
+          ./linuxdeploy-x86_64.AppImage \
+            --appdir AppDir \
+            --desktop-file AppDir/usr/share/applications/io.github.klaussilveira.neortcw.desktop \
+            --icon-file AppDir/usr/share/icons/hicolor/scalable/apps/io.github.klaussilveira.neortcw.svg \
+            --output appimage
+
+          rm linuxdeploy-x86_64.AppImage
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: iortcw-appimage-x86_64
+          path: "*.AppImage"

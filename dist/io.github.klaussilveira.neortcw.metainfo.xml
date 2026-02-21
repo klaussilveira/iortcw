@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>io.github.klaussilveira.neortcw</id>
+  <name>Return to Castle Wolfenstein</name>
+  <summary>Open-source engine for Return to Castle Wolfenstein</summary>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0-only</project_license>
+
+  <description>
+    <p>
+      iortcw is a source port of Return to Castle Wolfenstein. It provides
+      an updated engine with bug fixes and platform support while requiring
+      the original game data files to play.
+    </p>
+  </description>
+
+  <launchable type="desktop-id">io.github.klaussilveira.neortcw.desktop</launchable>
+
+  <url type="homepage">https://github.com/klaussilveira/iortcw</url>
+  <url type="bugtracker">https://github.com/klaussilveira/iortcw/issues</url>
+
+  <provides>
+    <binary>iowolfsp.x86_64</binary>
+    <binary>iowolfmp.x86_64</binary>
+  </provides>
+
+  <content_rating type="oars-1.1">
+    <content_attribute id="violence-realistic">intense</content_attribute>
+    <content_attribute id="violence-bloodshed">intense</content_attribute>
+  </content_rating>
+
+  <categories>
+    <category>Game</category>
+    <category>ActionGame</category>
+  </categories>
+</component>

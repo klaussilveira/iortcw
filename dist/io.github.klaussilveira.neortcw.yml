@@ -1,0 +1,54 @@
+app-id: io.github.klaussilveira.neortcw
+runtime: org.freedesktop.Platform
+runtime-version: '24.08'
+sdk: org.freedesktop.Sdk
+command: iortcw.sh
+
+finish-args:
+  - --device=dri
+  - --socket=pulseaudio
+  - --socket=x11
+  - --socket=wayland
+  - --share=network
+  # Game data: legacy ~/.wolf path
+  - --filesystem=~/.wolf:create
+  # Game data: XDG path
+  - --filesystem=xdg-data/iortcw:create
+  # Steam RTCW data (common install locations)
+  - --filesystem=~/.local/share/Steam/steamapps/common/Return to Castle Wolfenstein:ro
+  - --filesystem=~/.steam/steam/steamapps/common/Return to Castle Wolfenstein:ro
+
+modules:
+  - name: iortcw
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DUSE_INTERNAL_LIBS=ON
+    sources:
+      - type: dir
+        path: ..
+    post-install:
+      # Binaries
+      - install -Dm755 iowolfsp.x86_64 /app/bin/iowolfsp.x86_64
+      - install -Dm755 iowolfmp.x86_64 /app/bin/iowolfmp.x86_64
+      - install -Dm755 iowolfded.x86_64 /app/bin/iowolfded.x86_64
+      # Renderers
+      - install -Dm755 renderer_sp_opengl1_x86_64.so /app/bin/renderer_sp_opengl1_x86_64.so
+      - install -Dm755 renderer_sp_rend2_x86_64.so /app/bin/renderer_sp_rend2_x86_64.so
+      - install -Dm755 renderer_mp_opengl1_x86_64.so /app/bin/renderer_mp_opengl1_x86_64.so
+      - install -Dm755 renderer_mp_rend2_x86_64.so /app/bin/renderer_mp_rend2_x86_64.so
+      # Game modules
+      - install -Dm755 main/cgame.sp.x86_64.so /app/bin/main/cgame.sp.x86_64.so
+      - install -Dm755 main/qagame.sp.x86_64.so /app/bin/main/qagame.sp.x86_64.so
+      - install -Dm755 main/ui.sp.x86_64.so /app/bin/main/ui.sp.x86_64.so
+      - install -Dm755 main/cgame.mp.x86_64.so /app/bin/main/cgame.mp.x86_64.so
+      - install -Dm755 main/qagame.mp.x86_64.so /app/bin/main/qagame.mp.x86_64.so
+      - install -Dm755 main/ui.mp.x86_64.so /app/bin/main/ui.mp.x86_64.so
+      # Wrapper script
+      - install -Dm755 /run/build/iortcw/dist/iortcw.sh /app/bin/iortcw.sh
+      # Desktop file
+      - install -Dm644 /run/build/iortcw/dist/io.github.klaussilveira.neortcw.desktop /app/share/applications/io.github.klaussilveira.neortcw.desktop
+      # AppStream metadata
+      - install -Dm644 /run/build/iortcw/dist/io.github.klaussilveira.neortcw.metainfo.xml /app/share/metainfo/io.github.klaussilveira.neortcw.metainfo.xml
+      # Icon
+      - install -Dm644 /run/build/iortcw/MP/misc/iortcw.svg /app/share/icons/hicolor/scalable/apps/io.github.klaussilveira.neortcw.svg

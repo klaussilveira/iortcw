@@ -1,0 +1,45 @@
+name: Release
+on:
+  push:
+    tags: ['*']
+
+jobs:
+  linux:
+    uses: ./.github/workflows/linux.yml
+  windows:
+    uses: ./.github/workflows/windows.yml
+  macos:
+    uses: ./.github/workflows/macos.yml
+  appimage:
+    uses: ./.github/workflows/appimage.yml
+  flatpak:
+    uses: ./.github/workflows/flatpak.yml
+
+  release:
+    needs: [linux, windows, macos, appimage, flatpak]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+
+      - name: Package archives
+        run: |
+          tag="${GITHUB_REF_NAME}"
+
+          tar -czf "iortcw-${tag}-linux-x86_64.tar.gz" -C iortcw-linux-x86_64 .
+          (cd iortcw-windows-x86_64 && zip -r "../iortcw-${tag}-windows-x86_64.zip" .)
+          tar -czf "iortcw-${tag}-macos-arm64.tar.gz" -C iortcw-macos-arm64 .
+          mv iortcw-appimage-x86_64/*.AppImage "iortcw-${tag}-x86_64.AppImage"
+          mv iortcw-flatpak-x86_64/*.flatpak "iortcw-${tag}.flatpak"
+
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          files: |
+            iortcw-*.tar.gz
+            iortcw-*.zip
+            iortcw-*.AppImage
+            iortcw-*.flatpak
