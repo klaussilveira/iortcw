@@ -6,6 +6,7 @@ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 # Top-level build options
 option(BUILD_MP "Build multiplayer targets" ON)
 option(BUILD_SP "Build singleplayer targets" ON)
+option(BUILD_ET "Build Enemy Territory targets" ON)
 
 option(USE_RENDERER_DLOPEN "Load renderer as shared library" ON)
 option(USE_OPENAL "Use OpenAL for sound" ON)
@@ -75,9 +76,11 @@ set(SHLIBNAME "${FILE_ARCH}.${SHLIBEXT}")
 if(WIN32)
     set(MP_GAMEMOD_SHLIBNAME "_mp_${SHLIBNAME}")
     set(SP_GAMEMOD_SHLIBNAME "_sp_${SHLIBNAME}")
+    set(ET_GAMEMOD_SHLIBNAME "_et_${SHLIBNAME}")
 else()
     set(MP_GAMEMOD_SHLIBNAME ".mp.${SHLIBNAME}")
     set(SP_GAMEMOD_SHLIBNAME ".sp.${SHLIBNAME}")
+    set(ET_GAMEMOD_SHLIBNAME ".et.${SHLIBNAME}")
 endif()
 
 message(STATUS "Platform: ${PLATFORM}")
@@ -121,7 +124,7 @@ endif()
 
 # --- SDL2 (required for client & renderers) ---
 # Gate on whether any client build is enabled
-if(BUILD_MP OR BUILD_SP)
+if(BUILD_MP OR BUILD_SP OR BUILD_ET)
     find_package(SDL2 REQUIRED)
 endif()
 
@@ -349,4 +352,8 @@ endif()
 
 if(BUILD_SP)
     add_subdirectory(SP)
+endif()
+
+if(BUILD_ET)
+    add_subdirectory(ET)
 endif()
