@@ -21,10 +21,12 @@ jobs:
         run: brew install sdl2 freetype opus opusfile libogg libvorbis pkg-config
 
       - name: Configure
+        # ET build disabled: https://github.com/klaussilveira/neortcw/issues/2
         run: >
           cmake -S . -B build
           -DCMAKE_BUILD_TYPE=Release
           -DCMAKE_PREFIX_PATH=$(brew --prefix)
+          -DBUILD_ET=OFF
         env:
           PKG_CONFIG_PATH: /opt/homebrew/lib/pkgconfig
 

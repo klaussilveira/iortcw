@@ -33,11 +33,8 @@ If you have questions concerning this license or the applicable additional terms
 #include <setjmp.h>
 
 // htons
-#if defined(__linux__) || defined(__EMSCRIPTEN__)
+#if defined(__linux__) || defined(__APPLE__) || defined(__EMSCRIPTEN__)
 #include <netinet/in.h>
-// getpid
-#include <unistd.h>
-#elif __MACOS__
 // getpid
 #include <unistd.h>
 #else
@@ -2730,9 +2727,7 @@ void Com_Init( char *commandLine ) {
 	// bani: init pid
 #ifdef _WIN32
 	pid = GetCurrentProcessId();
-#elif __linux__
-	pid = getpid();
-#elif __MACOS__
+#else
 	pid = getpid();
 #endif
 	s = va( "%d", pid );

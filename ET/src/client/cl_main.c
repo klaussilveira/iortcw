@@ -4763,7 +4763,7 @@ static trans_t* LookupTrans( char *original, char *translated[MAX_LANGUAGES], qb
 
 	// see if we want to save out the translation table everytime a string is added
 	if ( cl_debugTranslation->integer == 2 && !isLoading ) {
-		CL_SaveTransTable();
+		CL_SaveTransTable( "scripts/translation.cfg", qfalse );
 	}
 
 	return newt;

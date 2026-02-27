@@ -34,9 +34,11 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Configure
+        # ET build disabled: https://github.com/klaussilveira/neortcw/issues/1
         run: >
           cmake -S . -B build -G Ninja
           -DCMAKE_BUILD_TYPE=Release
+          -DBUILD_ET=OFF
 
       - name: Build
         run: cmake --build build --parallel $(nproc)

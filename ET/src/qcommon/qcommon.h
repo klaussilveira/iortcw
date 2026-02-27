@@ -1205,7 +1205,7 @@ void Sys_OpenURL( const char *url, qboolean doexit );                       // N
 int Sys_GetHighQualityCPU();
 float Sys_GetCPUSpeed( void );
 
-#if defined(__linux__) || defined(__EMSCRIPTEN__)
+#if defined(__linux__) || defined(__APPLE__) || defined(__EMSCRIPTEN__)
 // TTimo only on linux .. maybe on Mac too?
 // will OR with the existing mode (chmod ..+..)
 void Sys_Chmod( char *file, int mode );
@@ -1299,35 +1299,7 @@ void Com_GetHunkInfo( int* hunkused, int* hunkexpected );
 #define SYS_DLLNAME_UI_SHIFT 5
 #define SYS_DLLNAME_UI "zn3ru3n8=;3xt"
 
-#elif __MACOS__
-
-#ifdef _DEBUG
-// qagame_d_mac
-	#define SYS_DLLNAME_QAGAME_SHIFT 6
-	#define SYS_DLLNAME_QAGAME "wgmgskejesgi"
-
-// cgame_d_mac
-	#define SYS_DLLNAME_CGAME_SHIFT 2
-	#define SYS_DLLNAME_CGAME "eicogafaoce"
-
-// ui_d_mac
-	#define SYS_DLLNAME_UI_SHIFT 5
-	#define SYS_DLLNAME_UI "zndidrfh"
-#else
-// qagame_mac
-	#define SYS_DLLNAME_QAGAME_SHIFT 6
-	#define SYS_DLLNAME_QAGAME "wgmgskesgi"
-
-// cgame_mac
-	#define SYS_DLLNAME_CGAME_SHIFT 2
-	#define SYS_DLLNAME_CGAME "eicogaoce"
-
-// ui_mac
-	#define SYS_DLLNAME_UI_SHIFT 5
-	#define SYS_DLLNAME_UI "zndrfh"
-#endif
-
-#elif defined( __FreeBSD__ ) || defined( __OpenBSD__ )
+#elif defined( __APPLE__ ) || defined( __FreeBSD__ ) || defined( __OpenBSD__ )
 
 // qagame.mp.i386.so
 #define SYS_DLLNAME_QAGAME_SHIFT 6

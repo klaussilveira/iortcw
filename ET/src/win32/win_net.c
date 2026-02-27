@@ -30,7 +30,9 @@ If you have questions concerning this license or the applicable additional terms
 
 #include "../game/q_shared.h"
 #include "../qcommon/qcommon.h"
-#include "win_local.h"
+#include <windows.h>
+#include <winsock.h>
+#include <wsipx.h>
 
 // install the internet SDK from
 // http://www.microsoft.com/msdownload/platformsdk/sdkupdate/
