@@ -1,0 +1,15 @@
+{
+  "name": "et-master-server",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node master.js",
+    "deploy": "wrangler deploy"
+  },
+  "dependencies": {
+    "ws": "^8.0.0"
+  },
+  "devDependencies": {
+    "wrangler": "^4.69.0"
+  }
+}

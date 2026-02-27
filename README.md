@@ -11,7 +11,7 @@
 
 This fork includes the following changes on top of upstream iortcw:
 
-  * **Unified build**: Replaced the legacy Makefiles with a unified CMake build that produces both SP and MP binaries
+  * **Unified build**: Replaced the legacy Makefiles with a unified CMake build that produces both SP, MP and ET binaries
   * **Steam**: Automatically detects game files from Steam on all platforms
   * **Higher tick rate**: Bumped server tick rate for smoother gameplay, with client snaps synced accordingly
   * **Client-side prediction**: Locally predicts some gameplay events so the game feels more responsive
@@ -62,6 +62,7 @@ The following options can be passed to `cmake` via `-D<OPTION>=ON|OFF`:
 
   * `BUILD_MP`                - Build multiplayer targets (default: ON)
   * `BUILD_SP`                - Build singleplayer targets (default: ON)
+  * `BUILD_ET`                - Build Enemy Territory targets (default: ON)
   * `USE_RENDERER_DLOPEN`     - Load renderer as shared library (default: ON)
   * `USE_OPENAL`              - Use OpenAL for sound (default: ON)
   * `USE_OPENAL_DLOPEN`       - dlopen OpenAL at runtime (default: ON)
@@ -84,6 +85,55 @@ For example, to build only multiplayer with all bundled libraries:
     $ cmake -S . -B build -DBUILD_SP=OFF -DUSE_INTERNAL_LIBS=ON
     $ cmake --build build
 
+#### Compiling ET for WebAssembly
+
+Currently, only ET has been ported to emscripten. It builds a browser
+client and/or a Node.js dedicated server. Both use Emscripten's
+WebSocket-based socket layer for networking, so WASM clients connect to
+WASM servers. There's also a master server implementation.
+
+#### Prerequisites
+
+- [Emscripten SDK (emsdk)](https://emscripten.org/docs/getting_started/downloads.html)
+- ET game data: place pk3 files in an `etmain/` directory
+- Node.js + `ws` package (for dedicated): `npm install ws`
+
+#### 1. Configure
+
+    $ source /path/to/emsdk/emsdk_env.sh
+    $ mkdir build-et-wasm && cd build-et-wasm
+
+Client only:
+
+    $ emcmake cmake .. -DBUILD_MP=OFF -DBUILD_SP=OFF -DBUILD_ET=ON \
+      -DGAME_DATA_DIR=/path/to/etmain
+
+Client and dedicated server:
+
+    $ emcmake cmake .. -DBUILD_MP=OFF -DBUILD_SP=OFF -DBUILD_ET=ON \
+      -DET_BUILD_SERVER=ON -DGAME_DATA_DIR=/path/to/etmain
+
+`GAME_DATA_DIR` bundles pk3 files into the client's `.data` file. It is
+optional for the dedicated server, which reads pk3s from disk at runtime.
+
+#### 2. Build
+
+    $ emmake make -j$(nproc)
+
+#### 3. Run the dedicated server
+
+The server reads pk3s from `etmain/` relative to the working directory.
+Copy or symlink your `etmain/` directory next to the server files, then:
+
+    $ node iowolfetded.wasm32.js +set dedicated 2 +set fs_homepath . +map radar
+
+#### 4. Run the client
+
+Serve the build directory over HTTP (required for WASM):
+
+    $ python3 -m http.server 8080
+
+Open `http://localhost:8080/iowolfet.wasm32.html` in a browser.
 
 ### Console
 

@@ -1,0 +1,10 @@
+name = "et-master"
+main = "master-cf.js"
+compatibility_date = "2025-01-01"
+
+[durable_objects]
+bindings = [{ name = "MASTER", class_name = "MasterServer" }]
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["MasterServer"]
