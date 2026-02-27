@@ -32,6 +32,19 @@ If you have questions concerning this license or the applicable additional terms
 // q_shared.h -- included first by ALL program modules.
 // A user mod should never modify this file
 
+// Endianness detection (needed for radix sort byte ordering, etc.)
+#if defined(__BYTE_ORDER__) && defined(__ORDER_BIG_ENDIAN__)
+  #if __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+    #define Q3_BIG_ENDIAN
+  #else
+    #define Q3_LITTLE_ENDIAN
+  #endif
+#elif defined(__ppc__) || defined(__powerpc__) || defined(__powerpc64__) || defined(__sparc__)
+  #define Q3_BIG_ENDIAN
+#else
+  #define Q3_LITTLE_ENDIAN
+#endif
+
 //#define PRE_RELEASE_DEMO
 
 #ifndef PRE_RELEASE_DEMO
@@ -290,6 +303,13 @@ void Sys_PumpEvents( void );
 typedef unsigned char byte;
 
 typedef enum {qfalse, qtrue}    qboolean;
+
+typedef union
+{
+	float f;
+	int32_t i;
+	uint32_t ui;
+} floatint_t;
 
 typedef int qhandle_t;
 typedef int sfxHandle_t;

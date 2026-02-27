@@ -703,7 +703,7 @@ void VM_Compile( vm_t *vm, vmHeader_t *header ) {
 
 	// offset all the instruction pointers for the new location
 	for ( i = 0 ; i < header->instructionCount ; i++ ) {
-		vm->instructionPointers[i] += (int)vm->codeBase;
+		vm->instructionPointers[i] += (intptr_t)vm->codeBase;
 	}
 
 #if 0 // ndef _WIN32

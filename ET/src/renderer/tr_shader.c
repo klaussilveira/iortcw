@@ -2066,7 +2066,6 @@ static void FixRenderCommandList( int newShader ) {
 				curCmd = (const void *)( sp_cmd + 1 );
 				break;
 			}
-			break;
 			case RC_DRAW_SURFS:
 			{
 				int i;
@@ -2087,9 +2086,9 @@ static void FixRenderCommandList( int newShader ) {
 						drawSurf->sort = ( sortedIndex << QSORT_SHADERNUM_SHIFT )
 										 | ( entityNum << QSORT_ENTITYNUM_SHIFT ) | ( fogNum << QSORT_FOGNUM_SHIFT ) | ( frontFace << QSORT_FRONTFACE_SHIFT ) | dlightMap;
 					}
-					curCmd = (const void *)( ds_cmd + 1 );
-					break;
 				}
+				curCmd = (const void *)( ds_cmd + 1 );
+				break;
 			}
 			case RC_DRAW_BUFFER:
 			{
@@ -3752,7 +3751,7 @@ static qboolean R_RegisterShaderImages( shader_t *sh ) {
 	for ( i = 0; i < sh->numUnfoggedPasses; i++ ) {
 		if ( sh->stages[i] && sh->stages[i]->active ) {
 			for ( b = 0 ; b < NUM_TEXTURE_BUNDLES ; b++ ) {
-				for ( j = 0; sh->stages[i]->bundle[b].image[j] && j < MAX_IMAGE_ANIMATIONS; j++ ) {
+				for ( j = 0; j < MAX_IMAGE_ANIMATIONS && sh->stages[i]->bundle[b].image[j]; j++ ) {
 					if ( !R_TouchImage( sh->stages[i]->bundle[b].image[j] ) ) {
 						return qfalse;
 					}
