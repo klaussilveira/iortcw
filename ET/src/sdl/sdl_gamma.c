@@ -71,8 +71,8 @@ void GLimp_SetGamma( unsigned char red[256], unsigned char green[256], unsigned 
 						table[ j ][ i ] = ( 128 + i ) << 8;
 				}
 
-				if( table[ j ] [127 ] > 254 << 8 )
-					table[ j ][ 127 ] = 254 << 8;
+				if( table[ j ] [127 ] > (254 << 8) )
+					table[ j ][ 127 ] = (254 << 8);
 			}
 		}
 	}

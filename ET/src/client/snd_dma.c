@@ -596,11 +596,9 @@ void S_SpatializeOrigin( vec3_t origin, int master_vol, int *left_vol, int *righ
 	vec3_t vec;
 
 //	const float dist_mult = SOUND_ATTENUATE;
-	float dist_mult, dist_fullvol;
+	float dist_fullvol;
 
 	dist_fullvol = range * 0.064f;        // default range of 1250 gives 80
-	dist_mult = dist_fullvol * 0.00001f;  // default range of 1250 gives .0008
-//	dist_mult = range*0.00000064f;		// default range of 1250 gives .0008
 
 	// calculate stereo seperation and distance attenuation
 	VectorSubtract( origin, listener_origin, source_vec );
@@ -2085,7 +2083,7 @@ void S_StartBackgroundTrack( const char *intro, const char *loop, int fadeupTime
 			snd.nextMusicTrackType = 0; // be quiet at the next opportunity
 
 			// clear out looping sound in current music so that it'll stop when it's done
-			if ( ss && ss->loop ) {
+			if ( ss ) {
 				ss->loop[0] = 0;    // clear loop
 			}
 
@@ -2407,7 +2405,7 @@ float S_StartStreamingSound( const char *intro, const char *loop, int entnum, in
 		return 0;
 	}
 
-	if ( ss->loop && loop ) {
+	if ( loop ) {
 		Q_strncpyz( ss->loop, loop, sizeof( ss->loop ) - 4 );
 	} else {
 		ss->loop[0] = 0;
@@ -2721,7 +2719,7 @@ void S_UpdateStreamingSounds( void ) {
 					break;  // this is now the music ss->file, no need to re-start next time through
 				} else {
 					// loop
-					if ( ss->loop && ss->loop[0] ) {
+					if ( ss->loop[0] ) {
 						if ( ss->looped ) {
 							char dump[16];
 							Sys_StreamSeek( ss->file, 0, FS_SEEK_SET );       // just go back to the beginning

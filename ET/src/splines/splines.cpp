@@ -457,7 +457,7 @@ void idSplineList::parse( const char *( *text )  ) {
 
 			Com_UngetToken();
 			idStr key = Com_ParseOnLine( text );
-			const char *token = Com_Parse( text );
+			(void)Com_Parse( text );
 			if ( Q_stricmp( key.c_str(), "granularity" ) == 0 ) {
 				granularity = atof( token );
 			} else if ( Q_stricmp( key.c_str(), "name" ) == 0 ) {
@@ -966,7 +966,7 @@ void idCameraEvent::parse( const char *( *text )  ) {
 
 			Com_UngetToken();
 			idStr key = Com_ParseOnLine( text );
-			const char *token = Com_Parse( text );
+			(void)Com_Parse( text );
 			if ( Q_stricmp( key.c_str(), "type" ) == 0 ) {
 				type = static_cast<idCameraEvent::eventType>( atoi( token ) );
 			} else if ( Q_stricmp( key.c_str(), "param" ) == 0 ) {
@@ -1076,7 +1076,7 @@ void idCameraFOV::parse( const char *( *text )  ) {
 
 			Com_UngetToken();
 			idStr key = Com_ParseOnLine( text );
-			const char *token = Com_Parse( text );
+			(void)Com_Parse( text );
 			if ( Q_stricmp( key.c_str(), "fov" ) == 0 ) {
 				fov = atof( token );
 			} else if ( Q_stricmp( key.c_str(), "startFOV" ) == 0 ) {
@@ -1155,7 +1155,7 @@ void idFixedPosition::parse( const char *( *text )  ) {
 			Com_UngetToken();
 			idStr key = Com_ParseOnLine( text );
 
-			const char *token = Com_Parse( text );
+			(void)Com_Parse( text );
 			if ( Q_stricmp( key.c_str(), "pos" ) == 0 ) {
 				Com_UngetToken();
 				Com_Parse1DMatrix( text, 3, pos );
@@ -1163,7 +1163,7 @@ void idFixedPosition::parse( const char *( *text )  ) {
 				Com_UngetToken();
 				idCameraPosition::parseToken( key.c_str(), text );
 			}
-			token = Com_Parse( text );
+			Com_Parse( text );
 
 		} while ( 1 );
 
@@ -1200,7 +1200,7 @@ void idInterpolatedPosition::parse( const char *( *text )  ) {
 			Com_UngetToken();
 			idStr key = Com_ParseOnLine( text );
 
-			const char *token = Com_Parse( text );
+			(void)Com_Parse( text );
 			if ( Q_stricmp( key.c_str(), "startPos" ) == 0 ) {
 				Com_UngetToken();
 				Com_Parse1DMatrix( text, 3, startPos );
@@ -1211,7 +1211,7 @@ void idInterpolatedPosition::parse( const char *( *text )  ) {
 				Com_UngetToken();
 				idCameraPosition::parseToken( key.c_str(), text );
 			}
-			token = Com_Parse( text );
+			Com_Parse( text );
 
 		} while ( 1 );
 
@@ -1249,14 +1249,14 @@ void idSplinePosition::parse( const char *( *text )  ) {
 			Com_UngetToken();
 			idStr key = Com_ParseOnLine( text );
 
-			const char *token = Com_Parse( text );
+			(void)Com_Parse( text );
 			if ( Q_stricmp( key.c_str(), "target" ) == 0 ) {
 				target.parse( text );
 			} else {
 				Com_UngetToken();
 				idCameraPosition::parseToken( key.c_str(), text );
 			}
-			token = Com_Parse( text );
+			Com_Parse( text );
 
 		} while ( 1 );
 

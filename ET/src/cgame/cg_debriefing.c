@@ -1151,7 +1151,7 @@ void CG_Debriefing_ChatEdit_Draw( panel_button_t* button ) {
 
 	do {
 		offset++;
-		if ( buffer + offset  == '\0' ) {
+		if ( *(buffer + offset)  == '\0' ) {
 			break;
 		}
 	} while ( CG_Text_Width_Ext( buffer + offset, button->font->scalex, 0, button->font->font ) > button->rect.w );
@@ -1176,7 +1176,7 @@ void CG_Debriefing_ChatEdit_Draw( panel_button_t* button ) {
 }
 
 void CG_Debriefing_ChatBox_Draw( panel_button_t* button ) {
-	int w, h;
+	int w;
 	int i, len;
 	vec4_t hcolor;
 	float lineHeight = 9.f;
@@ -1185,8 +1185,6 @@ void CG_Debriefing_ChatBox_Draw( panel_button_t* button ) {
 	int chatHeight = button->rect.h;
 
 	if ( cgs.teamLastChatPos != cgs.teamChatPos ) {
-		h = ( cgs.teamChatPos - cgs.teamLastChatPos ) * TINYCHAR_HEIGHT;
-
 		w = 0;
 
 		for ( i = cgs.teamLastChatPos; i < cgs.teamChatPos; i++ ) {

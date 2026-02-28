@@ -53,8 +53,8 @@ WM_DrawObjectives
 #define INFO_TOTAL_WIDTH        ( INFO_PLAYER_WIDTH + INFO_CLASS_WIDTH + INFO_SCORE_WIDTH + INFO_LATENCY_WIDTH )
 
 int WM_DrawObjectives( int x, int y, int width, float fade ) {
-	const char *s, *str;
-	int tempy, rows;
+	const char *s;
+	int rows;
 	int msec, mins, seconds, tens; // JPW NERVE
 	vec4_t tclr =   { 0.6f,     0.6f,       0.6f,       1.0f };
 
@@ -94,9 +94,8 @@ int WM_DrawObjectives( int x, int y, int width, float fade ) {
 		buf = Info_ValueForKey( s, "winner" );
 
 		if ( atoi( buf ) == -1 ) {
-			str = "ITS A TIE!";
+			// "ITS A TIE!"
 		} else if ( atoi( buf ) ) {
-			str = "ALLIES";
 //			shader = "ui/assets/portraits/allies_win";
 			flagshader = "ui/assets/portraits/allies_win_flag.tga";
 			nameshader = "ui/assets/portraits/text_allies.tga";
@@ -106,7 +105,6 @@ int WM_DrawObjectives( int x, int y, int width, float fade ) {
 				trap_S_StartLocalSound( trap_S_RegisterSound( "sound/music/allies_win.wav", qtrue ), CHAN_LOCAL_SOUND );	// FIXME: stream
 			}*/
 		} else {
-			str = "AXIS";
 //			shader = "ui/assets/portraits/axis_win";
 			flagshader = "ui/assets/portraits/axis_win_flag.tga";
 			nameshader = "ui/assets/portraits/text_axis.tga";
@@ -135,7 +133,6 @@ int WM_DrawObjectives( int x, int y, int width, float fade ) {
 	}
 // JPW NERVE -- mission time & reinforce time
 	else {
-		tempy = y;
 		rows = 1;
 
 		CG_FillRect( x - 5, y - 2, width + 5, 21, clrUiBack );
@@ -539,12 +536,11 @@ static int WM_DrawInfoLine( int x, int y, float fade ) {
 static int WM_TeamScoreboard( int x, int y, team_t team, float fade, int maxrows ) {
 	vec4_t hcolor;
 	float tempx, tempy;
-	int height, width;
+	int width;
 	int i;
 	int count = 0;
 	vec4_t tclr =   { 0.6f,     0.6f,       0.6f,       1.0f };
 
-	height = SMALLCHAR_HEIGHT * maxrows;
 	width = INFO_PLAYER_WIDTH + INFO_CLASS_WIDTH + INFO_SCORE_WIDTH + INFO_LATENCY_WIDTH;
 
 	CG_FillRect( x - 5, y - 2, width + 5, 21, clrUiBack );

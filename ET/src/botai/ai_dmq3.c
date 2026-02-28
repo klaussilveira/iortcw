@@ -538,7 +538,7 @@ qboolean BotFindNearbyGoal( bot_state_t *bs ) {
 				if ( !needAmmo ) {
 					continue;
 				}
-				switch ( item->giType ) {
+				switch ( (int)item->giType ) {
 				case WP_AMMO:
 					break;
 				default:
@@ -1118,11 +1118,10 @@ BotBestFightWeapon
 */
 int BotBestFightWeapon( bot_state_t *bs ) {
 	weapon_t bestWeapon;
-	int i, *ammo;
+	int i;
 	float wantScale, bestWantScale, dist, thisRange, bestRange;
 	qboolean inRange, bestInRange;
 
-	ammo = bs->cur_ps.ammo;
 	bestWantScale = 0.0;
 	bestRange = 0.0;
 	bestWeapon = bs->weaponnum; // default to current weapon
@@ -1893,8 +1892,7 @@ BotAttackMove
 bot_moveresult_t BotAttackMove( bot_state_t *bs, int tfl ) {
 	int movetype, i;
 	float attack_skill, jumper, croucher, dist, strafechange_time;
-	float attack_dist, attack_range;
-	vec3_t forward, backward, sideward, hordir, up = {0, 0, 1}, end;
+	vec3_t forward, sideward, hordir, up = {0, 0, 1}, end;
 	aas_entityinfo_t entinfo;
 	bot_moveresult_t moveresult;
 	bot_goal_t goal;
@@ -1936,7 +1934,6 @@ bot_moveresult_t BotAttackMove( bot_state_t *bs, int tfl ) {
 	VectorSubtract( entinfo.origin, bs->origin, forward );
 	//the distance towards the enemy
 	dist = VectorNormalize( forward );
-	VectorNegate( forward, backward );
 // RF, removed, has it's own AI Node now
 /*	// if using mobile mg42, go prone if possible
 	if (bs->weaponnum == WP_MOBILE_MG42) {
@@ -1990,8 +1987,6 @@ bot_moveresult_t BotAttackMove( bot_state_t *bs, int tfl ) {
 			bs->attackjump_time = trap_AAS_Time() + 1;
 		}
 	}
-	attack_dist = IDEAL_ATTACKDIST;
-	attack_range = 40;
 /*	//if the bot is stupid
 	if (attack_skill <= 0.4) {
 		//just walk to or away from the enemy
@@ -3478,9 +3473,7 @@ float BotWeaponRange( bot_state_t *bs, int weaponnum ) {
 }
 
 qboolean BotHasWeaponWithRange( bot_state_t *bs, float dist ) {
-	int i, *ammo;
-
-	ammo = bs->cur_ps.ammo;
+	int i;
 
 	// if we are mounted on an MG42, always return true
 	if ( g_entities[bs->client].s.eFlags & EF_MG42_ACTIVE ) {
@@ -3558,7 +3551,7 @@ Find a new target for bots in multiplayer
 */
 int BotFindEnemyMP( bot_state_t *bs, int curenemy, qboolean ignoreViewRestrictions ) {
 	int i, healthdecrease, j;
-	float fov, dist, curdist, alertness, easyfragger, vis;
+	float fov, dist, curdist, easyfragger, vis;
 	aas_entityinfo_t entinfo, curenemyinfo;
 	vec3_t dir, ang;
 	int heardShooting, heardFootSteps;
@@ -3580,7 +3573,7 @@ int BotFindEnemyMP( bot_state_t *bs, int curenemy, qboolean ignoreViewRestrictio
 	}
 	bs->last_findenemy = level.time;
 
-	alertness = trap_Characteristic_BFloat( bs->character, CHARACTERISTIC_ALERTNESS, 0, 1 );
+	trap_Characteristic_BFloat( bs->character, CHARACTERISTIC_ALERTNESS, 0, 1 );
 	easyfragger = trap_Characteristic_BFloat( bs->character, CHARACTERISTIC_EASY_FRAGGER, 0, 1 );
 	//check if the health decreased
 	healthdecrease = bs->lasthealth > bs->inventory[INVENTORY_HEALTH];
@@ -4679,7 +4672,7 @@ void BotAIBlocked( bot_state_t *bs, bot_moveresult_t *moveresult, int activate )
 	char buf[128];
 #endif
 	vec3_t up = {0, 0, 1};
-	vec3_t angles, mins, maxs, origin, movedir, hordir, start, end, sideward;
+	vec3_t angles, mins, maxs, origin, movedir, hordir, start, sideward;
 	aas_entityinfo_t entinfo;
 	int oldMoverState;
 
@@ -4840,7 +4833,6 @@ void BotAIBlocked( bot_state_t *bs, bot_moveresult_t *moveresult, int activate )
 	//the bot might be able to crouch through
 	VectorCopy( bs->origin, start );
 	start[2] += 18;
-	VectorMA( start, 5, hordir, end );
 	VectorSet( mins, -16, -16, -24 );
 	VectorSet( maxs, 16, 16, 4 );
 	//
@@ -4896,8 +4888,6 @@ void BotCheckEvents( bot_state_t *bs, entityState_t *state ) {
 
 //@TEST.  See if this is ever called when the state->number isn't us!
 	if ( state->number != bs->client ) {
-		int foo;
-		foo = 7;
 
 	} // if (state->number != bs->client)...
 	  //if it's an event only entity
@@ -4911,11 +4901,10 @@ void BotCheckEvents( bot_state_t *bs, entityState_t *state ) {
 		//client obituary event
 	case EV_OBITUARY:
 	{
-		int target, attacker, mod;
+		int target, attacker;
 
 		target = state->otherEntityNum;
 		attacker = state->otherEntityNum2;
-		mod = state->eventParm;
 		//
 		if ( target == bs->client ) {
 
@@ -5476,7 +5465,7 @@ void BotMoveToIntermission( int client ) {
 	int winner;                             // DHM - Nerve
 	bot_state_t *bs;
 
-	if ( !g_entities[client].r.svFlags & SVF_BOT ) {
+	if ( !(g_entities[client].r.svFlags & SVF_BOT) ) {
 		return;
 	}
 
@@ -7192,7 +7181,7 @@ BotBestTargetWeapon
 ==================
 */
 int BotBestTargetWeapon( bot_state_t *bs, int targetNum ) {
-	int bestWeapon, i, *ammo, validWeapons[2];
+	int bestWeapon, i, validWeapons[2];
 	float wantScale, bestWantScale, dist;
 	gentity_t *ent = &g_entities[targetNum];
 
@@ -7251,7 +7240,6 @@ int BotBestTargetWeapon( bot_state_t *bs, int targetNum ) {
 		return WP_NONE;
 	}
 
-	ammo = bs->cur_ps.ammo;
 	bestWantScale = 0.0;
 	bestWeapon = WP_NONE;       // if nothing it found, return WP_NONE
 

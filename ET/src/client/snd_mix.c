@@ -794,7 +794,7 @@ void S_PaintChannels( int endtime ) {
 				}
 #ifdef TALKANIM
 				if ( firstPass && ss->channel == CHAN_VOICE && ss->entnum < MAX_CLIENTS ) {
-					int talkcnt, talktime;
+					int talktime;
 					int sfx_count, vstop;
 					int data;
 
@@ -802,7 +802,6 @@ void S_PaintChannels( int endtime ) {
 					// animation creates lag in the time it takes to display the current facial frame
 					talktime = s_paintedtime + (int)( TALK_FUTURE_SEC * (float)s_khz->integer * 1000 );
 					vstop = ( talktime + 100 < s_rawend[si] ) ? talktime + 100 : s_rawend[si];
-					talkcnt = 1;
 					sfx_count = 0;
 
 					for ( i = talktime ; i < vstop ; i++ ) {

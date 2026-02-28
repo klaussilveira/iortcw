@@ -2508,15 +2508,13 @@ void R_DeleteTextures( void ) {
 	// done.
 
 	memset( glState.currenttextures, 0, sizeof( glState.currenttextures ) );
-	if ( qglBindTexture ) {
-		if ( qglActiveTextureARB ) {
-			GL_SelectTexture( 1 );
-			qglBindTexture( GL_TEXTURE_2D, 0 );
-			GL_SelectTexture( 0 );
-			qglBindTexture( GL_TEXTURE_2D, 0 );
-		} else {
-			qglBindTexture( GL_TEXTURE_2D, 0 );
-		}
+	if ( qglActiveTextureARB ) {
+		GL_SelectTexture( 1 );
+		qglBindTexture( GL_TEXTURE_2D, 0 );
+		GL_SelectTexture( 0 );
+		qglBindTexture( GL_TEXTURE_2D, 0 );
+	} else {
+		qglBindTexture( GL_TEXTURE_2D, 0 );
 	}
 }
 
@@ -3077,7 +3075,6 @@ R_TouchImage
 qboolean R_TouchImage( image_t *inImage ) {
 	image_t *bImage, *bImagePrev;
 	int hash;
-	char *name;
 
 	if ( inImage == tr.dlightImage ||
 		 inImage == tr.whiteImage ||
@@ -3087,7 +3084,6 @@ qboolean R_TouchImage( image_t *inImage ) {
 	}
 
 	hash = inImage->hash;
-	name = inImage->imgName;
 
 	bImage = backupHashTable[hash];
 	bImagePrev = NULL;
@@ -3139,15 +3135,13 @@ void R_PurgeImage( image_t *image ) {
 	R_CacheImageFree( image );
 
 	memset( glState.currenttextures, 0, sizeof( glState.currenttextures ) );
-	if ( qglBindTexture ) {
-		if ( qglActiveTextureARB ) {
-			GL_SelectTexture( 1 );
-			qglBindTexture( GL_TEXTURE_2D, 0 );
-			GL_SelectTexture( 0 );
-			qglBindTexture( GL_TEXTURE_2D, 0 );
-		} else {
-			qglBindTexture( GL_TEXTURE_2D, 0 );
-		}
+	if ( qglActiveTextureARB ) {
+		GL_SelectTexture( 1 );
+		qglBindTexture( GL_TEXTURE_2D, 0 );
+		GL_SelectTexture( 0 );
+		qglBindTexture( GL_TEXTURE_2D, 0 );
+	} else {
+		qglBindTexture( GL_TEXTURE_2D, 0 );
 	}
 }
 
@@ -3217,15 +3211,13 @@ void R_BackupImages( void ) {
 	tr.numImages = 0;
 
 	memset( glState.currenttextures, 0, sizeof( glState.currenttextures ) );
-	if ( qglBindTexture ) {
-		if ( qglActiveTextureARB ) {
-			GL_SelectTexture( 1 );
-			qglBindTexture( GL_TEXTURE_2D, 0 );
-			GL_SelectTexture( 0 );
-			qglBindTexture( GL_TEXTURE_2D, 0 );
-		} else {
-			qglBindTexture( GL_TEXTURE_2D, 0 );
-		}
+	if ( qglActiveTextureARB ) {
+		GL_SelectTexture( 1 );
+		qglBindTexture( GL_TEXTURE_2D, 0 );
+		GL_SelectTexture( 0 );
+		qglBindTexture( GL_TEXTURE_2D, 0 );
+	} else {
+		qglBindTexture( GL_TEXTURE_2D, 0 );
 	}
 }
 
@@ -3235,7 +3227,7 @@ R_FindCachedImage
 =============
 */
 image_t *R_FindCachedImage( const char *name, int hash ) {
-	image_t *bImage, *bImagePrev;
+	image_t *bImage;
 
 	if ( !r_cacheShaders->integer ) {
 		return NULL;
@@ -3246,7 +3238,6 @@ image_t *R_FindCachedImage( const char *name, int hash ) {
 	}
 
 	bImage = backupHashTable[hash];
-	bImagePrev = NULL;
 	while ( bImage ) {
 
 		if ( !Q_stricmp( name, bImage->imgName ) ) {
@@ -3259,7 +3250,6 @@ image_t *R_FindCachedImage( const char *name, int hash ) {
 			return bImage;
 		}
 
-		bImagePrev = bImage;
 		bImage = bImage->next;
 	}
 
@@ -3362,7 +3352,7 @@ void R_LoadCacheImages( void ) {
 
 	buf = (byte *)ri.Hunk_AllocateTempMemory( len );
 	ri.FS_ReadFile( "image.cache", (void **)&buf );
-	pString = buf;
+	pString = (char *)buf;
 
 	while ( ( token = COM_ParseExt( &pString, qtrue ) ) && token[0] ) {
 		Q_strncpyz( name, token, sizeof( name ) );

@@ -115,7 +115,7 @@ typedef struct iteminfo_s
 	int number;                         //number of the item info
 } iteminfo_t;
 
-#define ITEMINFO_OFS( x ) (int)&( ( (iteminfo_t *)0 )->x )
+#define ITEMINFO_OFS( x ) (int)(intptr_t)&( ( (iteminfo_t *)0 )->x )
 
 fielddef_t iteminfo_fields[] =
 {
@@ -220,9 +220,7 @@ void BotInterbreedGoalFuzzyLogic( int parent1, int parent2, int child ) {
 // Changes Globals:		-
 //===========================================================================
 void BotSaveGoalFuzzyLogic( int goalstate, char *filename ) {
-	bot_goalstate_t *gs;
-
-	gs = BotGoalStateFromHandle( goalstate );
+	BotGoalStateFromHandle( goalstate );
 
 	//WriteWeightConfig(filename, gs->itemweightconfig);
 } //end of the function BotSaveGoalFuzzyLogic

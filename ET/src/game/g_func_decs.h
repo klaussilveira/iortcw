@@ -360,7 +360,7 @@ extern void Team_ResetFlag ( gentity_t * ent ) ;
 extern void Team_CheckHurtCarrier ( gentity_t * targ , gentity_t * attacker ) ;
 extern void Team_FragBonuses ( gentity_t * targ , gentity_t * inflictor , gentity_t * attacker ) ;
 extern qboolean OnSameTeam ( gentity_t * ent1 , gentity_t * ent2 ) ;
-extern void QDECL PrintMsg ( gentity_t * ent , const char * fmt , ... ) ;
+extern void QDECL PrintMsg ( gentity_t * ent , const char * fmt , ... ) _attribute( ( format( printf,2,3 ) ) ) ;
 extern const char * TeamColorString ( int team ) ;
 extern const char * OtherTeamName ( int team ) ;
 extern const char * TeamName ( int team ) ;

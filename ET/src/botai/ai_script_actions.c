@@ -81,7 +81,7 @@ qboolean Bot_ScriptAction_SetSpeed( bot_state_t* bs, char *params ) {
 Bot_ScriptError
 =================
 */
-void Bot_ScriptError( bot_state_t *bs, char *fmt, ... ) {
+void __attribute__((format(printf, 2, 3))) Bot_ScriptError( bot_state_t *bs, char *fmt, ... ) {
 	va_list ap;
 	char text[512];
 	//
@@ -165,7 +165,7 @@ qboolean Bot_ScriptAction_SetAccumToPlayerCount( bot_state_t *bs, char *params )
 		if ( !g_entities[i].client ) {
 			continue;
 		}
-		if ( !g_entities[i].client->pers.connected != CON_CONNECTED ) {
+		if ( g_entities[i].client->pers.connected != CON_CONNECTED ) {
 			continue;
 		}
 		validPlayers[i] = 1;

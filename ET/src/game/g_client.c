@@ -593,8 +593,7 @@ reinforce
 // -- called when time expires for a team deployment cycle and there is at least one guy ready to go
 */
 void reinforce( gentity_t *ent ) {
-	int p, team; // numDeployable=0, finished=0; // TTimo unused
-	char *classname;
+	int p; // numDeployable=0, finished=0; // TTimo unused
 	gclient_t *rclient;
 	char userinfo[MAX_INFO_STRING], *respawnStr;
 
@@ -614,18 +613,6 @@ void reinforce( gentity_t *ent ) {
 	if ( ent->client->pers.mvCount > 0 ) {
 		G_smvRemoveInvalidClients( ent, TEAM_AXIS );
 		G_smvRemoveInvalidClients( ent, TEAM_ALLIES );
-	}
-
-	// get team to deploy from passed entity
-	team = ent->client->sess.sessionTeam;
-
-	// find number active team spawnpoints
-	if ( team == TEAM_AXIS ) {
-		classname = "team_CTF_redspawn";
-	} else if ( team == TEAM_ALLIES ) {
-		classname = "team_CTF_bluespawn";
-	} else {
-		assert( 0 );
 	}
 
 	// DHM - Nerve :: restore persistant data now that we're out of Limbo
@@ -1536,7 +1523,7 @@ char *ClientConnect( int clientNum, qboolean firstTime, qboolean isBot ) {
 	// Gordon: porting q3f flag bug fix
 	//			If a player reconnects quickly after a disconnect, the client disconnect may never be called, thus flag can get lost in the ether
 	if ( ent->inuse ) {
-		G_LogPrintf( "Forcing disconnect on active client: %i\n", ent - g_entities );
+		G_LogPrintf( "Forcing disconnect on active client: %i\n", (int)(ent - g_entities) );
 		// so lets just fix up anything that should happen on a disconnect
 		ClientDisconnect( ent - g_entities );
 	}

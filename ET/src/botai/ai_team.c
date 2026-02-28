@@ -289,7 +289,7 @@ float* BotSortPlayersByDistance( vec3_t target, int *list, int numList ) {
 	static float outDistances[MAX_CLIENTS];
 
 	float distances[MAX_CLIENTS], bestDist;
-	int i, j, outList[MAX_CLIENTS], best = 0;
+	int i, j, best = 0;
 
 	for ( i = 0; i < numList; i++ ) {
 		distances[i] = VectorDistanceSquared( g_entities[list[i]].r.currentOrigin, target );
@@ -307,7 +307,6 @@ float* BotSortPlayersByDistance( vec3_t target, int *list, int numList ) {
 
 		outDistances[j] = distances[best];
 		distances[best] = -1;
-		outList[j] = list[best];
 	}
 
 	return outDistances;
@@ -324,7 +323,7 @@ float *BotSortPlayersByTraveltime( int areanum, int *list, int numList ) {
 	static float outDistances[MAX_CLIENTS];
 
 	float distances[MAX_CLIENTS], bestDist;
-	int i, j, outList[MAX_CLIENTS], best = 0;
+	int i, j, best = 0;
 	bot_state_t *lbs;
 
 	for ( i = 0; i < numList; i++ ) {
@@ -351,7 +350,6 @@ float *BotSortPlayersByTraveltime( int areanum, int *list, int numList ) {
 
 		outDistances[j] = distances[best];
 		distances[best] = -1;
-		outList[j] = list[best];
 	}
 
 	return outDistances;
@@ -1213,10 +1211,6 @@ int BotGetTargetDynamite( int *list, int listSize, gentity_t* target ) {
 			continue;
 		}
 		for ( team = TEAM_AXIS; team <= TEAM_ALLIES; team++ ) {
-			vec3_t mins, maxs;
-			VectorAdd( dyn->r.currentOrigin, dyn->r.mins, mins );
-			VectorAdd( dyn->r.currentOrigin, dyn->r.maxs, maxs );
-
 			if ( target ) {
 				if ( target->s.eType == ET_EXPLOSIVE ) {
 					if ( !target->parent ) {
@@ -1444,7 +1438,6 @@ BotSuggestClass
 ==================
 */
 int BotSuggestClass( bot_state_t *bs, team_t team ) {
-	gclient_t *cl;
 	int i;
 	int numRequired[NUM_PLAYER_CLASSES];
 //	int		list[10], numList;
@@ -1456,8 +1449,6 @@ int BotSuggestClass( bot_state_t *bs, team_t team ) {
 	int bestClass;
 	qboolean needEngineers = qfalse;
 	int lastMg42Death = ( team == TEAM_ALLIES ? level.alliesMG42Counter : level.axisMG42Counter );
-
-	cl = &level.clients[bs->entitynum];
 
 	// if we have a specified class, then use that
 /*	trap_GetUserinfo( bs->client, userinfo, sizeof(userinfo) );
@@ -1978,7 +1969,7 @@ void BotTeamOrders( bot_state_t *bs ) {
 // Covert Ops bot searches for a body to steal the uniform from
 qboolean BotClass_CovertOpsCheckDisguises( bot_state_t *bs, int maxTravel, bot_goal_t *goal ) {
 	gentity_t *trav;
-	int t, area, best = -1, bestTravel, bestArea = -1; // Arnout: bestArea was not initialized
+	int t, area, best = -1, bestTravel;
 	bot_goal_t target;
 	int list[32], numList;
 	vec3_t loc;
@@ -2030,7 +2021,6 @@ qboolean BotClass_CovertOpsCheckDisguises( bot_state_t *bs, int maxTravel, bot_g
 			if ( BotGoalWithinMovementAutonomy( bs, &target, BGU_HIGH ) ) {
 				best = trav->s.number;
 				bestTravel = t;
-				bestArea = area;
 			}
 		}
 	}
@@ -2962,10 +2952,8 @@ G_RequestedFollow
 qboolean G_RequestedFollow( bot_state_t *bs, int client ) {
 	bot_chat_t *trav;
 	int i;
-	qboolean clearRequest = qfalse;
 	//
 	if ( client < 0 ) {
-		clearRequest = qtrue;
 		client = -client - 1;
 	}
 	//

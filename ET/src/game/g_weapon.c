@@ -580,7 +580,7 @@ void Weapon_Syringe( gentity_t *ent ) {
 					ent->client->sess.aWeaponStats[WS_SYRINGE].hits++;
 				}
 				if ( ent && ent->client ) {
-					G_LogPrintf( "Medic_Revive: %d %d\n", ent - g_entities, traceEnt - g_entities );                // OSP
+					G_LogPrintf( "Medic_Revive: %d %d\n", (int)(ent - g_entities), (int)(traceEnt - g_entities) );                // OSP
 
 				}
 				if ( !traceEnt->isProp ) { // Gordon: flag for if they were teamkilled or not
@@ -1571,7 +1571,7 @@ void Weapon_Engineer( gentity_t *ent ) {
 				traceEnt->health = MG42_MULTIPLAYER_HEALTH;
 			}
 
-			G_LogPrintf( "Repair: %d\n", ent - g_entities );    // OSP
+			G_LogPrintf( "Repair: %d\n", (int)(ent - g_entities) );    // OSP
 
 			if ( traceEnt->sound3to2 != ent->client->sess.sessionTeam ) {
 				AddScore( ent, WOLF_REPAIR_BONUS ); // JPW NERVE props to the E for the fixin'
@@ -1991,7 +1991,7 @@ evilbanigoto:
 							if ( !( hit->spawnflags & OBJECTIVE_DESTROYED ) ) {
 								AddScore( traceEnt->parent, WOLF_DYNAMITE_PLANT ); // give drop score to guy who dropped it
 								if ( traceEnt->parent && traceEnt->parent->client ) {
-									G_LogPrintf( "Dynamite_Plant: %d\n", traceEnt->parent - g_entities );   // OSP
+									G_LogPrintf( "Dynamite_Plant: %d\n", (int)(traceEnt->parent - g_entities) );   // OSP
 								}
 								traceEnt->parent = ent; // give explode score to guy who armed it
 							}
@@ -2061,7 +2061,7 @@ evilbanigoto:
 								 hit->s.teamNum && ( hit->s.teamNum == ent->client->sess.sessionTeam ) ) { // ==, as it's inverse
 								AddScore( traceEnt->parent, WOLF_DYNAMITE_PLANT ); // give drop score to guy who dropped it
 								if ( traceEnt->parent && traceEnt->parent->client ) {
-									G_LogPrintf( "Dynamite_Plant: %d\n", traceEnt->parent - g_entities );   // OSP
+									G_LogPrintf( "Dynamite_Plant: %d\n", (int)(traceEnt->parent - g_entities) );   // OSP
 								}
 								traceEnt->parent = ent; // give explode score to guy who armed it
 							}
@@ -2227,7 +2227,7 @@ evilbanigoto:
 								if ( hit->s.teamNum == TEAM_AXIS && ( !scored ) ) {
 									AddScore( ent,WOLF_DYNAMITE_DIFFUSE );
 									if ( ent && ent->client ) {
-										G_LogPrintf( "Dynamite_Diffuse: %d\n", ent - g_entities );                  // OSP
+										G_LogPrintf( "Dynamite_Diffuse: %d\n", (int)(ent - g_entities) );                  // OSP
 									}
 									G_AddSkillPoints( ent, SK_EXPLOSIVES_AND_CONSTRUCTION, 6.f );
 									G_DebugAddSkillPoints( ent, SK_EXPLOSIVES_AND_CONSTRUCTION, 6.f, "defusing enemy dynamite" );
@@ -2247,7 +2247,7 @@ evilbanigoto:
 								if ( hit->s.teamNum == TEAM_ALLIES && ( !scored ) ) {
 									AddScore( ent,WOLF_DYNAMITE_DIFFUSE );
 									if ( ent && ent->client ) {
-										G_LogPrintf( "Dynamite_Diffuse: %d\n", ent - g_entities );                  // OSP
+										G_LogPrintf( "Dynamite_Diffuse: %d\n", (int)(ent - g_entities) );                  // OSP
 									}
 									G_AddSkillPoints( ent, SK_EXPLOSIVES_AND_CONSTRUCTION, 6.f );
 									G_DebugAddSkillPoints( ent, SK_EXPLOSIVES_AND_CONSTRUCTION, 6.f, "defusing enemy dynamite" );
@@ -3258,8 +3258,6 @@ qboolean Bullet_Fire_Extended( gentity_t *source, gentity_t *attacker, vec3_t st
 	gentity_t   *traceEnt;
 	qboolean hitClient = qfalse;
 
-	qboolean reducedDamage = qfalse;
-
 	qboolean waslinked = qfalse;
 
 	//bani - prevent shooting ourselves in the head when prone, firing through a breakable
@@ -3303,8 +3301,6 @@ qboolean Bullet_Fire_Extended( gentity_t *source, gentity_t *attacker, vec3_t st
 #if DO_BROKEN_DISTANCEFALLOFF
 		// ~~~___---___
 		if ( dist > Square( 1500.f ) ) {
-			reducedDamage = qtrue;
-
 			if ( dist > Square( 2500.f ) ) {
 				damage *= 0.5f;
 			} else {
@@ -3326,9 +3322,8 @@ qboolean Bullet_Fire_Extended( gentity_t *source, gentity_t *attacker, vec3_t st
 		scale = 1.0f - scale;
 
 		// And, finally, cap it.
-		reducedDamage = qtrue;
 		if ( scale >= 1.0f ) {
-			scale = 1.0f; reducedDamage = qfalse;
+			scale = 1.0f;
 		} else if ( scale < 0.5f )                                                                {
 			scale = 0.5f;
 		}
@@ -3654,11 +3649,7 @@ ROCKET
 */
 
 void Weapon_Panzerfaust_Fire( gentity_t *ent ) {
-	gentity_t   *m;
-
-	m = fire_rocket( ent, muzzleEffect, forward );
-
-//	VectorAdd( m->s.pos.trDelta, ent->client->ps.velocity, m->s.pos.trDelta );	// "real" physics
+	(void)fire_rocket( ent, muzzleEffect, forward );
 }
 
 
@@ -3714,7 +3705,6 @@ static vec3_t flameChunkMins = {-4, -4, -4};
 static vec3_t flameChunkMaxs = { 4,  4,  4};
 
 void Weapon_FlamethrowerFire( gentity_t *ent ) {
-	gentity_t   *traceEnt;
 	vec3_t start;
 	vec3_t trace_start;
 	vec3_t trace_end;
@@ -3745,7 +3735,7 @@ void Weapon_FlamethrowerFire( gentity_t *ent ) {
 		}
 	}
 
-	traceEnt = fire_flamechunk( ent, start, forward );
+	(void)fire_flamechunk( ent, start, forward );
 }
 
 //======================================================================
@@ -3881,19 +3871,14 @@ void CalcMuzzlePoints( gentity_t *ent, int weapon ) {
 		float spreadfrac, phase;
 
 		if ( BG_IsScopedWeapon( weapon ) ) {
-			float pitchAmp, yawAmp;
 			float pitchMinAmp, yawMinAmp;
 
 			spreadfrac = ent->client->currentAimSpreadScale;
 
 			if ( weapon == WP_FG42SCOPE ) {
-				pitchAmp = 4 * ZOOM_PITCH_AMPLITUDE;
-				yawAmp = 4 * ZOOM_YAW_AMPLITUDE;
 				pitchMinAmp = 4 * ZOOM_PITCH_MIN_AMPLITUDE;
 				yawMinAmp = 4 * ZOOM_YAW_MIN_AMPLITUDE;
 			} else {
-				pitchAmp = ZOOM_PITCH_AMPLITUDE;
-				yawAmp = ZOOM_YAW_AMPLITUDE;
 				pitchMinAmp = ZOOM_PITCH_MIN_AMPLITUDE;
 				yawMinAmp = ZOOM_YAW_MIN_AMPLITUDE;
 			}

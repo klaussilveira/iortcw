@@ -80,7 +80,7 @@ vmCvar_t bot_findgoal;
 BotAI_Print
 ==================
 */
-void QDECL BotAI_Print( int type, char *fmt, ... ) {
+void QDECL __attribute__((format(printf, 2, 3))) BotAI_Print( int type, char *fmt, ... ) {
 	char str[2048];
 	va_list ap;
 
@@ -705,7 +705,7 @@ int BotTravelFlagsForClient( int client ) {
 	int tfl;
 	gclient_t *cl = &level.clients[client];
 	//
-	if ( !cl || !cl->pers.connected == CON_CONNECTED ) {
+	if ( !cl || cl->pers.connected != CON_CONNECTED ) {
 		return 0;
 	}
 	//
@@ -1353,7 +1353,7 @@ int BotAISetupClient( int client, struct bot_settings_s *settings ) {
 	//load the bot character
 	bs->character = trap_BotLoadCharacter( settings->characterfile, settings->skill );
 	if ( !bs->character ) {
-		BotAI_Print( PRT_FATAL, "couldn't load skill %d from %s\n", settings->skill, settings->characterfile );
+		BotAI_Print( PRT_FATAL, "couldn't load skill %f from %s\n", settings->skill, settings->characterfile );
 		return qfalse;
 	}
 	//copy the settings
@@ -1717,9 +1717,11 @@ int BotAIThinkFrame( int time ) {
 	static int botlib_residual;
 	static int lastbotthink_time;
 	static int lastbot;
-	int startTime /*, totalProfileTime*/;
+	/*int startTime, totalProfileTime;*/
+
 	if ( bot_profile.integer == 1 ) {
-		startTime = trap_Milliseconds();
+		/*startTime =*/ (void)trap_Milliseconds();
+
 	}
 
 	trap_Cvar_Update( &bot_rocketjump );
@@ -2656,7 +2658,7 @@ void BotDebugViewClient( int client ) {
 	if ( lastChange < level.time && lastChange > level.time - 5000 ) {
 		return;
 	}
-	if ( !level.clients[0].pers.connected == CON_CONNECTED ) {
+	if ( level.clients[0].pers.connected != CON_CONNECTED ) {
 		return;
 	}
 	if ( g_entities[0].r.svFlags & SVF_BOT ) {

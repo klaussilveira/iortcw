@@ -105,7 +105,7 @@ void G_SendSystemMessage( sysMsg_t message, int team ) {
 			continue;
 		}
 
-		trap_SendServerCommand( other - g_entities, va( "vschat 0 %d 3 %s 0 0 0", other - g_entities, systemMessages[message] ) );
+		trap_SendServerCommand( (int)(other - g_entities), va( "vschat 0 %d 3 %s 0 0 0", (int)(other - g_entities), systemMessages[message] ) );
 	}
 }
 
@@ -148,7 +148,7 @@ void G_CheckForNeededClasses( void ) {
 
 	// ALLIES
 	if ( teamCounts[1] > 3 ) {
-		if ( !playerClasses[PC_ENGINEER - 1] ) {
+		if ( !playerClasses[PC_ENGINEER - 1][0] ) {
 			playerClasses[PC_ENGINEER - 1][0] = G_NeedEngineers( TEAM_ALLIES ) ? 0 : 1;
 		}
 
@@ -174,7 +174,7 @@ void G_CheckForNeededClasses( void ) {
 
 	// AXIS
 	if ( teamCounts[0] > 3 ) {
-		if ( !playerClasses[PC_ENGINEER - 1] ) {
+		if ( !playerClasses[PC_ENGINEER - 1][1] ) {
 			playerClasses[PC_ENGINEER - 1][1] = G_NeedEngineers( TEAM_AXIS ) ? 0 : 1;
 		}
 

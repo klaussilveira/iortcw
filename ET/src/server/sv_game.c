@@ -195,17 +195,14 @@ Does NOT check portalareas
 qboolean SV_inPVSIgnorePortals( const vec3_t p1, const vec3_t p2 ) {
 	int leafnum;
 	int cluster;
-	int area1, area2;
 	byte    *mask;
 
 	leafnum = CM_PointLeafnum( p1 );
 	cluster = CM_LeafCluster( leafnum );
-	area1 = CM_LeafArea( leafnum );
 	mask = CM_ClusterPVS( cluster );
 
 	leafnum = CM_PointLeafnum( p2 );
 	cluster = CM_LeafCluster( leafnum );
-	area2 = CM_LeafArea( leafnum );
 
 	if ( mask && ( !( mask[cluster >> 3] & ( 1 << ( cluster & 7 ) ) ) ) ) {
 		return qfalse;
@@ -961,7 +958,7 @@ intptr_t SV_GameSystemCalls( intptr_t *args ) {
 		return 0;
 
 	case TRAP_STRNCPY:
-		return (int)strncpy( VMA( 1 ), VMA( 2 ), args[3] );
+		return (intptr_t)strncpy( VMA( 1 ), VMA( 2 ), args[3] );
 
 	case TRAP_SIN:
 		return FloatAsInt( sin( VMF( 1 ) ) );
@@ -1003,7 +1000,7 @@ intptr_t SV_GameSystemCalls( intptr_t *args ) {
 		return SV_BinaryMessageStatus( args[1] );
 
 	default:
-		Com_Error( ERR_DROP, "Bad game system trap: %i", args[0] );
+		Com_Error( ERR_DROP, "Bad game system trap: %ld", (long)args[0] );
 	}
 	return -1;
 }

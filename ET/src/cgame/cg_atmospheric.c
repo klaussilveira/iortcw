@@ -357,7 +357,7 @@ static void CG_RainParticleRender( cg_atmosphericParticle_t *particle ) {
 	vec3_t forward, right;
 	polyVert_t verts[3];
 	vec2_t line;
-	float len, frac, dist;
+	float len, dist;
 	vec3_t start, finish;
 	float groundHeight;
 //	int			msec = trap_Milliseconds();
@@ -383,7 +383,6 @@ static void CG_RainParticleRender( cg_atmosphericParticle_t *particle ) {
 	if ( start[2] <= groundHeight ) {
 		// Stop snow going through surfaces.
 		len = particle->height - groundHeight + start[2];
-		frac = start[2];
 		VectorMA( start, len - particle->height, particle->deltaNormalized, start );
 	}
 
@@ -549,7 +548,7 @@ static void CG_SnowParticleRender( cg_atmosphericParticle_t *particle ) {
 	vec3_t forward, right;
 	polyVert_t verts[3];
 	vec2_t line;
-	float len, frac, sinTumbling, cosTumbling, particleWidth, dist;
+	float len, sinTumbling, cosTumbling, particleWidth, dist;
 	vec3_t start, finish;
 	float groundHeight;
 //	int			msec = trap_Milliseconds();
@@ -578,7 +577,6 @@ static void CG_SnowParticleRender( cg_atmosphericParticle_t *particle ) {
 	if ( start[2] <= groundHeight ) {
 		// Stop snow going through surfaces.
 		len = particle->height - groundHeight + start[2];
-		frac = start[2];
 		VectorMA( start, len - particle->height, particle->deltaNormalized, start );
 	}
 

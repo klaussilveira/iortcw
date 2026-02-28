@@ -671,7 +671,7 @@ int CG_LastAttacker( void ) {
 	return( ( !cg.attackerTime ) ? -1 : cg.snap->ps.persistant[PERS_ATTACKER] );
 }
 
-void QDECL CG_Printf( const char *msg, ... ) {
+void QDECL __attribute__((format(printf, 1, 2))) CG_Printf( const char *msg, ... ) {
 	va_list argptr;
 	char text[1024];
 
@@ -696,7 +696,7 @@ void QDECL CG_Printf( const char *msg, ... ) {
 	trap_Print( text );
 }
 
-void QDECL CG_Error( const char *msg, ... ) {
+void QDECL __attribute__((format(printf, 1, 2))) CG_Error( const char *msg, ... ) {
 	va_list argptr;
 	char text[1024];
 
@@ -2571,8 +2571,15 @@ void CG_LoadHudMenu() {
 	cgDC.keynumToStringBuf = &trap_Key_KeynumToStringBuf;   // NERVE - SMF
 	cgDC.translateString = &CG_TranslateString;             // NERVE - SMF
 	//cgDC.executeText = &trap_Cmd_ExecuteText;
+#if defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wsuggest-attribute=format"
+#endif
 	cgDC.Error = &Com_Error;
 	cgDC.Print = &Com_Printf;
+#if defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
 	cgDC.ownerDrawWidth = &CG_OwnerDrawWidth;
 	//cgDC.Pause = &CG_Pause;
 	cgDC.registerSound = &trap_S_RegisterSound;

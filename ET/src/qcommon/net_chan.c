@@ -227,7 +227,6 @@ copied out.
 */
 qboolean Netchan_Process( netchan_t *chan, msg_t *msg ) {
 	int sequence;
-	int qport;
 	int fragmentStart, fragmentLength;
 	qboolean fragmented;
 
@@ -245,7 +244,7 @@ qboolean Netchan_Process( netchan_t *chan, msg_t *msg ) {
 
 	// read the qport if we are a server
 	if ( chan->sock == NS_SERVER ) {
-		qport = MSG_ReadShort( msg );
+		(void)MSG_ReadShort( msg );
 	}
 
 	// read the fragment information
@@ -730,7 +729,7 @@ NET_OutOfBandPrint
 Sends a text message in an out-of-band datagram
 ================
 */
-void QDECL NET_OutOfBandPrint( netsrc_t sock, netadr_t adr, const char *format, ... ) {
+void QDECL __attribute__((format(printf, 3, 4))) NET_OutOfBandPrint( netsrc_t sock, netadr_t adr, const char *format, ... ) {
 	va_list argptr;
 	char string[MAX_MSGLEN];
 

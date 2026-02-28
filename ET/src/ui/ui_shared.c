@@ -2170,12 +2170,7 @@ int Item_Slider_OverSlider( itemDef_t *item, float x, float y ) {
 
 int Item_ListBox_OverLB( itemDef_t *item, float x, float y ) {
 	rectDef_t r;
-	listBoxDef_t *listPtr;
 	int thumbstart;
-	int count;
-
-	count = DC->feederCount( item->special );
-	listPtr = (listBoxDef_t*)item->typeData;
 	if ( item->window.flags & WINDOW_HORIZONTAL ) {
 		// check if on left arrow
 		r.x = item->window.rect.x;
@@ -3982,7 +3977,7 @@ void Item_TextField_Paint( itemDef_t *item ) {
 	do
 	{
 		field_offset++;
-		if ( buff + editPtr->paintOffset + field_offset == '\0' ) {
+		if ( *(buff + editPtr->paintOffset + field_offset) == '\0' ) {
 			break; // keep it safe
 		}
 		text_len = DC->textWidth( buff + editPtr->paintOffset + field_offset, item->textscale, 0 );
@@ -4425,10 +4420,8 @@ char* BindingFromName( const char *cvar ) {
 
 void Item_Slider_Paint( itemDef_t *item ) {
 	vec4_t newColor, lowLight;
-	float x, y, value;
+	float x, y;
 	menuDef_t *parent = (menuDef_t*)item->parent;
-
-	value = ( item->cvar ) ? DC->getCVarValue( item->cvar ) : 0;
 
 	if ( item->window.flags & WINDOW_HASFOCUS && item->window.flags & WINDOW_FOCUSPULSE ) {
 		lowLight[0] = 0.8 * parent->focusColor[0];
@@ -4912,13 +4905,10 @@ void Item_ListBox_Paint( itemDef_t *item ) {
 
 
 void Item_OwnerDraw_Paint( itemDef_t *item ) {
-	menuDef_t *parent;
 
 	if ( item == NULL ) {
 		return;
 	}
-
-	parent = (menuDef_t*)item->parent;
 
 	if ( DC->ownerDrawItem ) {
 		vec4_t color, lowLight;
@@ -5632,9 +5622,7 @@ qboolean ItemParse_group( itemDef_t *item, int handle ) {
 // asset_model <string>
 qboolean ItemParse_asset_model( itemDef_t *item, int handle ) {
 	const char *temp = NULL;
-	modelDef_t *modelPtr;
 	Item_ValidateTypeData( item );
-	modelPtr = (modelDef_t*)item->typeData;
 
 	if ( !PC_String_Parse( handle, &temp ) ) {
 		return qfalse;
@@ -7429,7 +7417,7 @@ void BG_PanelButton_RenderEdit( panel_button_t* button ) {
 
 		do {
 			offset++;
-			if ( buffer + offset  == '\0' ) {
+			if ( *(buffer + offset)  == '\0' ) {
 				break;
 			}
 		} while ( DC->textWidthExt( buffer + offset, button->font->scalex, 0, button->font->font ) > button->rect.w );
@@ -7450,7 +7438,7 @@ void BG_PanelButton_RenderEdit( panel_button_t* button ) {
 
 		do {
 			offset++;
-			if ( s + offset  == '\0' ) {
+			if ( *(s + offset)  == '\0' ) {
 				break;
 			}
 		} while ( DC->textWidthExt( s + offset, button->font->scalex, 0, button->font->font ) > button->rect.w );

@@ -171,7 +171,7 @@ static void CG_CalcMoveSpeeds( bg_character_t *character ) {
 	int i, j, k;
 	float totalSpeed;
 	int numSpeed;
-	int lastLow, low;
+	int low;
 	orientation_t o[2];
 
 	memset( &refent, 0, sizeof( refent ) );
@@ -186,7 +186,6 @@ static void CG_CalcMoveSpeeds( bg_character_t *character ) {
 		}
 
 		totalSpeed = 0;
-		lastLow = -1;
 		numSpeed = 0;
 
 		// for each frame
@@ -226,7 +225,6 @@ static void CG_CalcMoveSpeeds( bg_character_t *character ) {
 			for ( k = 0; k < 2; k++ ) {
 				VectorCopy( o[k].origin, oldPos[k] );
 			}
-			lastLow = low;
 		}
 
 		// record the speed
@@ -305,7 +303,7 @@ static qboolean CG_CheckForExistingAnimModelInfo( const char *animationGroup, co
 	} else {
 		*animModelInfo = firstFree;
 		// clear the structure out ready for use
-		memset( *animModelInfo, 0, sizeof( *animModelInfo ) );
+		memset( *animModelInfo, 0, sizeof( **animModelInfo ) );
 	}
 
 	// qfalse signifies that we need to parse the information from the script files

@@ -471,7 +471,7 @@ qboolean BotMP_CheckEmergencyGoals( bot_state_t *bs ) {
 			trav = NULL;
 			numList = 0;
 			while ( ( trav = BotFindNextStaticEntity( trav, BOTSTATICENTITY_MG42 ) ) ) {
-				if ( ( trav->aiInactive && ( 1 << team ) ) ) {
+				if ( ( trav->aiInactive & ( 1 << team ) ) ) {
 					continue;
 				}
 				if ( trav->s.powerups != STATE_DEFAULT ) {
@@ -1184,7 +1184,6 @@ botMPpg_t BotMP_FindGoal_ProcessGoal( bot_state_t* bs, botgoalFind_t* bg, bot_go
 		numList = trap_AAS_BBoxAreas( mins, maxs, list, 32 );
 		if ( numList ) {
 			int oldestTime = -1;
-			int bestDist = -1;
 			int oldest = 0;
 
 			for ( i = 0; i < numList; i++ ) {
@@ -1206,7 +1205,6 @@ botMPpg_t BotMP_FindGoal_ProcessGoal( bot_state_t* bs, botgoalFind_t* bg, bot_go
 					if ( t ) {
 						oldestTime = t;
 						oldest = list[i];
-						bestDist = t;
 					}
 				}
 			}

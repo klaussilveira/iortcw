@@ -42,7 +42,7 @@ qboolean m_entersound;              // after a frame, so caching won't disrupt t
 
 // JPW NERVE added Com_DPrintf
 #define MAXPRINTMSG 4096
-void QDECL Com_DPrintf( const char *fmt, ... ) {
+void QDECL __attribute__((format(printf, 1, 2))) Com_DPrintf( const char *fmt, ... ) {
 	va_list argptr;
 	char msg[MAXPRINTMSG];
 	int developer;

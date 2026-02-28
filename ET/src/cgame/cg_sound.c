@@ -264,13 +264,11 @@ CG_SoundParseSounds
 */
 static void CG_SoundParseSounds( char *filename, char *buffer ) {
 	char *token, **text;
-	int s;
 	long hash;
 	soundScript_t sound;                // the current sound being read
 	soundScriptSound_t  *scriptSound = NULL;
 	qboolean inSound, wantSoundName;
 
-	s = 0;
 	inSound = qfalse;
 	wantSoundName = qtrue;
 	text = &buffer;
@@ -443,7 +441,7 @@ static void CG_SoundLoadSoundFiles( void ) {
 		if ( !token[0] ) {
 			break;
 		}
-		Com_sprintf( soundFiles[numSounds++], MAX_QPATH, token );
+		Com_sprintf( soundFiles[numSounds++], MAX_QPATH, "%s", token );
 	}
 
 	// add the map specific soundfile

@@ -700,7 +700,7 @@ bot_synonymlist_t *BotLoadSynonyms( char *filename ) {
 						} //end if
 						StripDoubleQuotes( token.string );
 						if ( strlen( token.string ) <= 0 ) {
-							SourceError( source, "empty string", token.string );
+							SourceError( source, "empty string %s", token.string );
 							FreeSource( source );
 							return NULL;
 						} //end if
@@ -2784,7 +2784,6 @@ int BotAllocChatState( void ) {
 // Changes Globals:		-
 //========================================================================
 void BotFreeChatState( int handle ) {
-	bot_chatstate_t *cs;
 	bot_consolemessage_t m;
 	int h;
 
@@ -2796,7 +2795,6 @@ void BotFreeChatState( int handle ) {
 		botimport.Print( PRT_FATAL, "invalid chat state %d\n", handle );
 		return;
 	} //end if
-	cs = botchatstates[handle];
 	if ( LibVarGetValue( "bot_reloadcharacters" ) ) {
 		BotFreeChatFile( handle );
 	} //end if

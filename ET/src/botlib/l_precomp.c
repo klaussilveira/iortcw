@@ -141,7 +141,7 @@ define_t *globaldefines;
 // Returns:					-
 // Changes Globals:		-
 //============================================================================
-void QDECL SourceError( source_t *source, char *str, ... ) {
+void QDECL __attribute__((format(printf, 2, 3))) SourceError( source_t *source, char *str, ... ) {
 	char text[1024];
 	va_list ap;
 
@@ -164,7 +164,7 @@ void QDECL SourceError( source_t *source, char *str, ... ) {
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void QDECL SourceWarning( source_t *source, char *str, ... ) {
+void QDECL __attribute__((format(printf, 2, 3))) SourceWarning( source_t *source, char *str, ... ) {
 	char text[1024];
 	va_list ap;
 
@@ -1001,7 +1001,7 @@ int PC_Directive_include( source_t *source ) {
 			if ( token.type == TT_PUNCTUATION && *token.string == '>' ) {
 				break;
 			}
-			strncat( path, token.string, _MAX_PATH );
+			strncat( path, token.string, _MAX_PATH - strlen( path ) - 1 );
 		} //end while
 		if ( *token.string != '>' ) {
 			SourceWarning( source, "#include missing trailing >" );
@@ -1668,7 +1668,6 @@ int PC_EvaluateTokens( source_t *source, token_t *tokens, signed long int *intva
 	int questmarkintvalue = 0;
 	double questmarkfloatvalue = 0;
 	int gotquestmarkvalue = qfalse;
-	int lastoperatortype = 0;
 	//
 	operator_t operator_heap[MAX_OPERATORS];
 	int numoperators = 0;
@@ -2056,7 +2055,6 @@ int PC_EvaluateTokens( source_t *source, token_t *tokens, signed long int *intva
 		if ( error ) {
 			break;
 		}
-		lastoperatortype = o->operator;
 		//if not an operator with arity 1
 		if ( o->operator != P_LOGIC_NOT
 			 && o->operator != P_BIN_NOT ) {

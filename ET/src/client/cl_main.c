@@ -228,10 +228,8 @@ CL_ChangeReliableCommand
 ======================
 */
 void CL_ChangeReliableCommand( void ) {
-	int r, index, l;
+	int index, l;
 
-	// NOTE TTimo: what is the randomize for?
-	r = clc.reliableSequence - ( random() * 5 );
 	index = clc.reliableSequence & ( MAX_RELIABLE_COMMANDS - 1 );
 	l = strlen( clc.reliableCommands[ index ] );
 	if ( l >= MAX_STRING_CHARS - 1 ) {
@@ -1743,7 +1741,7 @@ void CL_DownloadsComplete( void ) {
 	// DHM - Nerve :: Auto-update (not finished yet)
 	if ( autoupdateStarted ) {
 
-		if ( autoupdateFilename && ( strlen( autoupdateFilename ) > 4 ) ) {
+		if ( strlen( autoupdateFilename ) > 4 ) {
 #ifdef _WIN32
 			// win32's Sys_StartProcess prepends the current dir
 			fn = va( "%s/%s", FS_ShiftStr( AUTOUPDATE_DIR, AUTOUPDATE_DIR_SHIFT ), autoupdateFilename );
@@ -2011,7 +2009,7 @@ void CL_CheckForResend( void ) {
 		// EVEN BALANCE - T.RAY
 		strcpy( pkt, "getchallenge" ) ;
 		pktlen = strlen( pkt ) ;
-		NET_OutOfBandPrint( NS_CLIENT, clc.serverAddress, pkt );
+		NET_OutOfBandPrint( NS_CLIENT, clc.serverAddress, "%s", pkt );
 		break;
 
 	case CA_CHALLENGING:
@@ -2037,7 +2035,7 @@ void CL_CheckForResend( void ) {
 		pktlen = i + 10 ;
 		memcpy( pkt, &data[0], pktlen ) ;
 
-		NET_OutOfBandData( NS_CLIENT, clc.serverAddress, pkt, pktlen );
+		NET_OutOfBandData( NS_CLIENT, clc.serverAddress, (byte *)pkt, pktlen );
 		// the most current userinfo has been sent, so watch for any
 		// newer changes to userinfo variables
 		cvar_modifiedFlags &= ~CVAR_USERINFO;
@@ -2084,7 +2082,7 @@ void CL_DisconnectPacket( netadr_t from ) {
 	if ( !cls.bWWWDlDisconnected ) {
 		// drop the connection
 		message = "Server disconnected for unknown reason";
-		Com_Printf( message );
+		Com_Printf( "%s", message );
 		Cvar_Set( "com_errorMessage", message );
 		CL_Disconnect( qtrue );
 	} else {
@@ -2143,18 +2141,18 @@ void CL_PrintPacket( netadr_t from, msg_t *msg ) {
 	if ( !Q_stricmpn( s, "[err_dialog]", 12 ) ) {
 		Q_strncpyz( clc.serverMessage, s + 12, sizeof( clc.serverMessage ) );
 		// Cvar_Set("com_errorMessage", clc.serverMessage );
-		Com_Error( ERR_DROP, clc.serverMessage );
+		Com_Error( ERR_DROP, "%s", clc.serverMessage );
 	} else if ( !Q_stricmpn( s, "[err_prot]", 10 ) )       {
 		Q_strncpyz( clc.serverMessage, s + 10, sizeof( clc.serverMessage ) );
 		// Cvar_Set("com_errorMessage", CL_TranslateStringBuf( PROTOCOL_MISMATCH_ERROR_LONG ) );
-		Com_Error( ERR_DROP, CL_TranslateStringBuf( PROTOCOL_MISMATCH_ERROR_LONG ) );
+		Com_Error( ERR_DROP, "%s", CL_TranslateStringBuf( PROTOCOL_MISMATCH_ERROR_LONG ) );
 	} else if ( !Q_stricmpn( s, "[err_update]", 12 ) )       {
 		Q_strncpyz( clc.serverMessage, s + 12, sizeof( clc.serverMessage ) );
-		Com_Error( ERR_AUTOUPDATE, clc.serverMessage );
+		Com_Error( ERR_AUTOUPDATE, "%s", clc.serverMessage );
 	} else if ( !Q_stricmpn( s, "ET://", 5 ) )       { // fretn
 		Q_strncpyz( clc.serverMessage, s, sizeof( clc.serverMessage ) );
 		Cvar_Set( "com_errorMessage", clc.serverMessage );
-		Com_Error( ERR_DROP, clc.serverMessage );
+		Com_Error( ERR_DROP, "%s", clc.serverMessage );
 	} else {
 		Q_strncpyz( clc.serverMessage, s, sizeof( clc.serverMessage ) );
 	}
@@ -2616,7 +2614,7 @@ void CL_WWWDownload( void ) {
 			const char *error = va( "Download failure while getting '%s'\n", cls.downloadName ); // get the msg before clearing structs
 			cls.bWWWDlDisconnected = qfalse; // need clearing structs before ERR_DROP, or it goes into endless reload
 			CL_ClearStaticDownload();
-			Com_Error( ERR_DROP, error );
+			Com_Error( ERR_DROP, "%s", error );
 		} else {
 			// see CL_ParseDownload, same abort strategy
 			Com_Printf( "Download failure while getting '%s'\n", cls.downloadName );
@@ -2896,7 +2894,7 @@ CL_RefPrintf
 DLL glue
 ================
 */
-void QDECL CL_RefPrintf( int print_level, const char *fmt, ... ) {
+void QDECL __attribute__((format(printf, 2, 3))) CL_RefPrintf( int print_level, const char *fmt, ... ) {
 	va_list argptr;
 	char msg[MAXPRINTMSG];
 
@@ -3198,8 +3196,8 @@ void CL_InitRef( void ) {
 	ri.Cmd_Argc = Cmd_Argc;
 	ri.Cmd_Argv = Cmd_Argv;
 	ri.Cmd_ExecuteText = Cbuf_ExecuteText;
-	ri.Printf = CL_RefPrintf;
-	ri.Error = Com_Error;
+	ri.Printf = (void (QDECL *)(int, const char *, ...))CL_RefPrintf;
+	ri.Error = (void (QDECL *)(int, const char *, ...))Com_Error;
 	ri.Milliseconds = CL_ScaledMilliseconds;
 #ifdef ZONE_DEBUG
 	ri.Z_MallocDebug = CL_RefMallocDebug;
@@ -3688,7 +3686,6 @@ CL_ServerInfoPacket
 void CL_ServerInfoPacket( netadr_t from, msg_t *msg ) {
 	int i, type;
 	char info[MAX_INFO_STRING];
-	char*   str;
 	char    *infoString;
 	int prot;
 	char    *gameName;
@@ -3733,18 +3730,15 @@ void CL_ServerInfoPacket( netadr_t from, msg_t *msg ) {
 			{
 			case NA_BROADCAST:
 			case NA_IP:
-				str = "udp";
 				type = 1;
 				break;
 
 			case NA_IPX:
 			case NA_BROADCAST_IPX:
-				str = "ipx";
 				type = 2;
 				break;
 
 			default:
-				str = "???";
 				type = 0;
 				break;
 			}
@@ -3804,7 +3798,7 @@ void CL_ServerInfoPacket( netadr_t from, msg_t *msg ) {
 	Q_strncpyz( info, MSG_ReadString( msg ), MAX_INFO_STRING );
 	if ( strlen( info ) ) {
 		if ( info[strlen( info ) - 1] != '\n' ) {
-			strncat( info, "\n", sizeof( info ) );
+			strncat( info, "\n", sizeof( info ) - strlen( info ) - 1 );
 		}
 		Com_Printf( "%s: %s", NET_AdrToString( from ), info );
 	}
@@ -3849,10 +3843,8 @@ CL_GetServerStatus
 ===================
 */
 serverStatus_t *CL_GetServerStatus( netadr_t from ) {
-	serverStatus_t *serverStatus;
 	int i, oldest, oldestTime;
 
-	serverStatus = NULL;
 	for ( i = 0; i < MAX_SERVERSTATUSREQUESTS; i++ ) {
 		if ( NET_CompareAdr( from, cl_serverStatusList[i].address ) ) {
 			return &cl_serverStatusList[i];
@@ -4195,7 +4187,7 @@ void CL_GlobalServers_f( void ) {
 		buffptr += sprintf( buffptr, " demo" );
 	}
 
-	NET_OutOfBandPrint( NS_SERVER, to, command );
+	NET_OutOfBandPrint( NS_SERVER, to, "%s", command );
 }
 
 
@@ -4608,12 +4600,9 @@ CL_AddToLimboChat
 */
 void CL_AddToLimboChat( const char *str ) {
 	int len;
-	char *p, *ls;
-	int lastcolor;
-	int chatHeight;
+	char *p;
 	int i;
 
-	chatHeight = LIMBOCHAT_HEIGHT;
 	cl.limboChatPos = LIMBOCHAT_HEIGHT - 1;
 	len = 0;
 
@@ -4626,9 +4615,6 @@ void CL_AddToLimboChat( const char *str ) {
 	p = cl.limboChatMsgs[0];
 	*p = 0;
 
-	lastcolor = '7';
-
-	ls = NULL;
 	while ( *str ) {
 		if ( len > LIMBOCHAT_WIDTH - 1 ) {
 			break;
@@ -4636,12 +4622,8 @@ void CL_AddToLimboChat( const char *str ) {
 
 		if ( Q_IsColorString( str ) ) {
 			*p++ = *str++;
-			lastcolor = *str;
 			*p++ = *str++;
 			continue;
-		}
-		if ( *str == ' ' ) {
-			ls = p;
 		}
 		*p++ = *str++;
 		len++;
@@ -5291,7 +5273,7 @@ CL_OpenURLForCvar
 */
 void CL_OpenURL( const char *url ) {
 	if ( !url || !strlen( url ) ) {
-		Com_Printf( CL_TranslateStringBuf( "invalid/empty URL\n" ) );
+		Com_Printf( "%s", CL_TranslateStringBuf( "invalid/empty URL\n" ) );
 		return;
 	}
 	Sys_OpenURL( url, qtrue );

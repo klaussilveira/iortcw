@@ -301,13 +301,11 @@ TeamPlayIsOn
 */
 int BotGetPatrolWaypoints( bot_state_t *bs, bot_match_t *match ) {
 	char keyarea[MAX_MESSAGE_SIZE];
-	int patrolflags;
 	bot_waypoint_t *wp, *newwp, *newpatrolpoints;
 	bot_match_t keyareamatch;
 	bot_goal_t goal;
 
 	newpatrolpoints = NULL;
-	patrolflags = 0;
 	//
 	trap_BotMatchVariable( match, KEYAREA, keyarea, MAX_MESSAGE_SIZE );
 	//
@@ -340,10 +338,8 @@ int BotGetPatrolWaypoints( bot_state_t *bs, bot_match_t *match ) {
 		}
 		//
 		if ( keyareamatch.subtype & ST_BACK ) {
-			patrolflags = PATROL_LOOP;
 			break;
 		} else if ( keyareamatch.subtype & ST_REVERSE )     {
-			patrolflags = PATROL_REVERSE;
 			break;
 		} else if ( keyareamatch.subtype & ST_MORE )     {
 			trap_BotMatchVariable( &keyareamatch, MORE, keyarea, MAX_MESSAGE_SIZE );

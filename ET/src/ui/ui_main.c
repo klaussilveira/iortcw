@@ -4365,7 +4365,6 @@ void UI_RunMenuScript( char **args ) {
 	if ( String_Parse( args, &name ) ) {
 
 		if ( Q_stricmp( name, "StartServer" ) == 0 ) {
-			float skill;
 			int pb_sv, pb_cl;
 
 			// DHM - Nerve
@@ -4393,8 +4392,6 @@ void UI_RunMenuScript( char **args ) {
 			} else {
 				trap_Cmd_ExecuteText( EXEC_APPEND, va( "wait ; wait ; map %s\n", uiInfo.mapList[ui_currentNetMap.integer].mapLoadName ) );
 			}
-
-			skill = trap_Cvar_VariableValue( "g_spSkill" );
 
 			// NERVE - SMF - set user cvars here
 			// set timelimit
@@ -4781,10 +4778,10 @@ void UI_RunMenuScript( char **args ) {
 					res = trap_LAN_AddServer( AS_FAVORITES, name, addr );
 					if ( res == 0 ) {
 						// server already in the list
-						Com_Printf( trap_TranslateString( "Favorite already in list\n" ) );
+						Com_Printf( "%s", trap_TranslateString( "Favorite already in list\n" ) );
 					} else if ( res == -1 )     {
 						// list full
-						Com_Printf( trap_TranslateString( "Favorite list full\n" ) );
+						Com_Printf( "%s", trap_TranslateString( "Favorite list full\n" ) );
 					} else {
 						// successfully added
 						Com_Printf( trap_TranslateString( "Added favorite server %s\n" ), addr );
@@ -4814,10 +4811,10 @@ void UI_RunMenuScript( char **args ) {
 					res = trap_LAN_AddServer( AS_FAVORITES, name, addr );
 					if ( res == 0 ) {
 						// server already in the list
-						Com_Printf( trap_TranslateString( "Favorite already in list\n" ) );
+						Com_Printf( "%s", trap_TranslateString( "Favorite already in list\n" ) );
 					} else if ( res == -1 )     {
 						// list full
-						Com_Printf( trap_TranslateString( "Favorite list full\n" ) );
+						Com_Printf( "%s", trap_TranslateString( "Favorite list full\n" ) );
 					} else {
 						// successfully added
 						Com_Printf( trap_TranslateString( "Added favorite server %s\n" ), addr );
@@ -4840,10 +4837,10 @@ void UI_RunMenuScript( char **args ) {
 				res = trap_LAN_AddServer( AS_FAVORITES, name, addr );
 				if ( res == 0 ) {
 					// server already in the list
-					Com_Printf( trap_TranslateString( "Favorite already in list\n" ) );
+					Com_Printf( "%s", trap_TranslateString( "Favorite already in list\n" ) );
 				} else if ( res == -1 )     {
 					// list full
-					Com_Printf( trap_TranslateString( "Favorite list full\n" ) );
+					Com_Printf( "%s", trap_TranslateString( "Favorite list full\n" ) );
 				} else {
 					// successfully added
 					Com_Printf( trap_TranslateString( "Added favorite server %s\n" ), addr );
@@ -6309,8 +6306,7 @@ static const char *UI_SelectedMap( qboolean singlePlayer, int index, int *actual
 }
 
 static const char *UI_SelectedCampaign( int index, int *actual ) {
-	int i, c;
-	c = 0;
+	int i;
 	*actual = 0;
 	for ( i = 0; i < uiInfo.campaignCount; i++ ) {
 		if ( ( uiInfo.campaignList[i].order == index ) && uiInfo.campaignList[i].unlocked ) {
@@ -6664,10 +6660,9 @@ void UI_FeederSelection( float feederID, int index ) {
 			updateModel = qtrue;
 		}
 	} else if ( feederID == FEEDER_MAPS || feederID == FEEDER_ALLMAPS ) {
-		int actual, map;
+		int actual;
 		int game;
 
-		map = ( feederID == FEEDER_ALLMAPS ) ? ui_currentNetMap.integer : ui_currentMap.integer;
 		game = feederID == FEEDER_MAPS ? uiInfo.gameTypes[ui_gameType.integer].gtEnum : ui_netGameType.integer;
 		/*if( game == GT_WOLF_CAMPAIGN ) {
 			if (uiInfo.campaignList[map].campaignCinematic >= 0) {
@@ -7381,7 +7376,7 @@ UI_Init
 =================
 */
 void _UI_Init( qboolean inGameLoad ) {
-	int start, x;
+	int x;
 
 	//uiInfo.inGameLoad = inGameLoad;
 
@@ -7459,8 +7454,8 @@ void _UI_Init( qboolean inGameLoad ) {
 	uiInfo.uiDC.keynumToStringBuf = &trap_Key_KeynumToStringBuf;
 	uiInfo.uiDC.keyIsDown = &trap_Key_IsDown;
 	uiInfo.uiDC.executeText = &trap_Cmd_ExecuteText;
-	uiInfo.uiDC.Error = &Com_Error;
-	uiInfo.uiDC.Print = &Com_Printf;
+	uiInfo.uiDC.Error = (void (*)(int, const char *, ...))&Com_Error;
+	uiInfo.uiDC.Print = (void (*)(const char *, ...))&Com_Printf;
 	uiInfo.uiDC.Pause = &UI_Pause;
 	uiInfo.uiDC.ownerDrawWidth = &UI_OwnerDrawWidth;
 	uiInfo.uiDC.registerSound = &trap_S_RegisterSound;
@@ -7501,8 +7496,6 @@ void _UI_Init( qboolean inGameLoad ) {
 
 	uiInfo.campaignMap = trap_R_RegisterShaderNoMip( "gfx/loading/camp_map.tga" );
 
-	start = trap_Milliseconds();
-
 	uiInfo.teamCount = 0;
 	uiInfo.characterCount = 0;
 	uiInfo.aliasCount = 0;
@@ -7520,7 +7513,7 @@ void _UI_Init( qboolean inGameLoad ) {
 	// rain - bounds check array index, although I'm pretty sure this
 	// stuff isn't used anymore...
 	x = (int)trap_Cvar_VariableValue( "color" ) - 1;
-	if ( x < 0 || x >= sizeof( gamecodetoui ) / sizeof( gamecodetoui[0] ) ) {
+	if ( x < 0 || x >= (int)( sizeof( gamecodetoui ) / sizeof( gamecodetoui[0] ) ) ) {
 		x = 0;
 	}
 	uiInfo.effectsColor = gamecodetoui[x];

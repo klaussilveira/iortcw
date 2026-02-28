@@ -474,7 +474,7 @@ void RB_SurfaceFoliage( srfFoliage_t *srf ) {
 	int o, i, a, numVerts, numIndexes;
 	vec4_t distanceCull, distanceVector;
 	float alpha, z, dist, fovScale;
-	vec3_t viewOrigin, local;
+	vec3_t local;
 	vec_t               *xyz;
 	int srcColor, *color;
 	int dlightBits;
@@ -484,7 +484,6 @@ void RB_SurfaceFoliage( srfFoliage_t *srf ) {
 	// basic setup
 	numVerts = srf->numVerts;
 	numIndexes = srf->numIndexes;
-	VectorCopy( backEnd.orientation.viewOrigin, viewOrigin );
 
 	// set fov scale
 	fovScale = backEnd.viewParms.fovX * ( 1.0 / 90.0 );
@@ -1688,7 +1687,7 @@ void RB_SurfacePolyBuffer( srfPolyBuffer_t *surf ) {
 
 	tess.xyz =          (vec4hack_t*)surf->pPolyBuffer->xyz;
 	tess.texCoords0 =   (vec2hack_t*)surf->pPolyBuffer->st;
-	tess.indexes =      surf->pPolyBuffer->indicies;
+	tess.indexes =      (glIndex_t *)surf->pPolyBuffer->indicies;
 	tess.vertexColors = (color4ubhack_t*)surf->pPolyBuffer->color;
 
 	tess.maxShaderIndicies =    MAX_PB_INDICIES;

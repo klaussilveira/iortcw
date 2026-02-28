@@ -187,7 +187,7 @@ void BotDrawDebugPolygons( BotPolyFunc drawPoly, int value ) {
 BotImport_Print
 ==================
 */
-void QDECL BotImport_Print( int type, char *fmt, ... ) {
+void QDECL __attribute__((format(printf, 2, 3))) BotImport_Print( int type, char *fmt, ... ) {
 	char str[2048];
 	va_list ap;
 
@@ -666,7 +666,7 @@ void SV_BotInitBotLib( void ) {
 	Com_Printf( "Bypassing CD checks\n" );
 #endif
 
-	botlib_import.Print = BotImport_Print;
+	botlib_import.Print = (void (QDECL *)(int, char *, ...))BotImport_Print;
 	botlib_import.Trace = BotImport_Trace;
 	botlib_import.EntityTrace = BotImport_EntityTrace;
 	botlib_import.PointContents = BotImport_PointContents;

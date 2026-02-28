@@ -862,7 +862,7 @@ char *Q_CleanDirName( char *dirname );
 
 #define _vsnprintf use_Q_vsnprintf
 #define vsnprintf use_Q_vsnprintf
-int Q_vsnprintf( char *dest, int size, const char *fmt, va_list argptr );
+int Q_vsnprintf( char *dest, int size, const char *fmt, va_list argptr ) _attribute( ( format( gnu_printf,3,0 ) ) );
 
 //=============================================
 

@@ -76,7 +76,7 @@ qboolean BG_SS_StoreSpeaker( bg_speaker_t *speaker ) {
 	return qtrue;
 }
 
-static qboolean BG_SS_ParseError( int handle, char *format, ... ) {
+static qboolean __attribute__((format(printf, 2, 3))) BG_SS_ParseError( int handle, char *format, ... ) {
 	int line;
 	char filename[128];
 	va_list argptr;
@@ -192,7 +192,7 @@ static qboolean BG_SS_ParseSpeaker( int handle ) {
 	}
 
 	if ( !BG_SS_StoreSpeaker( &speaker ) ) {
-		return BG_SS_ParseError( handle, "Failed to store speaker", token.string );
+		return BG_SS_ParseError( handle, "Failed to store speaker" );
 	}
 
 	return qtrue;

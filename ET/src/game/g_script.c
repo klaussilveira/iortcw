@@ -993,7 +993,7 @@ void script_mover_aas_blocking( gentity_t *ent ) {
 
 void script_mover_spawn( gentity_t *ent ) {
 	if ( ent->spawnflags & 128 ) {
-		if ( !ent->tagBuffer ) {
+		if ( !ent->tagBuffer[0] ) {
 			ent->nextTrain = ent;
 		} else {
 			gentity_t* tent = G_FindByTargetname( NULL, ent->tagBuffer );
@@ -1146,7 +1146,7 @@ void SP_script_mover( gentity_t *ent ) {
 
 		if ( G_SpawnString( "description", "", &s ) ) {
 			trap_GetConfigstring( CS_SCRIPT_MOVER_NAMES, cs, sizeof( cs ) );
-			Info_SetValueForKey( cs, va( "%i",ent - g_entities ), s );
+			Info_SetValueForKey( cs, va( "%i", (int)(ent - g_entities) ), s );
 			trap_SetConfigstring( CS_SCRIPT_MOVER_NAMES, cs );
 		}
 	} else {

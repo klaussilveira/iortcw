@@ -405,9 +405,6 @@ SV_AreaEntities_r
 void SV_AreaEntities_r( worldSector_t *node, areaParms_t *ap ) {
 	svEntity_t  *check, *next;
 	sharedEntity_t *gcheck;
-	int count;
-
-	count = 0;
 
 	for ( check = node->entities  ; check ; check = next ) {
 		next = check->nextEntityInWorldSector;
@@ -717,7 +714,6 @@ int SV_PointContents( const vec3_t p, int passEntityNum ) {
 	int i, num;
 	int contents, c2;
 	clipHandle_t clipHandle;
-	float       *angles;
 
 	// get base contents from world
 	contents = CM_PointContents( p, 0 );
@@ -736,11 +732,6 @@ int SV_PointContents( const vec3_t p, int passEntityNum ) {
 		// ydnar: non-worldspawn entities must not use world as clip model!
 		if ( clipHandle == 0 ) {
 			continue;
-		}
-
-		angles = hit->r.currentAngles;
-		if ( !hit->r.bmodel ) {
-			angles = vec3_origin;   // boxes don't rotate
 		}
 
 		c2 = CM_TransformedPointContents( p, clipHandle, hit->r.currentOrigin, hit->r.currentAngles );

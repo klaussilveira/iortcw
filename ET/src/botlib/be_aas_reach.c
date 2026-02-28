@@ -727,7 +727,6 @@ int AAS_NearbySolidOrGap( vec3_t start, vec3_t end ) {
 int AAS_Reachability_Swim( int area1num, int area2num ) {
 	int i, j, face1num, face2num, side1;
 	aas_area_t *area1, *area2;
-	aas_areasettings_t *areasettings;
 	aas_lreachability_t *lreach;
 	aas_face_t *face1;
 	aas_plane_t *plane;
@@ -771,7 +770,6 @@ int AAS_Reachability_Swim( int area1num, int area2num ) {
 				if ( AAS_PointContents( start ) & ( CONTENTS_LAVA | CONTENTS_SLIME | CONTENTS_WATER ) ) {
 					//
 					face1 = &( *aasworld ).faces[face1num];
-					areasettings = &( *aasworld ).areasettings[area1num];
 					//create a new reachability link
 					lreach = AAS_AllocReachability();
 					if ( !lreach ) {
@@ -971,7 +969,7 @@ int AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge( int area1num, int area
 	int ground_bestarea2groundedgenum, ground_foundreach;
 	int water_bestarea2groundedgenum, water_foundreach;
 	int side1, area1swim, faceside1, groundface1num;
-	float dist, dist1, dist2, diff, invgravitydot, ortdot;
+	float dist, dist1, dist2, diff, ortdot;
 	float x1, x2, x3, x4, y1, y2, y3, y4, tmp, y;
 	float length, ground_bestlength, water_bestlength, ground_bestdist, water_bestdist;
 	vec3_t v1, v2, v3, v4, tmpv, p1area1, p1area2, p2area1, p2area2;
@@ -982,7 +980,7 @@ int AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge( int area1num, int area
 	vec3_t testpoint;
 	aas_plane_t *plane;
 	aas_area_t *area1, *area2;
-	aas_face_t *groundface1, *groundface2, *ground_bestface1, *water_bestface1;
+	aas_face_t *groundface1, *groundface2;
 	aas_edge_t *edge1, *edge2;
 	aas_lreachability_t *lreach;
 	aas_trace_t trace;
@@ -1097,7 +1095,6 @@ int AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge( int area1num, int area
 					//edges if they overlap in the direction orthogonal to
 					//the gravity direction
 					CrossProduct( invgravity, normal, ort );
-					invgravitydot = DotProduct( invgravity, invgravity );
 					ortdot = DotProduct( ort, ort );
 					//projection into the step plane
 					//NOTE: since gravity is vertical this is just the z coordinate
@@ -1215,7 +1212,6 @@ int AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge( int area1num, int area
 							ground_bestlength = length;
 							ground_foundreach = qtrue;
 							ground_bestarea2groundedgenum = edge1num;
-							ground_bestface1 = groundface1;
 							//best point towards area1
 							VectorCopy( start, ground_beststart );
 							//normal is pointing into area2
@@ -1235,7 +1231,6 @@ int AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge( int area1num, int area
 							water_bestlength = length;
 							water_foundreach = qtrue;
 							water_bestarea2groundedgenum = edge1num;
-							water_bestface1 = groundface1;
 							//best point towards area1
 							VectorCopy( start, water_beststart );
 							//normal is pointing into area2
@@ -3429,7 +3424,7 @@ void AAS_Reachability_FuncBobbing( void ) {
 //===========================================================================
 void AAS_Reachability_JumpPad( void ) {
 	int face2num, i, ret, modelnum, area2num, visualize;
-	float speed, zvel, hordist, dist, time, height, gravity, forward;
+	float speed, zvel, dist, time, height, gravity, forward;
 	aas_face_t *face2;
 	aas_area_t *area2;
 	aas_lreachability_t *lreach;
@@ -3665,7 +3660,7 @@ void AAS_Reachability_JumpPad( void ) {
 					//direction towards the face center
 					VectorSubtract( facecenter, areastart, dir );
 					dir[2] = 0;
-					hordist = VectorNormalize( dir );
+					VectorNormalize( dir );
 					//if (hordist < 1.6 * facecenter[2] - areastart[2])
 					{
 						//get command movement
@@ -4078,7 +4073,7 @@ void AAS_SetWeaponJumpAreaFlags( void ) {
 //===========================================================================
 int AAS_Reachability_WeaponJump( int area1num, int area2num ) {
 	int face2num, i, n, ret;
-	float speed, zvel, hordist;
+	float speed, zvel;
 	aas_face_t *face2;
 	aas_area_t *area1, *area2;
 	aas_lreachability_t *lreach;
@@ -4149,7 +4144,7 @@ int AAS_Reachability_WeaponJump( int area1num, int area2num ) {
 				//direction towards the face center
 				VectorSubtract( facecenter, areastart, dir );
 				dir[2] = 0;
-				hordist = VectorNormalize( dir );
+				VectorNormalize( dir );
 				//if (hordist < 1.6 * (facecenter[2] - areastart[2]))
 				{
 					//get command movement

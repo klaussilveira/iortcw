@@ -55,7 +55,7 @@ void CG_PanelButton_RenderEdit( panel_button_t* button ) {
 
 		do {
 			offset++;
-			if ( buffer + offset  == '\0' ) {
+			if ( *(buffer + offset)  == '\0' ) {
 				break;
 			}
 		} while ( CG_Text_Width_Ext( buffer + offset, button->font->scalex, 0, button->font->font ) > button->rect.w );
@@ -64,7 +64,6 @@ void CG_PanelButton_RenderEdit( panel_button_t* button ) {
 
 		//	CG_FillRect( button->rect.x, button->rect.y, button->rect.w, button->rect.h, colorRed );
 	} else {
-		int maxlen = button->data[0];
 		char *s;
 
 		if ( cg_focusButton == button && ( ( cg.time / 1000 ) % 2 ) ) {
@@ -79,7 +78,7 @@ void CG_PanelButton_RenderEdit( panel_button_t* button ) {
 
 		do {
 			offset++;
-			if ( s + offset  == '\0' ) {
+			if ( *(s + offset)  == '\0' ) {
 				break;
 			}
 		} while ( CG_Text_Width_Ext( s + offset, button->font->scalex, 0, button->font->font ) > button->rect.w );

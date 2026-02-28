@@ -175,7 +175,7 @@ the client game module: "cp", "print", "chat", etc
 A NULL client will broadcast to all clients
 =================
 */
-void QDECL SV_SendServerCommand( client_t *cl, const char *fmt, ... ) {
+void QDECL __attribute__((format(printf, 2, 3))) SV_SendServerCommand( client_t *cl, const char *fmt, ... ) {
 	va_list argptr;
 	byte message[MAX_MSGLEN];
 	client_t    *client;
@@ -752,7 +752,7 @@ void SV_ConnectionlessPacket( netadr_t from, msg_t *msg ) {
 	MSG_BeginReadingOOB( msg );
 	MSG_ReadLong( msg );        // skip the -1 marker
 
-	if ( !Q_strncmp( "connect", &msg->data[4], 7 ) ) {
+	if ( !Q_strncmp( "connect", (const char *)&msg->data[4], 7 ) ) {
 		Huff_Decompress( msg, 12 );
 	}
 

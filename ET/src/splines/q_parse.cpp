@@ -102,7 +102,7 @@ Com_ScriptError
 Prints the script name and line number in the message
 ===================
 */
-void Com_ScriptError( const char *msg, ... ) {
+void __attribute__((format(printf, 1, 2))) Com_ScriptError( const char *msg, ... ) {
 	va_list argptr;
 	char string[32000];
 
@@ -113,7 +113,7 @@ void Com_ScriptError( const char *msg, ... ) {
 	Com_Error( ERR_DROP, "File %s, line %i: %s", pi->parseFile, pi->lines, string );
 }
 
-void Com_ScriptWarning( const char *msg, ... ) {
+void __attribute__((format(printf, 1, 2))) Com_ScriptWarning( const char *msg, ... ) {
 	va_list argptr;
 	char string[32000];
 

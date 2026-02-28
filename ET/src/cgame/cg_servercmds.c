@@ -469,7 +469,7 @@ void CG_ParseServerVersionInfo( const char *pszVersionInfo ) {
 // Parse reinforcement offsets
 void CG_ParseReinforcementTimes( const char *pszReinfSeedString ) {
 	const char *tmp = pszReinfSeedString, *tmp2;
-	unsigned int i, j, dwDummy, dwOffset[TEAM_NUM_TEAMS];
+	unsigned int i, j, dwOffset[TEAM_NUM_TEAMS];
 
 #define GETVAL( x,y ) if ( ( tmp = strchr( tmp, ' ' ) ) == NULL ) {return;} x = atoi( ++tmp ) / y;
 
@@ -485,7 +485,7 @@ void CG_ParseReinforcementTimes( const char *pszReinfSeedString ) {
 				cgs.aReinfOffset[i] *= 1000;
 				break;
 			}
-			GETVAL( dwDummy, 1 );
+			{ unsigned int dwDummy; GETVAL( dwDummy, 1 ); (void)dwDummy; }
 		}
 	}
 }
@@ -2362,7 +2362,7 @@ static void CG_ServerCommand( void ) {
 		int fadeTime = 0;   // default to instant start
 
 		Q_strncpyz( text, CG_Argv( 2 ), MAX_SAY_TEXT );
-		if ( text && strlen( text ) ) {
+		if ( text[0] ) {
 			fadeTime = atoi( text );
 		}
 
@@ -2374,7 +2374,7 @@ static void CG_ServerCommand( void ) {
 		int fadeTime = 0;   // default to instant start
 
 		Q_strncpyz( text, CG_Argv( 2 ), MAX_SAY_TEXT );
-		if ( text && strlen( text ) ) {
+		if ( text[0] ) {
 			fadeTime = atoi( text );
 		}
 
@@ -2386,7 +2386,7 @@ static void CG_ServerCommand( void ) {
 		int fadeTime = 0;   // default to instant stop
 
 		Q_strncpyz( text, CG_Argv( 1 ), MAX_SAY_TEXT );
-		if ( text && strlen( text ) ) {
+		if ( text[0] ) {
 			fadeTime = atoi( text );
 		}
 

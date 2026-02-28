@@ -235,7 +235,7 @@ char *PunctuationFromNum( script_t *script, int num ) {
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void QDECL ScriptError( script_t *script, char *str, ... ) {
+void QDECL __attribute__((format(printf, 2, 3))) ScriptError( script_t *script, char *str, ... ) {
 	char text[1024];
 	va_list ap;
 
@@ -262,7 +262,7 @@ void QDECL ScriptError( script_t *script, char *str, ... ) {
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void QDECL ScriptWarning( script_t *script, char *str, ... ) {
+void QDECL __attribute__((format(printf, 2, 3))) ScriptWarning( script_t *script, char *str, ... ) {
 	char text[1024];
 	va_list ap;
 
@@ -1018,7 +1018,7 @@ int PS_ExpectTokenType( script_t *script, int type, int subtype, token_t *token 
 		} //end if
 		if ( token->subtype != subtype ) {
 			ScriptError( script, "expected %s, found %s",
-						 script->punctuations[subtype], token->string );
+						 script->punctuations[subtype].p, token->string );
 			return 0;
 		} //end if
 	} //end else if
@@ -1437,8 +1437,8 @@ void FreeScript( script_t *script ) {
 //============================================================================
 void PS_SetBaseFolder( char *path ) {
 #ifdef BSPC
-	sprintf( basefolder, path );
+	sprintf( basefolder, "%s", path );
 #else
-	Com_sprintf( basefolder, sizeof( basefolder ), path );
+	Com_sprintf( basefolder, sizeof( basefolder ), "%s", path );
 #endif
 } //end of the function PS_SetBaseFolder

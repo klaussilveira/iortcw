@@ -478,7 +478,7 @@ void Sys_Print( const char *msg )
 Sys_Error
 =================
 */
-void Sys_Error( const char *error, ... )
+void __attribute__((format(printf, 1, 2))) Sys_Error( const char *error, ... )
 {
 	va_list argptr;
 	char    string[1024];

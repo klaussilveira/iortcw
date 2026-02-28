@@ -483,7 +483,6 @@ Bot_ScriptParse
 */
 void Bot_ScriptParse( bot_script_data_t *bsd, char **text ) {
 	char        *token;
-	qboolean inScript;
 	int eventNum;
 	bot_script_event_t events[BOT_MAX_SCRIPT_EVENTS];
 	int numEventItems;
@@ -497,8 +496,6 @@ void Bot_ScriptParse( bot_script_data_t *bsd, char **text ) {
 	int i;
 	int bracketLevel;
 	int strPoolCount;
-
-	inScript = qfalse;      // not inside the given bot's script
 
 	bracketLevel = 0;
 	numEventItems = 0;
@@ -1010,7 +1007,7 @@ qboolean Bot_ScriptRun( bot_state_t *bs, qboolean force ) {
 		return qtrue;
 	}
 
-	if ( !bs->script.data->events ) {
+	if ( !bs->script.data->numEvents ) {
 		bs->script.status.eventIndex = -1;
 		return qtrue;
 	}
@@ -1088,7 +1085,7 @@ int Bot_Script_GetCurrentLine( bot_state_t *bs ) {
 Bot_ScriptLog_Entry
 =================
 */
-void Bot_ScriptLog_Entry( bot_state_t *bs, qboolean showDetails, char *preText, char *fmt, ... ) {
+void __attribute__((format(printf, 4, 5))) Bot_ScriptLog_Entry( bot_state_t *bs, qboolean showDetails, char *preText, char *fmt, ... ) {
 	va_list ap;
 	char text[1024], *pStr, *token;
 	fileHandle_t f;

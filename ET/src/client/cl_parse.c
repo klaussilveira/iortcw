@@ -737,7 +737,7 @@ void CL_ParseDownload( msg_t *msg ) {
 		Cvar_SetValue( "cl_downloadSize", clc.downloadSize );
 
 		if ( clc.downloadSize < 0 ) {
-			Com_Error( ERR_DROP, MSG_ReadString( msg ) );
+			Com_Error( ERR_DROP, "%s", MSG_ReadString( msg ) );
 			return;
 		}
 	}
@@ -844,7 +844,7 @@ void CL_ParseBinaryMessage( msg_t *msg ) {
 		return;
 	}
 
-	CL_CGameBinaryMessageReceived( &msg->data[msg->readcount], size, cl.snap.serverTime );
+	CL_CGameBinaryMessageReceived( (const char *)&msg->data[msg->readcount], size, cl.snap.serverTime );
 }
 
 /*
@@ -854,9 +854,6 @@ CL_ParseServerMessage
 */
 void CL_ParseServerMessage( msg_t *msg ) {
 	int cmd;
-	msg_t msgback;
-
-	msgback = *msg;
 
 	if ( cl_shownet->integer == 1 ) {
 		Com_Printf( "%i ",msg->cursize );

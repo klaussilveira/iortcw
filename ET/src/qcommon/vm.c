@@ -58,7 +58,7 @@ void VM_VmProfile_f( void );
 // converts a VM pointer to a C pointer and
 // checks to make sure that the range is acceptable
 void    *VM_VM2C( vmptr_t p, int length ) {
-	return (void *)p;
+	return (void *)(intptr_t)p;
 }
 
 void VM_Debug( int level ) {
@@ -170,7 +170,7 @@ const char *VM_SymbolForCompiledPointer( vm_t *vm, void *code ) {
 
 	// find which original instruction it is after
 	for ( i = 0 ; i < vm->codeLength ; i++ ) {
-		if ( (void *)vm->instructionPointers[i] > code ) {
+		if ( (void *)(intptr_t)vm->instructionPointers[i] > code ) {
 			break;
 		}
 	}
@@ -216,7 +216,6 @@ VM_LoadSymbols
 ===============
 */
 void VM_LoadSymbols( vm_t *vm ) {
-	int len;
 	char    *mapfile, *text_p, *token;
 	char name[MAX_QPATH];
 	char symbols[MAX_QPATH];
@@ -234,7 +233,7 @@ void VM_LoadSymbols( vm_t *vm ) {
 
 	COM_StripExtension2( vm->name, name, sizeof( name ) );
 	Com_sprintf( symbols, sizeof( symbols ), "vm/%s.map", name );
-	len = FS_ReadFile( symbols, (void **)&mapfile );
+	FS_ReadFile( symbols, (void **)&mapfile );
 	if ( !mapfile ) {
 		Com_Printf( "Couldn't load symbol file: %s\n", symbols );
 		return;
@@ -356,7 +355,6 @@ This allows a server to do a map_restart without changing memory allocation
 */
 vm_t *VM_Restart( vm_t *vm ) {
 	vmHeader_t  *header;
-	int length;
 	int dataLength;
 	int i;
 	char filename[MAX_QPATH];
@@ -379,7 +377,7 @@ vm_t *VM_Restart( vm_t *vm ) {
 	Com_Printf( "VM_Restart()\n" );
 	Com_sprintf( filename, sizeof( filename ), "vm/%s.qvm", vm->name );
 	Com_Printf( "Loading vm file %s.\n", filename );
-	length = FS_ReadFile( filename, (void **)&header );
+	FS_ReadFile( filename, (void **)&header );
 	if ( !header ) {
 		Com_Error( ERR_DROP, "VM_Restart failed.\n" );
 	}
@@ -438,7 +436,6 @@ vm_t *VM_Create( const char *module, intptr_t ( *systemCalls )(intptr_t *),
 				 vmInterpret_t interpret ) {
 	vm_t        *vm;
 	vmHeader_t  *header;
-	int length;
 	int dataLength;
 	int i, remaining;
 	char filename[MAX_QPATH];
@@ -498,7 +495,7 @@ vm_t *VM_Create( const char *module, intptr_t ( *systemCalls )(intptr_t *),
 	// load the image
 	Com_sprintf( filename, sizeof( filename ), "vm/%s.qvm", vm->name );
 	Com_Printf( "Loading vm file %s.\n", filename );
-	length = FS_ReadFile( filename, (void **)&header );
+	FS_ReadFile( filename, (void **)&header );
 	if ( !header ) {
 		Com_Printf( "Failed.\n" );
 		VM_Free( vm );
@@ -829,7 +826,7 @@ void VM_LogSyscalls( int *args ) {
 		f = fopen( "syscalls.log", "w" );
 	}
 	callnum++;
-	fprintf( f, "%i: %i (%i) = %i %i %i %i\n", callnum, args - (int *)currentVM->dataBase,
+	fprintf( f, "%i: %li (%i) = %i %i %i %i\n", callnum, (long)(args - (int *)currentVM->dataBase),
 			 args[0], args[1], args[2], args[3], args[4] );
 }
 

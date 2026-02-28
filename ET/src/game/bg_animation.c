@@ -380,7 +380,7 @@ long BG_StringHashValue_Lwr( const char *fname ) {
 BG_AnimParseError
 =================
 */
-void QDECL BG_AnimParseError( const char *msg, ... ) {
+void QDECL __attribute__((format(printf, 1, 2))) BG_AnimParseError( const char *msg, ... ) {
 	va_list argptr;
 	char text[1024];
 
@@ -582,7 +582,7 @@ void BG_ParseConditionBits( char **text_pp, animStringItem_t *stringTable, int c
 
 	//indexBits = 0;
 	currentString[0] = '\0';
-	memset( result, 0, sizeof( result ) );
+	memset( result, 0, sizeof( int ) * 2 );
 	memset( tempBits, 0, sizeof( tempBits ) );
 
 	while ( !endFlag ) {
@@ -773,7 +773,7 @@ static void BG_ParseCommands( char **input, animScriptItem_t *scriptItem, animMo
 				BG_AnimParseError( "BG_ParseCommands: exceeded maximum number of animations (%i)", MAX_ANIMSCRIPT_ANIMCOMMANDS );
 			}
 			command = &scriptItem->commands[scriptItem->numCommands++];
-			memset( command, 0, sizeof( command ) );
+			memset( command, 0, sizeof( *command ) );
 		}
 
 		command->bodyPart[partIndex] = BG_IndexForString( token, animBodyPartsStr, qtrue );
@@ -921,7 +921,7 @@ void BG_AnimParseAnimScript( animModelInfo_t *animModelInfo, animScriptData_t *s
 		token = COM_Parse( &text_p );
 		if ( !token || !*token ) {
 			if ( indentLevel ) {
-				BG_AnimParseError( "BG_AnimParseAnimScript: unexpected end of file: %s" );
+				BG_AnimParseError( "BG_AnimParseAnimScript: unexpected end of file" );
 			}
 			break;
 		}
@@ -1661,7 +1661,7 @@ int BG_GetConditionValue( int client, int condition, qboolean checkConversion ) 
 			return 0;
 		} else {
 			// xkan, 1/14/2003 - must use COM_BitCheck on the result.
-			return (int)globalScriptData->clientConditions[client][condition];
+			return globalScriptData->clientConditions[client][condition][0];
 		}
 		//BG_AnimParseError( "BG_GetConditionValue: internal error" );
 	} else {

@@ -356,7 +356,6 @@ G_CheckMinimumPlayers
 */
 void G_CheckMinimumPlayers( void ) {
 	int minplayers /*, weakestTeam, strongestTeam*/;
-	int humanplayers[TEAM_NUM_TEAMS], botplayers[TEAM_NUM_TEAMS], players[TEAM_NUM_TEAMS];
 	static int checkminimumplayers_time = 0;
 
 	// wait until the system is ready
@@ -373,16 +372,6 @@ void G_CheckMinimumPlayers( void ) {
 	if ( !G_IsSinglePlayerGame() && level.time - level.startTime < 7500 ) {
 		return;
 	}
-
-	humanplayers[TEAM_AXIS] = G_CountHumanPlayers( TEAM_AXIS );
-	botplayers[TEAM_AXIS] = G_CountBotPlayers(  TEAM_AXIS );
-	players[TEAM_AXIS] = humanplayers[TEAM_AXIS] + botplayers[TEAM_AXIS];
-
-	//
-	humanplayers[TEAM_ALLIES] = G_CountHumanPlayers( TEAM_ALLIES );
-	botplayers[TEAM_ALLIES] = G_CountBotPlayers( TEAM_ALLIES );
-	players[TEAM_ALLIES] = humanplayers[TEAM_ALLIES] + botplayers[TEAM_ALLIES];
-
 
 	checkminimumplayers_time = level.time;
 	trap_Cvar_Update( &bot_minplayers );
@@ -823,7 +812,6 @@ Svcmd_AddBot_f
 */
 void Svcmd_AddBot_f( void ) {
 	int skill;
-	int delay;
 	char name[MAX_TOKEN_CHARS];
 	char string[MAX_TOKEN_CHARS];
 	char team[MAX_TOKEN_CHARS];
@@ -856,14 +844,6 @@ void Svcmd_AddBot_f( void ) {
 
 	// team
 	trap_Argv( 2, team, sizeof( team ) );
-
-	// delay
-	trap_Argv( 3, string, sizeof( string ) );
-	if ( !string[0] ) {
-		delay = 0;
-	} else {
-		delay = atoi( string );
-	}
 
 	G_AddBot( name, skill, team, NULL, 0, 0, -1, NULL, NULL, -1, NULL, qfalse );
 
@@ -978,12 +958,6 @@ void G_SpawnBot( const char *text ) {
 
 		{NULL}
 	};
-	// special tables
-	typedef struct {
-		char    *weapon;
-		int index;
-	} spawnBotWeapons_t;
-
 	// TAT 1/16/2003 - uninit'ed data here - getting crazy data for the skills
 	memset( &skills, 0, sizeof( skills ) );
 

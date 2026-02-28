@@ -59,9 +59,14 @@ static size_t DL_cb_FWriteFile( void *ptr, size_t size, size_t nmemb, void *stre
 /*
 ** Print progress
 */
-static int DL_cb_Progress( void *clientp, double dltotal, double dlnow, double ultotal, double ulnow ) {
+static int DL_cb_Progress( void *clientp, curl_off_t dltotal, curl_off_t dlnow, curl_off_t ultotal, curl_off_t ulnow ) {
 	/* cl_downloadSize and cl_downloadTime are set by the Q3 protocol...
 	   and it would probably be expensive to verify them here.   -zinx */
+
+	(void)clientp;
+	(void)dltotal;
+	(void)ultotal;
+	(void)ulnow;
 
 	Cvar_SetValue( "cl_downloadCount", (float)dlnow );
 	return 0;
@@ -138,7 +143,7 @@ int DL_BeginDownload( const char *localName, const char *remoteName, int debug )
 	curl_easy_setopt( dl_request, CURLOPT_URL, remoteName );
 	curl_easy_setopt( dl_request, CURLOPT_WRITEFUNCTION, DL_cb_FWriteFile );
 	curl_easy_setopt( dl_request, CURLOPT_WRITEDATA, (void*)dl_file );
-	curl_easy_setopt( dl_request, CURLOPT_PROGRESSFUNCTION, DL_cb_Progress );
+	curl_easy_setopt( dl_request, CURLOPT_XFERINFOFUNCTION, DL_cb_Progress );
 	curl_easy_setopt( dl_request, CURLOPT_NOPROGRESS, 0 );
 	curl_easy_setopt( dl_request, CURLOPT_FAILONERROR, 1 );
 

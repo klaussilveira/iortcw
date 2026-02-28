@@ -955,7 +955,10 @@ void *Z_TagMallocDebug( int size, int tag, char *label, char *file, int line ) {
 #else
 void *Z_TagMalloc( int size, int tag ) {
 #endif
-	int extra, allocSize;
+	int extra;
+#ifdef ZONE_DEBUG
+	int allocSize;
+#endif
 	memblock_t  *start, *rover, *new, *base;
 	memzone_t *zone;
 
@@ -969,7 +972,9 @@ void *Z_TagMalloc( int size, int tag ) {
 		zone = mainzone;
 	}
 
+#ifdef ZONE_DEBUG
 	allocSize = size;
+#endif
 	//
 	// scan through the block list looking for the first free block
 	// of sufficient size
@@ -2447,13 +2452,13 @@ static void Com_WriteCDKey( const char *filename, const char *ikey ) {
 #endif
 
 void Com_SetRecommended() {
-	cvar_t *r_highQualityVideo,* com_recommended;
+	cvar_t *r_highQualityVideo;
 	qboolean goodVideo;
 	float cpuSpeed;
 	//qboolean goodCPU;
 	// will use this for recommended settings as well.. do i outside the lower check so it gets done even with command line stuff
 	r_highQualityVideo = Cvar_Get( "r_highQualityVideo", "1", CVAR_ARCHIVE );
-	com_recommended = Cvar_Get( "com_recommended", "-1", CVAR_ARCHIVE );
+	Cvar_Get( "com_recommended", "-1", CVAR_ARCHIVE );
 	goodVideo = ( r_highQualityVideo && r_highQualityVideo->integer );
 
 	cpuSpeed = Sys_GetCPUSpeed();
@@ -3079,7 +3084,6 @@ void Com_Frame( void ) {
 
 	int msec, minMsec;
 	static int lastTime;
-	int key;
 
 	int timeBeforeFirstEvents;
 	int timeBeforeServer;
@@ -3102,9 +3106,6 @@ void Com_Frame( void ) {
 	timeBeforeClient = 0;
 	timeAfter = 0;
 
-
-	// old net chan encryption key
-	key = 0x87243987;
 
 	// write config file if anything changed
 	Com_WriteConfiguration();
@@ -3258,9 +3259,6 @@ void Com_Frame( void ) {
 		c_patch_traces = 0;
 		c_pointcontents = 0;
 	}
-
-	// old net chan encryption key
-	key = lastTime * 0x87243987;
 
 	com_frameNumber++;
 }

@@ -5582,9 +5582,7 @@ int AINode_MP_Battle_Fight( bot_state_t *bs ) {
 
 				// make sure these angles are within view limits towards the enemy
 				if ( fabs( AngleDifference( mountedWeaponAngles[PITCH], ang[PITCH] ) ) < 15.f ) {
-					int oldviewheight;
 					// check for obstruction at feet
-					oldviewheight = level.clients[bs->client].ps.viewheight;
 					level.clients[bs->client].ps.viewheight = PRONE_VIEWHEIGHT;
 					if ( BotVisibleFromPos( bs->origin, bs->client, BotGetOrigin( bs->enemy ), bs->enemy, qtrue ) ) {
 						AIEnter_MP_Battle_MobileMG42( bs );
