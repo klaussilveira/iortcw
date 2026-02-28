@@ -2,9 +2,9 @@
 ===========================================================================
 
 Wolfenstein: Enemy Territory GPL Source Code
-Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).  
+This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).
 
 Wolf ET Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -25,7 +25,6 @@ If you have questions concerning this license or the applicable additional terms
 
 ===========================================================================
 */
-
 
 /*****************************************************************************
  * name:		be_interface.h
@@ -49,13 +48,13 @@ If you have questions concerning this license or the applicable additional terms
 "a madman is just someone living in another reality which isn't shared among many people"
 */
 
-//#define DEBUG			//debug code
-#define RANDOMIZE       //randomize bot behaviour
-#if defined( WIN32 ) || defined( _WIN32 )
-#define AASZIP          //allow reading directly from aasX.zip files
+// #define DEBUG			//debug code
+#define RANDOMIZE // randomize bot behaviour
+#if defined(WIN32) || defined(_WIN32)
+#define AASZIP // allow reading directly from aasX.zip files
 #endif
-#define QUAKE2          //bot for Quake2
-//#define HALFLIFE		//bot for Half-Life
+#define QUAKE2 // bot for Quake2
+// #define HALFLIFE		//bot for Half-Life
 
 //==========================================================
 //
@@ -63,20 +62,19 @@ If you have questions concerning this license or the applicable additional terms
 //
 //==========================================================
 
-//FIXME: get rid of this global structure
-typedef struct botlib_globals_s
-{
-	int botlibsetup;                        //true when the bot library has been setup
-	int maxentities;                        //maximum number of entities
-	int maxclients;                         //maximum number of clients
-	float time;                             //the global time
-//#ifdef DEBUG
-	qboolean debug;                         //true if debug is on
-	int goalareanum;
-	vec3_t goalorigin;
-	int runai;
-	qboolean lastsuccess;
-//#endif
+// FIXME: get rid of this global structure
+typedef struct botlib_globals_s {
+    int botlibsetup; // true when the bot library has been setup
+    int maxentities; // maximum number of entities
+    int maxclients;  // maximum number of clients
+    float time;      // the global time
+    // #ifdef DEBUG
+    qboolean debug; // true if debug is on
+    int goalareanum;
+    vec3_t goalorigin;
+    int runai;
+    qboolean lastsuccess;
+    // #endif
 } botlib_globals_t;
 
 //==========================================================
@@ -87,8 +85,7 @@ typedef struct botlib_globals_s
 
 extern botlib_globals_t botlibglobals;
 extern botlib_import_t botimport;
-extern int bot_developer;                   //true if developer is on
+extern int bot_developer; // true if developer is on
 
 //
-int Sys_MilliSeconds( void );
-
+int Sys_MilliSeconds(void);

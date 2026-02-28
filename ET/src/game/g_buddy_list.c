@@ -2,9 +2,9 @@
 ===========================================================================
 
 Wolfenstein: Enemy Territory GPL Source Code
-Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).  
+This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).
 
 Wolf ET Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -36,97 +36,98 @@ If you have questions concerning this license or the applicable additional terms
 
 void waypoint_think( gentity_t *ent ) {
 
-	if( level.time - ent->lastHintCheckTime < WAYPOINTSET_POSTDELAY_TIME ) {
-		ent->nextthink = level.time + FRAMETIME;
-		return;
-	}
+        if( level.time - ent->lastHintCheckTime < WAYPOINTSET_POSTDELAY_TIME ) {
+                ent->nextthink = level.time + FRAMETIME;
+                return;
+        }
 
-	ent->nextthink = level.time + FRAMETIME;
+        ent->nextthink = level.time + FRAMETIME;
 
 }
 
 void G_SetWayPoint( gentity_t *ent, wayPointType_t wayPointType, vec3_t loc ) {
-	gclient_t	*client;
-	gentity_t	*wp;
+        gclient_t	*client;
+        gentity_t	*wp;
 
-	if( !ent || !ent->client ) {
-		return;	// something went horribly wrong here
-	}
+        if( !ent || !ent->client ) {
+                return;	// something went horribly wrong here
+        }
 
-	if( !wayPointType || wayPointType >= NUM_WAYPOINTTYPES ) {
-		G_Printf( "^3WARNING: G_SetWayPoint, bad waypoint type %i\n", wayPointType );
-		return;
-	}
+        if( !wayPointType || wayPointType >= NUM_WAYPOINTTYPES ) {
+                G_Printf( "^3WARNING: G_SetWayPoint, bad waypoint type %i\n", wayPointType );
+                return;
+        }
 
-	client = ent->client;
+        client = ent->client;
 
-	if( !client->pers.wayPoint ) {
-		wp = G_Spawn();
+        if( !client->pers.wayPoint ) {
+                wp = G_Spawn();
 
-		wp->r.svFlags = SVF_BROADCAST;
-		wp->classname = "waypoint";
-		wp->s.eType = ET_WAYPOINT;
-		wp->s.pos.trType = TR_STATIONARY;
+                wp->r.svFlags = SVF_BROADCAST;
+                wp->classname = "waypoint";
+                wp->s.eType = ET_WAYPOINT;
+                wp->s.pos.trType = TR_STATIONARY;
 
-		wp->r.ownerNum = ent->s.number;
-		wp->s.clientNum = ent->s.number;
+                wp->r.ownerNum = ent->s.number;
+                wp->s.clientNum = ent->s.number;
 
-		wp->think = waypoint_think;
-		wp->nextthink = level.time + FRAMETIME;
+                wp->think = waypoint_think;
+                wp->nextthink = level.time + FRAMETIME;
 
-		// Set location
-		VectorCopy( loc, wp->s.pos.trBase );
+                // Set location
+                VectorCopy( loc, wp->s.pos.trBase );
 
-		// Set type
-		wp->s.frame = wayPointType;
+                // Set type
+                wp->s.frame = wayPointType;
 
-		// Can't set for a while - hijack this to save some memory
-		wp->lastHintCheckTime = level.time;
+                // Can't set for a while - hijack this to save some memory
+                wp->lastHintCheckTime = level.time;
 
-		trap_LinkEntity( wp );
+                trap_LinkEntity( wp );
 
-		client->pers.wayPoint = wp;
-	} else {
+                client->pers.wayPoint = wp;
+        } else {
 
-		wp = client->pers.wayPoint;
+                wp = client->pers.wayPoint;
 
-		if( level.time - wp->lastHintCheckTime < WAYPOINTSET_POSTDELAY_TIME ) {
-			// Latching, more hijacking
-			wp->botDelayBegin = qtrue;	// to indicate we got latched values
+                if( level.time - wp->lastHintCheckTime < WAYPOINTSET_POSTDELAY_TIME ) {
+                        // Latching, more hijacking
+                        wp->botDelayBegin = qtrue;	// to indicate we got latched values
 
-			// Latch location
-			VectorCopy( loc, wp->dl_color );
+                        // Latch location
+                        VectorCopy( loc, wp->dl_color );
 
-			// Latch type
-			wp->key = wayPointType;
+                        // Latch type
+                        wp->key = wayPointType;
 
-			return;
-		}
+                        return;
+                }
 
-		// Set location
-		VectorCopy( loc, wp->s.pos.trBase );
+                // Set location
+                VectorCopy( loc, wp->s.pos.trBase );
 
-		// Set type
-		wp->s.frame = wayPointType;
+                // Set type
+                wp->s.frame = wayPointType;
 
-		// Can't set for a while
-		wp->lastHintCheckTime = level.time;
+                // Can't set for a while
+                wp->lastHintCheckTime = level.time;
 
-		trap_LinkEntity( wp );
-	}
+                trap_LinkEntity( wp );
+        }
 }*/
 
 /*void G_RemoveWayPoint( gclient_t *client ) {
-	if( client->pers.wayPoint ) {
-		G_FreeEntity( client->pers.wayPoint );
-		client->pers.wayPoint = NULL;
-	}
+        if( client->pers.wayPoint ) {
+                G_FreeEntity( client->pers.wayPoint );
+                client->pers.wayPoint = NULL;
+        }
 }*/
 
-void G_RemoveFromAllIgnoreLists( int clientNum ) {
-	int i;
+void G_RemoveFromAllIgnoreLists(int clientNum)
+{
+    int i;
 
-	for ( i = 0; i < MAX_CLIENTS; i++ ) {
-		COM_BitClear( level.clients[i].sess.ignoreClients, clientNum );
-	}
+    for (i = 0; i < MAX_CLIENTS; i++) {
+        COM_BitClear(level.clients[i].sess.ignoreClients, clientNum);
+    }
 }

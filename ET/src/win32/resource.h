@@ -2,9 +2,9 @@
 ===========================================================================
 
 Wolfenstein: Enemy Territory GPL Source Code
-Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).  
+This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).
 
 Wolf ET Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -30,20 +30,20 @@ If you have questions concerning this license or the applicable additional terms
 // Microsoft Developer Studio generated include file.
 // Used by winquake.rc
 //
-#define IDS_STRING1                     1
-#define IDI_ICON1                       1
-#define IDB_BITMAP1                     1
-#define IDB_BITMAP2                     128
-#define IDC_CURSOR1                     129
+#define IDS_STRING1 1
+#define IDI_ICON1 1
+#define IDB_BITMAP1 1
+#define IDB_BITMAP2 128
+#define IDC_CURSOR1 129
 
 // Next default values for new objects
 //
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NO_MFC                     1
-#define _APS_NEXT_RESOURCE_VALUE        131
-#define _APS_NEXT_COMMAND_VALUE         40001
-#define _APS_NEXT_CONTROL_VALUE         1005
-#define _APS_NEXT_SYMED_VALUE           101
+#define _APS_NO_MFC 1
+#define _APS_NEXT_RESOURCE_VALUE 131
+#define _APS_NEXT_COMMAND_VALUE 40001
+#define _APS_NEXT_CONTROL_VALUE 1005
+#define _APS_NEXT_SYMED_VALUE 101
 #endif
 #endif

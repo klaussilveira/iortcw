@@ -2,9 +2,9 @@
 ===========================================================================
 
 Wolfenstein: Enemy Territory GPL Source Code
-Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).  
+This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).
 
 Wolf ET Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -26,13 +26,12 @@ If you have questions concerning this license or the applicable additional terms
 ===========================================================================
 */
 
-
 /*
  *	Apple Universal Headers 3.1
  *
  *	Uncomment any additional #includes you want to add to your MacHeaders.
  */
-//#include <MacHeaders.h>
+// #include <MacHeaders.h>
 
 #ifdef verify
 #undef verify
@@ -49,78 +48,78 @@ If you have questions concerning this license or the applicable additional terms
 #include <errno.h>
 
 /* Menus: */
-	#define rMenuBar    128
-	#define rMenuBarX   129
+#define rMenuBar 128
+#define rMenuBarX 129
 /* Apple menu: */
-		#define mApple  128
-		#define iAbout  1
+#define mApple 128
+#define iAbout 1
 /* File menu: */
-		#define mFile   129
-		#define iQuit   1
+#define mFile 129
+#define iQuit 1
 /* Edit menu: */
-		#define mEdit   130
-		#define iUndo   1
-		#define iCut    3
-		#define iCopy   4
-		#define iPaste  5
-		#define iClear  6
+#define mEdit 130
+#define iUndo 1
+#define iCut 3
+#define iCopy 4
+#define iPaste 5
+#define iClear 6
 /* Options menu: */
-		#define mOptions 131
-		#define iMouse  1
-		#define iHideWindow 2
+#define mOptions 131
+#define iMouse 1
+#define iHideWindow 2
 /* Windows: */
-	#define kMainWindow     128
-	#define kFullScreenWindow       129
+#define kMainWindow 128
+#define kFullScreenWindow 129
 /* Dilogs: */
-	#define kAboutDialog    128
+#define kAboutDialog 128
 
 // Set this to use Carbon timers on MacOS 8/9
 #define CARBON_TIMERS_ON_9 0
 
 enum {
-	rErrStrings = 128,
-	rMiscStrings = 129,
+    rErrStrings = 128,
+    rMiscStrings = 129,
 
-	kErrStringError = 1,
-	kErrStringWarning,
-	kErrStringDrawSprocket,
-	kErrStringQuickTime,
-	kErrStringWrongOS,
-	kErrStringWrongOSX,
-	kErrStringMisc,
-	kErrStringCDKey,
-	kErrStringCarbonLib
+    kErrStringError = 1,
+    kErrStringWarning,
+    kErrStringDrawSprocket,
+    kErrStringQuickTime,
+    kErrStringWrongOS,
+    kErrStringWrongOSX,
+    kErrStringMisc,
+    kErrStringCDKey,
+    kErrStringCarbonLib
 };
 
 // Fixed-point refresh frequency values
-#define kFrequency60 0x003c0000 // 60Hz, fixed point
-#define kFrequency67 0x00430000 // 67Hz, fixed point
-#define kFrequency70 0x00460000 // 70Hz, fixed point
-#define kFrequency72 0x00480000 // 72Hz, fixed point
-#define kFrequency75 0x004b0000 // 75Hz, fixed point
-#define kFrequency80 0x00500000 // 80Hz, fixed point
-#define kFrequency85 0x00550000 // 85Hz, fixed point
-#define kFrequency90 0x005a0000 // 90Hz, fixed point
-#define kFrequency99 0x00630000 // 99Hz, fixed point
+#define kFrequency60 0x003c0000  // 60Hz, fixed point
+#define kFrequency67 0x00430000  // 67Hz, fixed point
+#define kFrequency70 0x00460000  // 70Hz, fixed point
+#define kFrequency72 0x00480000  // 72Hz, fixed point
+#define kFrequency75 0x004b0000  // 75Hz, fixed point
+#define kFrequency80 0x00500000  // 80Hz, fixed point
+#define kFrequency85 0x00550000  // 85Hz, fixed point
+#define kFrequency90 0x005a0000  // 90Hz, fixed point
+#define kFrequency99 0x00630000  // 99Hz, fixed point
 #define kFrequency100 0x00640000 // 100Hz, fixed point
 #define kFrequency120 0x00780000 // 120Hz, fixed point
 #define kFrequency124 0x007c0000 // 124Hz, fixed point
 
 enum {
-	// Menu items - refresh rate menu
-	kMenuRefreshAuto = 1,
-	//---
-	kMenuRefresh60 = 3,
-	kMenuRefresh67,
-	kMenuRefresh70,
-	kMenuRefresh75,
-	kMenuRefresh80,
-	kMenuRefresh85,
-	kMenuRefresh90,
-	kMenuRefresh99,
-	kMenuRefresh100,
-	kMenuRefresh120,
-	kMenuRefresh124
+    // Menu items - refresh rate menu
+    kMenuRefreshAuto = 1,
+    //---
+    kMenuRefresh60 = 3,
+    kMenuRefresh67,
+    kMenuRefresh70,
+    kMenuRefresh75,
+    kMenuRefresh80,
+    kMenuRefresh85,
+    kMenuRefresh90,
+    kMenuRefresh99,
+    kMenuRefresh100,
+    kMenuRefresh120,
+    kMenuRefresh124
 };
 
 extern Fixed gRefreshRate;
@@ -145,28 +144,28 @@ extern Boolean gUseCarbonEvents;
 extern "C" {
 #endif
 
-void Sys_QueEvent( int time, sysEventType_t type, int value, int value2, int ptrLength, void *ptr );
-void Sys_Error( const char *format, ... );
-void Sys_Warning( const char *error, ... );
+void Sys_QueEvent(int time, sysEventType_t type, int value, int value2, int ptrLength, void* ptr);
+void Sys_Error(const char* format, ...);
+void Sys_Warning(const char* error, ...);
 
 #ifdef __cplusplus
 }
 #endif
 
-void OutputDebugString( const char *s );
-//qboolean VIDEO_Open(char *psPathlessBaseName, qboolean qbInGame, qboolean qbTestOpenOnly, int iLanguageNumber);
+void OutputDebugString(const char* s);
+// qboolean VIDEO_Open(char *psPathlessBaseName, qboolean qbInGame, qboolean qbTestOpenOnly, int iLanguageNumber);
 
 // mac_glimp.c
 extern glconfig_t glConfig;
 
 #if MAC_Q3_MP
-//�LBO - put this in tr_types.h for single-player apps
+// �LBO - put this in tr_types.h for single-player apps
 typedef struct
 {
-	qboolean clampToEdgeAvailable;
-	qboolean textureFilterAnisotropicAvailable;
-	qboolean multisampleAvailable;
-	qboolean hasClientStorage;
+    qboolean clampToEdgeAvailable;
+    qboolean textureFilterAnisotropicAvailable;
+    qboolean multisampleAvailable;
+    qboolean hasClientStorage;
 } glconfig_mac_t;
 
 extern glconfig_mac_t glConfig_Mac;
@@ -177,56 +176,55 @@ extern "C" {
 #endif
 
 // mac_files.c
-Boolean AmIBundled( void );
-OSErr GetApplicationPackageFSSpecFromBundle( FSSpecPtr theFSSpecPtr );
-void Mac_GetOSPath( short inDomain, OSType inFolderType, char *outPath );
-void GetPosixPathFromHFS( const char *inPath, char *outPath );
-extern const char *kPathSep;
+Boolean AmIBundled(void);
+OSErr GetApplicationPackageFSSpecFromBundle(FSSpecPtr theFSSpecPtr);
+void Mac_GetOSPath(short inDomain, OSType inFolderType, char* outPath);
+void GetPosixPathFromHFS(const char* inPath, char* outPath);
+extern const char* kPathSep;
 
 // mac_glimp.c
-void GLimp_SetGameGamma( void );
+void GLimp_SetGameGamma(void);
 #if !MAC_JKJA || MAC_Q3_MP
-void VID_Printf( int print_level, const char *fmt, ... );
+void VID_Printf(int print_level, const char* fmt, ...);
 #endif
 
 // mac_event.c
 extern int vkeyToQuakeKey[256];
-void Sys_SendKeyEvents( void );
-void Carbon_InstallTimer( void );
-void Carbon_RemoveTimer( void );
-void Carbon_InstallEvents( void );
+void Sys_SendKeyEvents(void);
+void Carbon_InstallTimer(void);
+void Carbon_RemoveTimer(void);
+void Carbon_InstallEvents(void);
 
 // mac_net.c
-void Sys_InitNetworking( void );
-void Sys_ShutdownNetworking( void );
-qboolean Sys_GetPacket( netadr_t *net_from, msg_t *net_message );
+void Sys_InitNetworking(void);
+void Sys_ShutdownNetworking(void);
+qboolean Sys_GetPacket(netadr_t* net_from, msg_t* net_message);
 
 // mac_input.c
-void Sys_InitInput( void );
-void Sys_ShutdownInput( void );
-void Sys_SuspendInput( void );
-void Sys_ResumeInput( void );
-void Sys_Input( void );
+void Sys_InitInput(void);
+void Sys_ShutdownInput(void);
+void Sys_SuspendInput(void);
+void Sys_ResumeInput(void);
+void Sys_Input(void);
 
-void IN_Init( void );
-void IN_Shutdown( void );
-void IN_Frame( void );
+void IN_Init(void);
+void IN_Shutdown(void);
+void IN_Frame(void);
 
 extern Boolean inputActive;
 extern Boolean inputMouseInWindow;
 
 // mac_console.c
-Boolean ConsoleWindowIsFrontmost( void );
+Boolean ConsoleWindowIsFrontmost(void);
 
-void    Sys_CreateConsole( void );
-void    Sys_ShowConsole( int level, qboolean quitOnClose );
-void    Sys_Print( const char *text );
-char    *Sys_ConsoleInput( void );
-qboolean Sys_ConsoleEvent( EventRecord *event, RgnHandle cursRgn );
+void Sys_CreateConsole(void);
+void Sys_ShowConsole(int level, qboolean quitOnClose);
+void Sys_Print(const char* text);
+char* Sys_ConsoleInput(void);
+qboolean Sys_ConsoleEvent(EventRecord* event, RgnHandle cursRgn);
 
-void Sys_SendStringToConsole( const char *inString );
+void Sys_SendStringToConsole(const char* inString);
 
 #ifdef __cplusplus
 }
 #endif
-

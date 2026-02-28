@@ -2,9 +2,9 @@
 ===========================================================================
 
 Return to Castle Wolfenstein multiplayer GPL Source Code
-Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Return to Castle Wolfenstein multiplayer GPL Source Code (RTCW MP Source Code).  
+This file is part of the Return to Castle Wolfenstein multiplayer GPL Source Code (RTCW MP Source Code).
 
 RTCW MP Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -26,58 +26,71 @@ If you have questions concerning this license or the applicable additional terms
 ===========================================================================
 */
 
-
 // snddma_null.c
 // all other sound mixing is portable
 
 #include "../qcommon/q_shared.h"
 #include "../qcommon/qcommon.h"
 
-qboolean SNDDMA_Init( void ) {
-	return qfalse;
+qboolean SNDDMA_Init(void)
+{
+    return qfalse;
 }
 
-int SNDDMA_GetDMAPos( void ) {
-	return 0;
+int SNDDMA_GetDMAPos(void)
+{
+    return 0;
 }
 
-void SNDDMA_Shutdown( void ) {
+void SNDDMA_Shutdown(void)
+{
 }
 
-void SNDDMA_BeginPainting( void ) {
+void SNDDMA_BeginPainting(void)
+{
 }
 
-void SNDDMA_Submit( void ) {
+void SNDDMA_Submit(void)
+{
 }
 
 #ifdef USE_VOIP
-void SNDDMA_StartCapture( void ) {
+void SNDDMA_StartCapture(void)
+{
 }
 
-int SNDDMA_AvailableCaptureSamples( void ) {
-	return 0;
+int SNDDMA_AvailableCaptureSamples(void)
+{
+    return 0;
 }
 
-void SNDDMA_Capture( int samples, byte *data ) {
+void SNDDMA_Capture(int samples, byte* data)
+{
 }
 
-void SNDDMA_StopCapture( void ) {
+void SNDDMA_StopCapture(void)
+{
 }
 
-void SNDDMA_MasterGain( float val ) {
+void SNDDMA_MasterGain(float val)
+{
 }
 #endif
 
-sfxHandle_t S_RegisterSound( const char *name, qboolean compressed ) {
-	return 0;
+sfxHandle_t S_RegisterSound(const char* name, qboolean compressed)
+{
+    return 0;
 }
 
-void S_StartLocalSound( sfxHandle_t sfxHandle, int channelNum ) {
+void S_StartLocalSound(sfxHandle_t sfxHandle, int channelNum)
+{
 }
 
-void S_ClearSoundBuffer( void ) {
+void S_ClearSoundBuffer(void)
+{
 }
 
 // TTimo: added for win32 dedicated
-void SNDDMA_Activate( void ) {
+void SNDDMA_Activate(void)
+{
 }

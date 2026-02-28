@@ -2,9 +2,9 @@
 ===========================================================================
 
 Return to Castle Wolfenstein multiplayer GPL Source Code
-Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Return to Castle Wolfenstein multiplayer GPL Source Code (RTCW MP Source Code).  
+This file is part of the Return to Castle Wolfenstein multiplayer GPL Source Code (RTCW MP Source Code).
 
 RTCW MP Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -26,7 +26,6 @@ If you have questions concerning this license or the applicable additional terms
 ===========================================================================
 */
 
-
 /*****************************************************************************
  * name:		be_aas_file.h
  *
@@ -36,13 +35,12 @@ If you have questions concerning this license or the applicable additional terms
  *****************************************************************************/
 
 #ifdef AASINTERN
-//loads the AAS file with the given name
-int AAS_LoadAASFile( char *filename );
-//writes an AAS file with the given name
-qboolean AAS_WriteAASFile( char *filename );
-//dumps the loaded AAS data
-void AAS_DumpAASData( void );
-//print AAS file information
-void AAS_FileInfo( void );
-#endif //AASINTERN
-
+// loads the AAS file with the given name
+int AAS_LoadAASFile(char* filename);
+// writes an AAS file with the given name
+qboolean AAS_WriteAASFile(char* filename);
+// dumps the loaded AAS data
+void AAS_DumpAASData(void);
+// print AAS file information
+void AAS_FileInfo(void);
+#endif // AASINTERN

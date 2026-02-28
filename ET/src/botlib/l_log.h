@@ -2,9 +2,9 @@
 ===========================================================================
 
 Wolfenstein: Enemy Territory GPL Source Code
-Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).  
+This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).
 
 Wolf ET Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -26,7 +26,6 @@ If you have questions concerning this license or the applicable additional terms
 ===========================================================================
 */
 
-
 /*****************************************************************************
  * name:		l_log.h
  *
@@ -35,20 +34,19 @@ If you have questions concerning this license or the applicable additional terms
  *
  *****************************************************************************/
 
-//open a log file
-void Log_Open( char *filename );
+// open a log file
+void Log_Open(char* filename);
 //
-void Log_AlwaysOpen( char *filename );
-//close the current log file
-void Log_Close( void );
-//close log file if present
-void Log_Shutdown( void );
-//write to the current opened log file
-void QDECL __attribute__((format(printf, 1, 2))) Log_Write( char *fmt, ... );
-//write to the current opened log file with a time stamp
-void QDECL __attribute__((format(printf, 1, 2))) Log_WriteTimeStamped( char *fmt, ... );
-//returns a pointer to the log file
-FILE *Log_FilePointer( void );
-//flush log file
-void Log_Flush( void );
-
+void Log_AlwaysOpen(char* filename);
+// close the current log file
+void Log_Close(void);
+// close log file if present
+void Log_Shutdown(void);
+// write to the current opened log file
+void QDECL __attribute__((format(printf, 1, 2))) Log_Write(char* fmt, ...);
+// write to the current opened log file with a time stamp
+void QDECL __attribute__((format(printf, 1, 2))) Log_WriteTimeStamped(char* fmt, ...);
+// returns a pointer to the log file
+FILE* Log_FilePointer(void);
+// flush log file
+void Log_Flush(void);

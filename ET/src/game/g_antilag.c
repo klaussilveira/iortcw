@@ -28,221 +28,228 @@ If you have questions concerning this license or the applicable additional terms
 
 #include "g_local.h"
 
-#define IS_ACTIVE( x ) ( \
-		x->r.linked == qtrue &&	\
-		x->client->ps.stats[STAT_HEALTH] > 0 &&	\
-		( x->client->sess.sessionTeam == TEAM_AXIS || x->client->sess.sessionTeam == TEAM_ALLIES ) && \
-		( x->client->ps.pm_flags & PMF_LIMBO ) == 0	\
-		)
+#define IS_ACTIVE(x) ( \
+x->r.linked == qtrue && x->client->ps.stats[STAT_HEALTH] > 0 && (x->client->sess.sessionTeam == TEAM_AXIS || x->client->sess.sessionTeam == TEAM_ALLIES) && (x->client->ps.pm_flags & PMF_LIMBO) == 0)
 
 // Called from ClientEndFrame() -- stores the client's position at level.time,
 // which is the position that will appear in the snapshot clients receive.
-void G_StoreClientPosition( gentity_t* ent ) {
-	int top;
-
-	if ( !IS_ACTIVE( ent ) ) {
-		return;
-	}
-
-	top = ( ent->client->topMarker + 1 ) % MAX_CLIENT_MARKERS;
-	ent->client->topMarker = top;
-
-	VectorCopy( ent->r.mins,            ent->client->clientMarkers[top].mins );
-	VectorCopy( ent->r.maxs,            ent->client->clientMarkers[top].maxs );
-	VectorCopy( ent->r.currentOrigin,   ent->client->clientMarkers[top].origin );
-	ent->client->clientMarkers[top].time = level.time;
-}
-
-static void G_AdjustSingleClientPosition( gentity_t* ent, int time ) {
-	int i, j;
-
-	if ( time > level.time ) {
-		time = level.time;
-	}
-
-	i = j = ent->client->topMarker;
-	do {
-		if ( ent->client->clientMarkers[i].time <= time ) {
-			break;
-		}
-
-		j = i;
-		i = ( ( i > 0 ) ? ( i ) : ( MAX_CLIENT_MARKERS ) ) - 1;
-	} while ( i != ent->client->topMarker );
-
-	if ( i == j ) {
-		return;
-	}
-
-	// save current position for restore
-	VectorCopy( ent->r.currentOrigin,    ent->client->backupMarker.origin );
-	VectorCopy( ent->r.mins,             ent->client->backupMarker.mins );
-	VectorCopy( ent->r.maxs,             ent->client->backupMarker.maxs );
-
-	if ( i != ent->client->topMarker ) {
-		float frac = ( (float)( ent->client->clientMarkers[j].time - time ) ) / ( ent->client->clientMarkers[j].time - ent->client->clientMarkers[i].time );
-
-		LerpPosition( ent->client->clientMarkers[j].origin,      ent->client->clientMarkers[i].origin,   frac,   ent->r.currentOrigin );
-		LerpPosition( ent->client->clientMarkers[j].mins,        ent->client->clientMarkers[i].mins,     frac,   ent->r.mins );
-		LerpPosition( ent->client->clientMarkers[j].maxs,        ent->client->clientMarkers[i].maxs,     frac,   ent->r.maxs );
-	} else {
-		VectorCopy( ent->client->clientMarkers[j].origin,       ent->r.currentOrigin );
-		VectorCopy( ent->client->clientMarkers[j].mins,         ent->r.mins );
-		VectorCopy( ent->client->clientMarkers[j].maxs,         ent->r.maxs );
-	}
-
-	trap_LinkEntity( ent );
-}
-
-static void G_ReAdjustSingleClientPosition( gentity_t* ent ) {
-	VectorCopy( ent->client->backupMarker.origin,       ent->r.currentOrigin );
-	VectorCopy( ent->client->backupMarker.mins,         ent->r.mins );
-	VectorCopy( ent->client->backupMarker.maxs,         ent->r.maxs );
-
-	trap_LinkEntity( ent );
-}
-
-void G_AdjustClientPositions( gentity_t* ent, int time, qboolean forward ) {
-	int i;
-	gentity_t   *list;
-
-	for ( i = 0; i < level.numConnectedClients; i++ ) {
-		list = g_entities + level.sortedClients[i];
-		if ( list != ent && IS_ACTIVE( list ) ) {
-			if ( forward ) {
-				G_AdjustSingleClientPosition( list, time );
-			} else { G_ReAdjustSingleClientPosition( list );}
-		}
-	}
-}
-
-void G_ResetMarkers(gentity_t *ent)
+void G_StoreClientPosition(gentity_t* ent)
 {
-	int   i, time;
-	char  buffer[MAX_CVAR_VALUE_STRING];
-	float period;
+    int top;
 
-	trap_Cvar_VariableStringBuffer("sv_fps", buffer, sizeof(buffer) - 1);
+    if (!IS_ACTIVE(ent)) {
+        return;
+    }
 
-	period = atoi(buffer);
-	if (!period)
-	{
-		period = 50;
-	}
-	else
-	{
-		period = 1000.f / period;
-	}
+    top = (ent->client->topMarker + 1) % MAX_CLIENT_MARKERS;
+    ent->client->topMarker = top;
 
-	ent->client->topMarker = MAX_CLIENT_MARKERS - 1;
-	for (i = MAX_CLIENT_MARKERS - 1, time = level.time; i >= 0; i--, time -= period)
-	{
-		VectorCopy(ent->r.mins, ent->client->clientMarkers[i].mins);
-		VectorCopy(ent->r.maxs, ent->client->clientMarkers[i].maxs);
-		VectorCopy(ent->r.currentOrigin, ent->client->clientMarkers[i].origin);
-		ent->client->clientMarkers[i].time = time;
-	}
+    VectorCopy(ent->r.mins, ent->client->clientMarkers[top].mins);
+    VectorCopy(ent->r.maxs, ent->client->clientMarkers[top].maxs);
+    VectorCopy(ent->r.currentOrigin, ent->client->clientMarkers[top].origin);
+    ent->client->clientMarkers[top].time = level.time;
 }
 
-void G_AttachBodyParts( gentity_t* ent ) {
-	int i;
-	gentity_t   *list;
+static void G_AdjustSingleClientPosition(gentity_t* ent, int time)
+{
+    int i, j;
 
-	for ( i = 0; i < level.numConnectedClients; i++ ) {
-		list = g_entities + level.sortedClients[i];
-		if ( list != ent && IS_ACTIVE( list ) ) {
-			list->client->tempHead = G_BuildHead( list );
-			list->client->tempLeg = G_BuildLeg( list );
-		} else {
-			list->client->tempHead = NULL;
-			list->client->tempLeg = NULL;
-		}
-	}
+    if (time > level.time) {
+        time = level.time;
+    }
+
+    i = j = ent->client->topMarker;
+    do {
+        if (ent->client->clientMarkers[i].time <= time) {
+            break;
+        }
+
+        j = i;
+        i = ((i > 0) ? (i) : (MAX_CLIENT_MARKERS)) - 1;
+    } while (i != ent->client->topMarker);
+
+    if (i == j) {
+        return;
+    }
+
+    // save current position for restore
+    VectorCopy(ent->r.currentOrigin, ent->client->backupMarker.origin);
+    VectorCopy(ent->r.mins, ent->client->backupMarker.mins);
+    VectorCopy(ent->r.maxs, ent->client->backupMarker.maxs);
+
+    if (i != ent->client->topMarker) {
+        float frac = ((float)(ent->client->clientMarkers[j].time - time)) / (ent->client->clientMarkers[j].time - ent->client->clientMarkers[i].time);
+
+        LerpPosition(ent->client->clientMarkers[j].origin, ent->client->clientMarkers[i].origin, frac, ent->r.currentOrigin);
+        LerpPosition(ent->client->clientMarkers[j].mins, ent->client->clientMarkers[i].mins, frac, ent->r.mins);
+        LerpPosition(ent->client->clientMarkers[j].maxs, ent->client->clientMarkers[i].maxs, frac, ent->r.maxs);
+    } else {
+        VectorCopy(ent->client->clientMarkers[j].origin, ent->r.currentOrigin);
+        VectorCopy(ent->client->clientMarkers[j].mins, ent->r.mins);
+        VectorCopy(ent->client->clientMarkers[j].maxs, ent->r.maxs);
+    }
+
+    trap_LinkEntity(ent);
 }
 
-void G_DettachBodyParts( void ) {
-	int i;
-	gentity_t   *list;
+static void G_ReAdjustSingleClientPosition(gentity_t* ent)
+{
+    VectorCopy(ent->client->backupMarker.origin, ent->r.currentOrigin);
+    VectorCopy(ent->client->backupMarker.mins, ent->r.mins);
+    VectorCopy(ent->client->backupMarker.maxs, ent->r.maxs);
 
-	for ( i = 0; i < level.numConnectedClients; i++ ) {
-		list = g_entities + level.sortedClients[i];
-		if ( list->client->tempHead ) {
-			G_FreeEntity( list->client->tempHead );
-		}
-		if ( list->client->tempLeg ) {
-			G_FreeEntity( list->client->tempLeg );
-		}
-	}
+    trap_LinkEntity(ent);
 }
 
-int G_SwitchBodyPartEntity( gentity_t* ent ) {
-	if ( ent->s.eType == ET_TEMPHEAD ) {
-		return ent->parent - g_entities;
-	}
-	if ( ent->s.eType == ET_TEMPLEGS ) {
-		return ent->parent - g_entities;
-	}
-	return ent - g_entities;
+void G_AdjustClientPositions(gentity_t* ent, int time, qboolean forward)
+{
+    int i;
+    gentity_t* list;
+
+    for (i = 0; i < level.numConnectedClients; i++) {
+        list = g_entities + level.sortedClients[i];
+        if (list != ent && IS_ACTIVE(list)) {
+            if (forward) {
+                G_AdjustSingleClientPosition(list, time);
+            } else {
+                G_ReAdjustSingleClientPosition(list);
+            }
+        }
+    }
+}
+
+void G_ResetMarkers(gentity_t* ent)
+{
+    int i, time;
+    char buffer[MAX_CVAR_VALUE_STRING];
+    float period;
+
+    trap_Cvar_VariableStringBuffer("sv_fps", buffer, sizeof(buffer) - 1);
+
+    period = atoi(buffer);
+    if (!period) {
+        period = 50;
+    } else {
+        period = 1000.f / period;
+    }
+
+    ent->client->topMarker = MAX_CLIENT_MARKERS - 1;
+    for (i = MAX_CLIENT_MARKERS - 1, time = level.time; i >= 0; i--, time -= period) {
+        VectorCopy(ent->r.mins, ent->client->clientMarkers[i].mins);
+        VectorCopy(ent->r.maxs, ent->client->clientMarkers[i].maxs);
+        VectorCopy(ent->r.currentOrigin, ent->client->clientMarkers[i].origin);
+        ent->client->clientMarkers[i].time = time;
+    }
+}
+
+void G_AttachBodyParts(gentity_t* ent)
+{
+    int i;
+    gentity_t* list;
+
+    for (i = 0; i < level.numConnectedClients; i++) {
+        list = g_entities + level.sortedClients[i];
+        if (list != ent && IS_ACTIVE(list)) {
+            list->client->tempHead = G_BuildHead(list);
+            list->client->tempLeg = G_BuildLeg(list);
+        } else {
+            list->client->tempHead = NULL;
+            list->client->tempLeg = NULL;
+        }
+    }
+}
+
+void G_DettachBodyParts(void)
+{
+    int i;
+    gentity_t* list;
+
+    for (i = 0; i < level.numConnectedClients; i++) {
+        list = g_entities + level.sortedClients[i];
+        if (list->client->tempHead) {
+            G_FreeEntity(list->client->tempHead);
+        }
+        if (list->client->tempLeg) {
+            G_FreeEntity(list->client->tempLeg);
+        }
+    }
+}
+
+int G_SwitchBodyPartEntity(gentity_t* ent)
+{
+    if (ent->s.eType == ET_TEMPHEAD) {
+        return ent->parent - g_entities;
+    }
+    if (ent->s.eType == ET_TEMPLEGS) {
+        return ent->parent - g_entities;
+    }
+    return ent - g_entities;
 }
 
 // Handles hit-box remapping and position backing-off
-static void ResolveTraceCollision( trace_t *results, const vec3_t start, const vec3_t end ) {
+static void ResolveTraceCollision(trace_t* results, const vec3_t start, const vec3_t end)
+{
     // Check if the body part entity needs to be mapped back to the main entity
-    int actualEntityNum = G_SwitchBodyPartEntity( &g_entities[results->entityNum] );
+    int actualEntityNum = G_SwitchBodyPartEntity(&g_entities[results->entityNum]);
 
-    if ( actualEntityNum != results->entityNum ) {
+    if (actualEntityNum != results->entityNum) {
         vec3_t dir;
 
         // Calculate direction of the trace
-        VectorSubtract( end, start, dir );
-        VectorNormalizeFast( dir );
+        VectorSubtract(end, start, dir);
+        VectorNormalizeFast(dir);
 
         // Back off the hit position by 1 unit to prevent sticking/clipping
         // issues when the entity index changes.
-        VectorMA( results->endpos, -1, dir, results->endpos );
+        VectorMA(results->endpos, -1, dir, results->endpos);
 
         // Update the result with the correct entity index
         results->entityNum = actualEntityNum;
     }
 }
 
-static void PerformBodyPartTrace( gentity_t *ent, trace_t *results, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int passEntityNum, int contentmask ) {
-    G_AttachBodyParts( ent );
+static void PerformBodyPartTrace(gentity_t* ent, trace_t* results, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int passEntityNum, int contentmask)
+{
+    G_AttachBodyParts(ent);
 
-    trap_Trace( results, start, mins, maxs, end, passEntityNum, contentmask );
-    ResolveTraceCollision( results, start, end );
+    trap_Trace(results, start, mins, maxs, end, passEntityNum, contentmask);
+    ResolveTraceCollision(results, start, end);
 
     G_DettachBodyParts();
 }
 
-void G_HistoricalTrace( gentity_t* ent, trace_t *results, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int passEntityNum, int contentmask ) {
+void G_HistoricalTrace(gentity_t* ent, trace_t* results, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int passEntityNum, int contentmask)
+{
 
     // Determine if we need to rewind time
-    qboolean useAntilag = ( g_antilag.integer && ent->client );
+    qboolean useAntilag = (g_antilag.integer && ent->client);
 
-    if ( useAntilag ) {
+    if (useAntilag) {
         // Rewind players to positions at the time the shot was fired
-        G_AdjustClientPositions( ent, ent->client->pers.cmd.serverTime, qtrue );
+        G_AdjustClientPositions(ent, ent->client->pers.cmd.serverTime, qtrue);
     }
 
     // Run the actual trace
-    PerformBodyPartTrace( ent, results, start, mins, maxs, end, passEntityNum, contentmask );
+    PerformBodyPartTrace(ent, results, start, mins, maxs, end, passEntityNum, contentmask);
 
-    if ( useAntilag ) {
+    if (useAntilag) {
         // Restore players to current positions
-        G_AdjustClientPositions( ent, 0, qfalse );
+        G_AdjustClientPositions(ent, 0, qfalse);
     }
 }
 
-void G_HistoricalTraceBegin( gentity_t *ent ) {
-	G_AdjustClientPositions( ent, ent->client->pers.cmd.serverTime, qtrue );
+void G_HistoricalTraceBegin(gentity_t* ent)
+{
+    G_AdjustClientPositions(ent, ent->client->pers.cmd.serverTime, qtrue);
 }
 
-void G_HistoricalTraceEnd( gentity_t *ent ) {
-	G_AdjustClientPositions( ent, 0, qfalse );
+void G_HistoricalTraceEnd(gentity_t* ent)
+{
+    G_AdjustClientPositions(ent, 0, qfalse);
 }
 
-//bani - Run a trace without fixups (historical fixups will be done externally)
-void G_Trace( gentity_t* ent, trace_t *results, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int passEntityNum, int contentmask ) {
-    PerformBodyPartTrace( ent, results, start, mins, maxs, end, passEntityNum, contentmask );
+// bani - Run a trace without fixups (historical fixups will be done externally)
+void G_Trace(gentity_t* ent, trace_t* results, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int passEntityNum, int contentmask)
+{
+    PerformBodyPartTrace(ent, results, start, mins, maxs, end, passEntityNum, contentmask);
 }

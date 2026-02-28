@@ -2,9 +2,9 @@
 ===========================================================================
 
 Return to Castle Wolfenstein multiplayer GPL Source Code
-Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Return to Castle Wolfenstein multiplayer GPL Source Code (RTCW MP Source Code).  
+This file is part of the Return to Castle Wolfenstein multiplayer GPL Source Code (RTCW MP Source Code).
 
 RTCW MP Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -26,7 +26,6 @@ If you have questions concerning this license or the applicable additional terms
 ===========================================================================
 */
 
-
 /*****************************************************************************
  * name:		ai_chat.h
  *
@@ -36,31 +35,30 @@ If you have questions concerning this license or the applicable additional terms
  *****************************************************************************/
 
 //
-int BotChat_EnterGame( bot_state_t *bs );
+int BotChat_EnterGame(bot_state_t* bs);
 //
-int BotChat_ExitGame( bot_state_t *bs );
+int BotChat_ExitGame(bot_state_t* bs);
 //
-int BotChat_StartLevel( bot_state_t *bs );
+int BotChat_StartLevel(bot_state_t* bs);
 //
-int BotChat_EndLevel( bot_state_t *bs );
+int BotChat_EndLevel(bot_state_t* bs);
 //
-int BotChat_HitTalking( bot_state_t *bs );
+int BotChat_HitTalking(bot_state_t* bs);
 //
-int BotChat_HitNoDeath( bot_state_t *bs );
+int BotChat_HitNoDeath(bot_state_t* bs);
 //
-int BotChat_HitNoKill( bot_state_t *bs );
+int BotChat_HitNoKill(bot_state_t* bs);
 //
-int BotChat_Death( bot_state_t *bs );
+int BotChat_Death(bot_state_t* bs);
 //
-int BotChat_Kill( bot_state_t *bs );
+int BotChat_Kill(bot_state_t* bs);
 //
-int BotChat_EnemySuicide( bot_state_t *bs );
+int BotChat_EnemySuicide(bot_state_t* bs);
 //
-int BotChat_Random( bot_state_t *bs );
+int BotChat_Random(bot_state_t* bs);
 // time the selected chat takes to type in
-float BotChatTime( bot_state_t *bs );
+float BotChatTime(bot_state_t* bs);
 // returns true if the bot can chat at the current position
-int BotValidChatPosition( bot_state_t *bs );
+int BotValidChatPosition(bot_state_t* bs);
 // test the initial bot chats
-void BotChatTest( bot_state_t *bs );
-
+void BotChatTest(bot_state_t* bs);

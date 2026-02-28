@@ -2,9 +2,9 @@
 ===========================================================================
 
 Wolfenstein: Enemy Territory GPL Source Code
-Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).  
+This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).
 
 Wolf ET Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@ If you have questions concerning this license or the applicable additional terms
 */
 
 #ifndef _WIN32
-#  error You should not be including this file on this platform
+#error You should not be including this file on this platform
 #endif
 
 #ifndef __GLW_WIN_H__
@@ -35,22 +35,22 @@ If you have questions concerning this license or the applicable additional terms
 
 typedef struct
 {
-	WNDPROC wndproc;
+    WNDPROC wndproc;
 
-	HDC hDC;                // handle to device context
-	HGLRC hGLRC;            // handle to GL rendering context
+    HDC hDC;     // handle to device context
+    HGLRC hGLRC; // handle to GL rendering context
 
-	HINSTANCE hinstOpenGL;  // HINSTANCE for the OpenGL library
+    HINSTANCE hinstOpenGL; // HINSTANCE for the OpenGL library
 
-	qboolean allowdisplaydepthchange;
-	qboolean pixelFormatSet;
+    qboolean allowdisplaydepthchange;
+    qboolean pixelFormatSet;
 
-	int desktopBitsPixel;
-	int desktopWidth, desktopHeight;
+    int desktopBitsPixel;
+    int desktopWidth, desktopHeight;
 
-	qboolean cdsFullscreen;
+    qboolean cdsFullscreen;
 
-	FILE *log_fp;
+    FILE* log_fp;
 } glwstate_t;
 
 extern glwstate_t glw_state;

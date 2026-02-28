@@ -2,9 +2,9 @@
 ===========================================================================
 
 Wolfenstein: Enemy Territory GPL Source Code
-Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).  
+This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).
 
 Wolf ET Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -34,26 +34,25 @@ If you have questions concerning this license or the applicable additional terms
 #include <OpenGL/gl.h>
 #include <AGL/agl.h>
 
-#define TEST_SMP    1
-#define TEST_FSAA   1
+#define TEST_SMP 1
+#define TEST_FSAA 1
 
 extern AGLPixelFormat gPixelFormat;
 extern AGLContext gAGLContext;
 extern Fixed aglFrequency;
 
-OSStatus MySetWindowContentColor( WindowRef inWindow, RGBColor const *inRGB );
-GLboolean _aglSetGameContext( short inWidth, short inHeight, short inDepth, short inTexDepth, short inStencilDepth,
-							  Fixed inFreq, DisplayIDType inDevice, Boolean inWindow, int inFSAASamples );
-void _aglDisposeGameContext( void );
-GLboolean _aglSuspendGameContext( void );
-GLboolean _aglResumeGameContext( void );
-void _aglSwapBuffers( void );
-WindowRef _aglGetGLWindow( void );
-Boolean _aglUsingFullscreen( void );
-AGLDrawable _aglGetDrawable( void );
-CGrafPtr _aglGetCurrentPort( void );
+OSStatus MySetWindowContentColor(WindowRef inWindow, RGBColor const* inRGB);
+GLboolean _aglSetGameContext(short inWidth, short inHeight, short inDepth, short inTexDepth, short inStencilDepth, Fixed inFreq, DisplayIDType inDevice, Boolean inWindow, int inFSAASamples);
+void _aglDisposeGameContext(void);
+GLboolean _aglSuspendGameContext(void);
+GLboolean _aglResumeGameContext(void);
+void _aglSwapBuffers(void);
+WindowRef _aglGetGLWindow(void);
+Boolean _aglUsingFullscreen(void);
+AGLDrawable _aglGetDrawable(void);
+CGrafPtr _aglGetCurrentPort(void);
 
-void _aglUsePrimaryContext( void );
-void _aglUseSecondaryContext( void );
+void _aglUsePrimaryContext(void);
+void _aglUseSecondaryContext(void);
 
 #endif

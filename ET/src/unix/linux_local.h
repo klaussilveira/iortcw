@@ -2,9 +2,9 @@
 ===========================================================================
 
 Wolfenstein: Enemy Territory GPL Source Code
-Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).  
+This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).
 
 Wolf ET Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -28,26 +28,25 @@ If you have questions concerning this license or the applicable additional terms
 
 // linux_local.h: Linux-specific Quake3 header file
 
-void Sys_QueEvent( int time, sysEventType_t type, int value, int value2, int ptrLength, void *ptr );
-qboolean Sys_GetPacket( netadr_t *net_from, msg_t *net_message );
-void Sys_SendKeyEvents( void );
+void Sys_QueEvent(int time, sysEventType_t type, int value, int value2, int ptrLength, void* ptr);
+qboolean Sys_GetPacket(netadr_t* net_from, msg_t* net_message);
+void Sys_SendKeyEvents(void);
 
 // Input subsystem
 
-void IN_Init( void );
-void IN_Frame( void );
-void IN_Shutdown( void );
+void IN_Init(void);
+void IN_Frame(void);
+void IN_Shutdown(void);
 
-
-void IN_JoyMove( void );
-void IN_StartupJoystick( void );
+void IN_JoyMove(void);
+void IN_StartupJoystick(void);
 
 // GL subsystem
-qboolean QGL_Init( const char *dllname );
-void QGL_EnableLogging( qboolean enable );
-void QGL_Shutdown( void );
+qboolean QGL_Init(const char* dllname);
+void QGL_EnableLogging(qboolean enable);
+void QGL_Shutdown(void);
 
-char *strlwr( char *s );
+char* strlwr(char* s);
 
 // signals.c
-void InitSig( void );
+void InitSig(void);

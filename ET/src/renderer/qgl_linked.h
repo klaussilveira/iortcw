@@ -2,9 +2,9 @@
 ===========================================================================
 
 Wolfenstein: Enemy Territory GPL Source Code
-Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).  
+This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).
 
 Wolf ET Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -25,7 +25,6 @@ If you have questions concerning this license or the applicable additional terms
 
 ===========================================================================
 */
-
 
 #define qglAccum glAccum
 #define qglAlphaFunc glAlphaFunc
@@ -374,15 +373,30 @@ If you have questions concerning this license or the applicable additional terms
 #undef qglPushAttrib
 #undef qglPopAttrib
 #undef qglRasterPos3fv
-static inline void qglArrayElement( GLint i ) { (void)i; }
-static inline void qglCallList( GLuint list ) { (void)list; }
-static inline void qglCallLists( GLsizei n, GLenum type, const GLvoid *lists ) { (void)n; (void)type; (void)lists; }
-static inline void qglDrawBuffer( GLenum mode ) { (void)mode; }
-static inline void qglDrawPixels( GLsizei w, GLsizei h, GLenum fmt, GLenum type, const GLvoid *p ) { (void)w; (void)h; (void)fmt; (void)type; (void)p; }
-static inline void qglListBase( GLuint base ) { (void)base; }
-static inline void qglPolygonMode( GLenum face, GLenum mode ) { (void)face; (void)mode; }
-static inline void qglPushAttrib( GLbitfield mask ) { (void)mask; }
-static inline void qglPopAttrib( void ) {}
-static inline void qglRasterPos3fv( const GLfloat *v ) { (void)v; }
+static inline void qglArrayElement(GLint i) { (void)i; }
+static inline void qglCallList(GLuint list) { (void)list; }
+static inline void qglCallLists(GLsizei n, GLenum type, const GLvoid* lists)
+{
+    (void)n;
+    (void)type;
+    (void)lists;
+}
+static inline void qglDrawBuffer(GLenum mode) { (void)mode; }
+static inline void qglDrawPixels(GLsizei w, GLsizei h, GLenum fmt, GLenum type, const GLvoid* p)
+{
+    (void)w;
+    (void)h;
+    (void)fmt;
+    (void)type;
+    (void)p;
+}
+static inline void qglListBase(GLuint base) { (void)base; }
+static inline void qglPolygonMode(GLenum face, GLenum mode)
+{
+    (void)face;
+    (void)mode;
+}
+static inline void qglPushAttrib(GLbitfield mask) { (void)mask; }
+static inline void qglPopAttrib(void) { }
+static inline void qglRasterPos3fv(const GLfloat* v) { (void)v; }
 #endif
-

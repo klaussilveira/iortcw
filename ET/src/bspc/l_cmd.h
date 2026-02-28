@@ -2,9 +2,9 @@
 ===========================================================================
 
 Wolfenstein: Enemy Territory GPL Source Code
-Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).  
+This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).
 
 Wolf ET Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@ If you have questions concerning this license or the applicable additional terms
 
 #ifndef SIN
 #define SIN
-#endif //SIN
+#endif // SIN
 
 #ifndef __CMDLIB__
 #define __CMDLIB__
@@ -54,111 +54,105 @@ If you have questions concerning this license or the applicable additional terms
 
 #ifndef __BYTEBOOL__
 #define __BYTEBOOL__
-typedef enum {false, true} qboolean;
+typedef enum { false,
+    true } qboolean;
 typedef unsigned char byte;
 #endif
 
 // the dec offsetof macro doesnt work very well...
-#define myoffsetof( type,identifier ) ( (size_t)&( (type *)0 )->identifier )
-
+#define myoffsetof(type, identifier) ((size_t)&((type*)0)->identifier)
 
 // set these before calling CheckParm
 extern int myargc;
-extern char **myargv;
+extern char** myargv;
 
-char *strupr( char *in );
-char *strlower( char *in );
-int Q_strncasecmp( char *s1, char *s2, int n );
-int Q_strcasecmp( char *s1, char *s2 );
-void Q_getwd( char *out );
+char* strupr(char* in);
+char* strlower(char* in);
+int Q_strncasecmp(char* s1, char* s2, int n);
+int Q_strcasecmp(char* s1, char* s2);
+void Q_getwd(char* out);
 
-int Q_filelength( FILE *f );
-int FileTime( char *path );
+int Q_filelength(FILE* f);
+int FileTime(char* path);
 
-void    Q_mkdir( char *path );
+void Q_mkdir(char* path);
 
 extern char qdir[1024];
 extern char gamedir[1024];
-void SetQdirFromPath( char *path );
-char *ExpandArg( char *path );   // from cmd line
-char *ExpandPath( char *path );  // from scripts
-char *ExpandPathAndArchive( char *path );
+void SetQdirFromPath(char* path);
+char* ExpandArg(char* path);  // from cmd line
+char* ExpandPath(char* path); // from scripts
+char* ExpandPathAndArchive(char* path);
 
+double I_FloatTime(void);
 
-double I_FloatTime( void );
+void Error(char* error, ...);
+void Warning(char* warning, ...);
 
-void Error( char *error, ... );
-void Warning( char *warning, ... );
+int CheckParm(char* check);
 
-int     CheckParm( char *check );
+FILE* SafeOpenWrite(char* filename);
+FILE* SafeOpenRead(char* filename);
+void SafeRead(FILE* f, void* buffer, int count);
+void SafeWrite(FILE* f, void* buffer, int count);
 
-FILE    *SafeOpenWrite( char *filename );
-FILE    *SafeOpenRead( char *filename );
-void    SafeRead( FILE *f, void *buffer, int count );
-void    SafeWrite( FILE *f, void *buffer, int count );
+int LoadFile(char* filename, void** bufferptr, int offset, int length);
+int TryLoadFile(char* filename, void** bufferptr);
+void SaveFile(char* filename, void* buffer, int count);
+qboolean FileExists(char* filename);
 
-int LoadFile( char *filename, void **bufferptr, int offset, int length );
-int TryLoadFile( char *filename, void **bufferptr );
-void SaveFile( char *filename, void *buffer, int count );
-qboolean    FileExists( char *filename );
+void DefaultExtension(char* path, char* extension);
+void DefaultPath(char* path, char* basepath);
+void StripFilename(char* path);
+void StripExtension(char* path);
 
-void    DefaultExtension( char *path, char *extension );
-void    DefaultPath( char *path, char *basepath );
-void    StripFilename( char *path );
-void    StripExtension( char *path );
+void ExtractFilePath(char* path, char* dest);
+void ExtractFileBase(char* path, char* dest);
+void ExtractFileExtension(char* path, char* dest);
 
-void    ExtractFilePath( char *path, char *dest );
-void    ExtractFileBase( char *path, char *dest );
-void    ExtractFileExtension( char *path, char *dest );
+int ParseNum(char* str);
 
-int     ParseNum( char *str );
-
-short   BigShort( short l );
-short   LittleShort( short l );
-int     BigLong( int l );
-int     LittleLong( int l );
-float   BigFloat( float l );
-float   LittleFloat( float l );
+short BigShort(short l);
+short LittleShort(short l);
+int BigLong(int l);
+int LittleLong(int l);
+float BigFloat(float l);
+float LittleFloat(float l);
 
 #ifdef SIN
-unsigned short  BigUnsignedShort( unsigned short l );
-unsigned short  LittleUnsignedShort( unsigned short l );
-unsigned          BigUnsigned( unsigned l );
-unsigned          LittleUnsigned( unsigned l );
+unsigned short BigUnsignedShort(unsigned short l);
+unsigned short LittleUnsignedShort(unsigned short l);
+unsigned BigUnsigned(unsigned l);
+unsigned LittleUnsigned(unsigned l);
 #endif
 
-
-char *COM_Parse( char *data );
+char* COM_Parse(char* data);
 
 extern char com_token[1024];
 extern qboolean com_eof;
 
-char *copystring( char *s );
+char* copystring(char* s);
 
+void CRC_Init(unsigned short* crcvalue);
+void CRC_ProcessByte(unsigned short* crcvalue, byte data);
+unsigned short CRC_Value(unsigned short crcvalue);
 
-void CRC_Init( unsigned short *crcvalue );
-void CRC_ProcessByte( unsigned short *crcvalue, byte data );
-unsigned short CRC_Value( unsigned short crcvalue );
-
-void    CreatePath( char *path );
-void    QCopyFile( char *from, char *to );
+void CreatePath(char* path);
+void QCopyFile(char* from, char* to);
 
 extern qboolean archive;
 extern char archivedir[1024];
 
-
 extern qboolean verbose;
-void qprintf( char *format, ... );
+void qprintf(char* format, ...);
 
-void ExpandWildcards( int *argc, char ***argv );
-
+void ExpandWildcards(int* argc, char*** argv);
 
 // for compression routines
 typedef struct
 {
-	byte    *data;
-	int count;
+    byte* data;
+    int count;
 } cblock_t;
 
 #endif
-

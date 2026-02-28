@@ -2,9 +2,9 @@
 ===========================================================================
 
 Return to Castle Wolfenstein multiplayer GPL Source Code
-Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Return to Castle Wolfenstein multiplayer GPL Source Code (RTCW MP Source Code).  
+This file is part of the Return to Castle Wolfenstein multiplayer GPL Source Code (RTCW MP Source Code).
 
 RTCW MP Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -30,21 +30,20 @@ If you have questions concerning this license or the applicable additional terms
 
 #include "cg_local.h"
 
-
 /*
 ======================
 CG_LoadingString
 
 ======================
 */
-void CG_LoadingString( const char *s ) {
-	Q_strncpyz( cg.infoScreenText, s, sizeof( cg.infoScreenText ) );
+void CG_LoadingString(const char* s)
+{
+    Q_strncpyz(cg.infoScreenText, s, sizeof(cg.infoScreenText));
 
-	if ( s && s[0] != 0 ) {
-		CG_Printf( "%s", va( "LOADING... %s\n",s ) );   //----(SA)	added so you can see from the console what's going on
-
-	}
-	trap_UpdateScreen();
+    if (s && s[0] != 0) {
+        CG_Printf("%s", va("LOADING... %s\n", s)); //----(SA)	added so you can see from the console what's going on
+    }
+    trap_UpdateScreen();
 }
 
 /*
@@ -52,8 +51,9 @@ void CG_LoadingString( const char *s ) {
 CG_LoadingItem
 ===================
 */
-void CG_LoadingItem( int itemNum ) {
-#if 0 //----(SA)	Max Kaufman request that we don't show any pacifier stuff for items
+void CG_LoadingItem(int itemNum)
+{
+#if 0  //----(SA)	Max Kaufman request that we don't show any pacifier stuff for items
 	gitem_t     *item;
 
 	item = &bg_itemlist[itemNum];
@@ -75,44 +75,45 @@ void CG_LoadingItem( int itemNum ) {
 CG_LoadingClient
 ===================
 */
-void CG_LoadingClient( int clientNum ) {
-	const char      *info;
-	char            *skin;
-	char personality[MAX_QPATH];
-	char model[MAX_QPATH];
-	char iconName[MAX_QPATH];
+void CG_LoadingClient(int clientNum)
+{
+    const char* info;
+    char* skin;
+    char personality[MAX_QPATH];
+    char model[MAX_QPATH];
+    char iconName[MAX_QPATH];
 
-	if ( cgs.gametype == GT_SINGLE_PLAYER  && clientNum > 0 ) { // for now only show the player's icon in SP games
-		return;
-	}
+    if (cgs.gametype == GT_SINGLE_PLAYER && clientNum > 0) { // for now only show the player's icon in SP games
+        return;
+    }
 
-	info = CG_ConfigString( CS_PLAYERS + clientNum );
+    info = CG_ConfigString(CS_PLAYERS + clientNum);
 
-	Q_strncpyz( model, Info_ValueForKey( info, "model" ), sizeof( model ) );
-	skin = strrchr( model, '/' );
-	if ( skin ) {
-		*skin++ = '\0';
-	} else {
-		skin = "default";
-	}
+    Q_strncpyz(model, Info_ValueForKey(info, "model"), sizeof(model));
+    skin = strrchr(model, '/');
+    if (skin) {
+        *skin++ = '\0';
+    } else {
+        skin = "default";
+    }
 
-	Com_sprintf( iconName, MAX_QPATH, "models/players/%s/icon_%s.tga", model, skin );
+    Com_sprintf(iconName, MAX_QPATH, "models/players/%s/icon_%s.tga", model, skin);
 
-// (SA) ignore player icons for the moment
-	if ( !( cg_entities[clientNum].currentState.aiChar ) ) {
-//		if ( loadingPlayerIconCount < MAX_LOADING_PLAYER_ICONS ) {
-//			loadingPlayerIcons[loadingPlayerIconCount++] = trap_R_RegisterShaderNoMip( iconName );
-//		}
-	}
+    // (SA) ignore player icons for the moment
+    if (!(cg_entities[clientNum].currentState.aiChar)) {
+        //		if ( loadingPlayerIconCount < MAX_LOADING_PLAYER_ICONS ) {
+        //			loadingPlayerIcons[loadingPlayerIconCount++] = trap_R_RegisterShaderNoMip( iconName );
+        //		}
+    }
 
-	Q_strncpyz( personality, Info_ValueForKey( info, "n" ), sizeof( personality ) );
-	Q_CleanStr( personality );
+    Q_strncpyz(personality, Info_ValueForKey(info, "n"), sizeof(personality));
+    Q_CleanStr(personality);
 
-	if ( cgs.gametype == GT_SINGLE_PLAYER ) {
-		trap_S_RegisterSound( va( "sound/player/announce/%s.wav", personality ) );
-	}
+    if (cgs.gametype == GT_SINGLE_PLAYER) {
+        trap_S_RegisterSound(va("sound/player/announce/%s.wav", personality));
+    }
 
-	CG_LoadingString( personality );
+    CG_LoadingString(personality);
 }
 
 /*
@@ -122,98 +123,98 @@ CG_DrawStats
 */
 
 typedef struct {
-	char    *label;
-	int YOfs;
-	int labelX;
-	int labelFlags;
-	vec4_t  *labelColor;
+    char* label;
+    int YOfs;
+    int labelX;
+    int labelFlags;
+    vec4_t* labelColor;
 
-	char    *format;
-	int formatX;
-	int formatFlags;
-	vec4_t  *formatColor;
+    char* format;
+    int formatX;
+    int formatFlags;
+    vec4_t* formatColor;
 
-	int numVars;
+    int numVars;
 } statsItem_t;
 
 // this defines the layout of the mission stats
 // NOTE: these must match the stats sent in AICast_ScriptAction_ChangeLevel()
 static statsItem_t statsItems[] = {
-	{ "Kills",       170, 40,        UI_SMALLFONT | UI_DROPSHADOW,     &colorWhite,        "%3i/%3i",       600,    UI_SMALLFONT | UI_DROPSHADOW | UI_RIGHT,        &colorWhite,    2 },
-	{ " Nazis",      40, 40,     UI_EXSMALLFONT | UI_DROPSHADOW,   &colorWhite,        "%3i/%3i",       600,    UI_EXSMALLFONT | UI_DROPSHADOW | UI_RIGHT,      &colorWhite,    2 },
-	{ " Monsters",   15, 40,     UI_EXSMALLFONT | UI_DROPSHADOW,   &colorWhite,        "%3i/%3i",       600,    UI_EXSMALLFONT | UI_DROPSHADOW | UI_RIGHT,      &colorWhite,    2 },
-	{ "Time",        30, 40,     UI_SMALLFONT | UI_DROPSHADOW,     &colorWhite,        "%2ih %2im %2is",    600,    UI_SMALLFONT | UI_DROPSHADOW | UI_RIGHT,        &colorWhite,    3 },
-	{ "Secrets", 30, 40,     UI_SMALLFONT | UI_DROPSHADOW,     &colorWhite,        "%i/%i",         600,    UI_SMALLFONT | UI_DROPSHADOW | UI_RIGHT,        &colorWhite,    2 },
-	{ "Attempts",    30, 40,     UI_SMALLFONT | UI_DROPSHADOW,     &colorWhite,        "%i",            600,    UI_SMALLFONT | UI_DROPSHADOW | UI_RIGHT,        &colorWhite,    1 },
+    { "Kills", 170, 40, UI_SMALLFONT | UI_DROPSHADOW, &colorWhite, "%3i/%3i", 600, UI_SMALLFONT | UI_DROPSHADOW | UI_RIGHT, &colorWhite, 2 },
+    { " Nazis", 40, 40, UI_EXSMALLFONT | UI_DROPSHADOW, &colorWhite, "%3i/%3i", 600, UI_EXSMALLFONT | UI_DROPSHADOW | UI_RIGHT, &colorWhite, 2 },
+    { " Monsters", 15, 40, UI_EXSMALLFONT | UI_DROPSHADOW, &colorWhite, "%3i/%3i", 600, UI_EXSMALLFONT | UI_DROPSHADOW | UI_RIGHT, &colorWhite, 2 },
+    { "Time", 30, 40, UI_SMALLFONT | UI_DROPSHADOW, &colorWhite, "%2ih %2im %2is", 600, UI_SMALLFONT | UI_DROPSHADOW | UI_RIGHT, &colorWhite, 3 },
+    { "Secrets", 30, 40, UI_SMALLFONT | UI_DROPSHADOW, &colorWhite, "%i/%i", 600, UI_SMALLFONT | UI_DROPSHADOW | UI_RIGHT, &colorWhite, 2 },
+    { "Attempts", 30, 40, UI_SMALLFONT | UI_DROPSHADOW, &colorWhite, "%i", 600, UI_SMALLFONT | UI_DROPSHADOW | UI_RIGHT, &colorWhite, 1 },
 
-	{ NULL }
+    { NULL }
 };
-
 
 /*
 ==============
 CG_DrawStats
 ==============
 */
-void CG_DrawStats( char *stats ) {
-	int i, y, v, j;
-	#define MAX_STATS_VARS  64
-	int vars[MAX_STATS_VARS];
-	char *str, *token;
-	char *formatStr = NULL; // TTimo: init
-	int varIndex;
-	char string[MAX_QPATH];
+void CG_DrawStats(char* stats)
+{
+    int i, y, v, j;
+#define MAX_STATS_VARS 64
+    int vars[MAX_STATS_VARS];
+    char *str, *token;
+    char* formatStr = NULL; // TTimo: init
+    int varIndex;
+    char string[MAX_QPATH];
 
-	UI_DrawProportionalString( 320, 120, "MISSION STATS",
-							   UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, colorWhite );
+    UI_DrawProportionalString(320, 120, "MISSION STATS",
+    UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, colorWhite);
 
-	Q_strncpyz( string, stats, sizeof( string ) );
-	str = string;
-	// convert commas to spaces
-	for ( i = 0; str[i]; i++ ) {
-		if ( str[i] == ',' ) {
-			str[i] = ' ';
-		}
-	}
+    Q_strncpyz(string, stats, sizeof(string));
+    str = string;
+    // convert commas to spaces
+    for (i = 0; str[i]; i++) {
+        if (str[i] == ',') {
+            str[i] = ' ';
+        }
+    }
 
-	for ( i = 0, y = 0, v = 0; statsItems[i].label; i++ ) {
-		y += statsItems[i].YOfs;
+    for (i = 0, y = 0, v = 0; statsItems[i].label; i++) {
+        y += statsItems[i].YOfs;
 
-		UI_DrawProportionalString( statsItems[i].labelX, y, statsItems[i].label,
-								   statsItems[i].labelFlags, *statsItems[i].labelColor );
+        UI_DrawProportionalString(statsItems[i].labelX, y, statsItems[i].label,
+        statsItems[i].labelFlags, *statsItems[i].labelColor);
 
-		if ( statsItems[i].numVars ) {
-			varIndex = v;
-			for ( j = 0; j < statsItems[i].numVars; j++ ) {
-				token = COM_Parse( &str );
-				if ( !token[0] ) {
-					CG_Error( "error parsing mission stats\n" );
-					return;
-				}
+        if (statsItems[i].numVars) {
+            varIndex = v;
+            for (j = 0; j < statsItems[i].numVars; j++) {
+                token = COM_Parse(&str);
+                if (!token[0]) {
+                    CG_Error("error parsing mission stats\n");
+                    return;
+                }
 
-				vars[v++] = atoi( token );
-			}
+                vars[v++] = atoi(token);
+            }
 
-			// build the formatStr
-			switch ( statsItems[i].numVars ) {
-			case 1:
-				formatStr = va( statsItems[i].format, vars[varIndex] );
-				break;
-			case 2:
-				formatStr = va( statsItems[i].format, vars[varIndex], vars[varIndex + 1] );
-				break;
-			case 3:
-				formatStr = va( statsItems[i].format, vars[varIndex], vars[varIndex + 1], vars[varIndex + 2] );
-				break;
-			case 4:
-				formatStr = va( statsItems[i].format, vars[varIndex], vars[varIndex + 1], vars[varIndex + 2], vars[varIndex + 3] );
-				break;
-			}
+            // build the formatStr
+            switch (statsItems[i].numVars) {
+            case 1:
+                formatStr = va(statsItems[i].format, vars[varIndex]);
+                break;
+            case 2:
+                formatStr = va(statsItems[i].format, vars[varIndex], vars[varIndex + 1]);
+                break;
+            case 3:
+                formatStr = va(statsItems[i].format, vars[varIndex], vars[varIndex + 1], vars[varIndex + 2]);
+                break;
+            case 4:
+                formatStr = va(statsItems[i].format, vars[varIndex], vars[varIndex + 1], vars[varIndex + 2], vars[varIndex + 3]);
+                break;
+            }
 
-			UI_DrawProportionalString( statsItems[i].formatX, y, formatStr,
-									   statsItems[i].formatFlags, *statsItems[i].formatColor );
-		}
-	}
+            UI_DrawProportionalString(statsItems[i].formatX, y, formatStr,
+            statsItems[i].formatFlags, *statsItems[i].formatColor);
+        }
+    }
 }
 
 /*
@@ -223,70 +224,69 @@ CG_DrawInformation
 Draw all the status / pacifier stuff during level loading
 ====================
 */
-void CG_DrawInformation( void ) {
-	const char  *s;
-	const char  *info;
-	qhandle_t levelshot = 0; // TTimo: init
-	static int callCount = 0;
-	float percentDone;
+void CG_DrawInformation(void)
+{
+    const char* s;
+    const char* info;
+    qhandle_t levelshot = 0; // TTimo: init
+    static int callCount = 0;
+    float percentDone;
 
-	int expectedHunk;
-	char hunkBuf[MAX_QPATH];
+    int expectedHunk;
+    char hunkBuf[MAX_QPATH];
 
-	if ( cg.snap ) {
-		return;     // we are in the world, no need to draw information
-	}
+    if (cg.snap) {
+        return; // we are in the world, no need to draw information
+    }
 
-	if ( callCount ) {    // reject recursive calls
-		return;
-	}
+    if (callCount) { // reject recursive calls
+        return;
+    }
 
-	callCount++;
+    callCount++;
 
-	info = CG_ConfigString( CS_SERVERINFO );
+    info = CG_ConfigString(CS_SERVERINFO);
 
-	trap_Cvar_VariableStringBuffer( "com_expectedhunkusage", hunkBuf, MAX_QPATH );
-	expectedHunk = atoi( hunkBuf );
+    trap_Cvar_VariableStringBuffer("com_expectedhunkusage", hunkBuf, MAX_QPATH);
+    expectedHunk = atoi(hunkBuf);
 
+    s = Info_ValueForKey(info, "mapname");
+    levelshot = trap_R_RegisterShaderNoMip(va("levelshots/%s.tga", s));
+    if (!levelshot) {
+        levelshot = trap_R_RegisterShaderNoMip("levelshots/unknownmap.jpg");
+    }
+    trap_R_SetColor(NULL);
 
-	s = Info_ValueForKey( info, "mapname" );
-	levelshot = trap_R_RegisterShaderNoMip( va( "levelshots/%s.tga", s ) );
-	if ( !levelshot ) {
-		levelshot = trap_R_RegisterShaderNoMip( "levelshots/unknownmap.jpg" );
-	}
-	trap_R_SetColor( NULL );
+    // Pillarboxes
+    if (cg_fixedAspect.integer) {
+        if (cgs.glconfig.vidWidth * 480.0 > cgs.glconfig.vidHeight * 640.0) {
+            vec4_t col = { 0, 0, 0, 1 };
+            float pillar = 0.5 * ((cgs.glconfig.vidWidth - (cgs.screenXScale * 640.0)) / cgs.screenXScale);
 
-	// Pillarboxes
-	if ( cg_fixedAspect.integer ) {
-		if ( cgs.glconfig.vidWidth * 480.0 > cgs.glconfig.vidHeight * 640.0 ) {
-			vec4_t col = { 0, 0, 0, 1 };
-			float pillar = 0.5 * ( ( cgs.glconfig.vidWidth - ( cgs.screenXScale * 640.0 ) ) / cgs.screenXScale );
+            CG_SetScreenPlacement(PLACE_LEFT, PLACE_CENTER);
+            CG_FillRect(0, 0, pillar + 1, 480, col);
+            CG_SetScreenPlacement(PLACE_RIGHT, PLACE_CENTER);
+            CG_FillRect(640 - pillar, 0, pillar + 1, 480, col);
+            CG_SetScreenPlacement(PLACE_CENTER, PLACE_CENTER);
+        }
+    }
 
-			CG_SetScreenPlacement( PLACE_LEFT, PLACE_CENTER );
-			CG_FillRect( 0, 0, pillar + 1, 480, col );
-			CG_SetScreenPlacement( PLACE_RIGHT, PLACE_CENTER );
-			CG_FillRect( 640 - pillar, 0, pillar + 1, 480, col );
-			CG_SetScreenPlacement( PLACE_CENTER, PLACE_CENTER );
-		}
-	}
+    CG_DrawPic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, levelshot);
 
-	CG_DrawPic( 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, levelshot );
+    // show the server motd
+    CG_DrawMotd();
 
-	// show the server motd
-	CG_DrawMotd();
+    // show the percent complete bar
+    if (expectedHunk >= 0) {
+        vec2_t xy = { 200, 468 };
+        vec2_t wh = { 240, 10 };
 
-	// show the percent complete bar
-	if ( expectedHunk >= 0 ) {
-		vec2_t xy = { 200, 468 };
-		vec2_t wh = { 240, 10 };
+        percentDone = (float)(cg_hunkUsed.integer + cg_soundAdjust.integer) / (float)(expectedHunk);
+        if (percentDone > 0.97) { // never actually show 100%, since we are not in the game yet
+            percentDone = 0.97;
+        }
+        CG_HorizontalPercentBar(xy[0], xy[1], wh[0], wh[1], percentDone);
+    }
 
-		percentDone = (float)( cg_hunkUsed.integer + cg_soundAdjust.integer ) / (float)( expectedHunk );
-		if ( percentDone > 0.97 ) { // never actually show 100%, since we are not in the game yet
-			percentDone = 0.97;
-		}
-		CG_HorizontalPercentBar( xy[0], xy[1], wh[0], wh[1], percentDone );
-
-	}
-
-	callCount--;
+    callCount--;
 }

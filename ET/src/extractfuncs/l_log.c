@@ -2,9 +2,9 @@
 ===========================================================================
 
 Wolfenstein: Enemy Territory GPL Source Code
-Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).  
+This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).
 
 Wolf ET Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -42,13 +42,12 @@ If you have questions concerning this license or the applicable additional terms
 #define MAX_QPATH 64
 #include "../bspc/qbsp.h"
 
-#define MAX_LOGFILENAMESIZE     1024
+#define MAX_LOGFILENAMESIZE 1024
 
-typedef struct logfile_s
-{
-	char filename[MAX_LOGFILENAMESIZE];
-	FILE *fp;
-	int numwrites;
+typedef struct logfile_s {
+    char filename[MAX_LOGFILENAMESIZE];
+    FILE* fp;
+    int numwrites;
 } logfile_t;
 
 logfile_t logfile;
@@ -59,141 +58,149 @@ logfile_t logfile;
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void Log_Open( char *filename ) {
-	if ( !filename || !strlen( filename ) ) {
-		printf( "openlog <filename>\n" );
-		return;
-	} //end if
-	if ( logfile.fp ) {
-		printf( "log file %s is already opened\n", logfile.filename );
-		return;
-	} //end if
-	logfile.fp = fopen( filename, "wb" );
-	if ( !logfile.fp ) {
-		printf( "can't open the log file %s\n", filename );
-		return;
-	} //end if
-	strncpy( logfile.filename, filename, MAX_LOGFILENAMESIZE );
-//	printf("Opened log %s\n", logfile.filename);
-} //end of the function Log_Create
+void Log_Open(char* filename)
+{
+    if (!filename || !strlen(filename)) {
+        printf("openlog <filename>\n");
+        return;
+    } // end if
+    if (logfile.fp) {
+        printf("log file %s is already opened\n", logfile.filename);
+        return;
+    } // end if
+    logfile.fp = fopen(filename, "wb");
+    if (!logfile.fp) {
+        printf("can't open the log file %s\n", filename);
+        return;
+    } // end if
+    strncpy(logfile.filename, filename, MAX_LOGFILENAMESIZE);
+    //	printf("Opened log %s\n", logfile.filename);
+} // end of the function Log_Create
 //===========================================================================
 //
 // Parameter:				-
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void Log_Close( void ) {
-	if ( !logfile.fp ) {
-		printf( "no log file to close\n" );
-		return;
-	} //end if
-	if ( fclose( logfile.fp ) ) {
-		printf( "can't close log file %s\n", logfile.filename );
-		return;
-	} //end if
-	logfile.fp = NULL;
-//	printf("Closed log %s\n", logfile.filename);
-} //end of the function Log_Close
+void Log_Close(void)
+{
+    if (!logfile.fp) {
+        printf("no log file to close\n");
+        return;
+    } // end if
+    if (fclose(logfile.fp)) {
+        printf("can't close log file %s\n", logfile.filename);
+        return;
+    } // end if
+    logfile.fp = NULL;
+    //	printf("Closed log %s\n", logfile.filename);
+} // end of the function Log_Close
 //===========================================================================
 //
 // Parameter:				-
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void Log_Shutdown( void ) {
-	if ( logfile.fp ) {
-		Log_Close();
-	}
-} //end of the function Log_Shutdown
+void Log_Shutdown(void)
+{
+    if (logfile.fp) {
+        Log_Close();
+    }
+} // end of the function Log_Shutdown
 //===========================================================================
 //
 // Parameter:				-
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void Log_Print( char *fmt, ... ) {
-	va_list ap;
+void Log_Print(char* fmt, ...)
+{
+    va_list ap;
 #ifdef WINBSPC
-	char buf[2048];
-#endif //WINBSPC
+    char buf[2048];
+#endif // WINBSPC
 
-	if ( verbose ) {
-		va_start( ap, fmt );
+    if (verbose) {
+        va_start(ap, fmt);
 #ifdef WINBSPC
-		Q_vsnprintf( buf, sizeof( buf ), fmt, ap );
-		WinBSPCPrint( buf );
+        Q_vsnprintf(buf, sizeof(buf), fmt, ap);
+        WinBSPCPrint(buf);
 #else
-		vprintf( fmt, ap );
-#endif //WINBSPS
-		va_end( ap );
-	} //end if
+        vprintf(fmt, ap);
+#endif // WINBSPS
+        va_end(ap);
+    } // end if
 
-	va_start( ap, fmt );
-	if ( logfile.fp ) {
-		vfprintf( logfile.fp, fmt, ap );
-		fflush( logfile.fp );
-	} //end if
-	va_end( ap );
-} //end of the function Log_Print
+    va_start(ap, fmt);
+    if (logfile.fp) {
+        vfprintf(logfile.fp, fmt, ap);
+        fflush(logfile.fp);
+    } // end if
+    va_end(ap);
+} // end of the function Log_Print
 //===========================================================================
 //
 // Parameter:				-
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void Log_Write( char *fmt, ... ) {
-	va_list ap;
+void Log_Write(char* fmt, ...)
+{
+    va_list ap;
 
-	if ( !logfile.fp ) {
-		return;
-	}
-	va_start( ap, fmt );
-	vfprintf( logfile.fp, fmt, ap );
-	va_end( ap );
-	fflush( logfile.fp );
-} //end of the function Log_Write
+    if (!logfile.fp) {
+        return;
+    }
+    va_start(ap, fmt);
+    vfprintf(logfile.fp, fmt, ap);
+    va_end(ap);
+    fflush(logfile.fp);
+} // end of the function Log_Write
 //===========================================================================
 //
 // Parameter:				-
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void Log_WriteTimeStamped( char *fmt, ... ) {
-	va_list ap;
+void Log_WriteTimeStamped(char* fmt, ...)
+{
+    va_list ap;
 
-	if ( !logfile.fp ) {
-		return;
-	}
-/*	fprintf(logfile.fp, "%d   %02d:%02d:%02d:%02d   ",
-					logfile.numwrites,
-					(int) (botlibglobals.time / 60 / 60),
-					(int) (botlibglobals.time / 60),
-					(int) (botlibglobals.time),
-					(int) ((int) (botlibglobals.time * 100)) -
-							((int) botlibglobals.time) * 100);*/
-	va_start( ap, fmt );
-	vfprintf( logfile.fp, fmt, ap );
-	va_end( ap );
-	logfile.numwrites++;
-	fflush( logfile.fp );
-} //end of the function Log_Write
+    if (!logfile.fp) {
+        return;
+    }
+    /*	fprintf(logfile.fp, "%d   %02d:%02d:%02d:%02d   ",
+                                            logfile.numwrites,
+                                            (int) (botlibglobals.time / 60 / 60),
+                                            (int) (botlibglobals.time / 60),
+                                            (int) (botlibglobals.time),
+                                            (int) ((int) (botlibglobals.time * 100)) -
+                                                            ((int) botlibglobals.time) * 100);*/
+    va_start(ap, fmt);
+    vfprintf(logfile.fp, fmt, ap);
+    va_end(ap);
+    logfile.numwrites++;
+    fflush(logfile.fp);
+} // end of the function Log_Write
 //===========================================================================
 //
 // Parameter:				-
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-FILE *Log_FileStruct( void ) {
-	return logfile.fp;
-} //end of the function Log_FileStruct
+FILE* Log_FileStruct(void)
+{
+    return logfile.fp;
+} // end of the function Log_FileStruct
 //===========================================================================
 //
 // Parameter:				-
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void Log_Flush( void ) {
-	if ( logfile.fp ) {
-		fflush( logfile.fp );
-	}
-} //end of the function Log_Flush
+void Log_Flush(void)
+{
+    if (logfile.fp) {
+        fflush(logfile.fp);
+    }
+} // end of the function Log_Flush

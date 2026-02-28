@@ -2,9 +2,9 @@
 ===========================================================================
 
 Wolfenstein: Enemy Territory GPL Source Code
-Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).  
+This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).
 
 Wolf ET Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -25,7 +25,6 @@ If you have questions concerning this license or the applicable additional terms
 
 ===========================================================================
 */
-
 
 /*****************************************************************************
  * name:		ai_distances.h
@@ -136,7 +135,7 @@ If you have questions concerning this license or the applicable additional terms
 //
 ///////////////////////////////////////
 
-#define kBOT_FOLLOW_SPEED_BONUS ( 1.25f )
+#define kBOT_FOLLOW_SPEED_BONUS (1.25f)
 
 ///////////////////////////////////////
 //
@@ -146,14 +145,12 @@ If you have questions concerning this license or the applicable additional terms
 //
 ///////////////////////////////////////
 
-
 // A short period of time to indicate we were just shot by someone
 #define kBOT_JUST_SHOT_TIME 1000
 
 // Max travel time a bot will spend travelling to heal/give ammo on a give team health/ammo command
 //		NOTE: also checks autonomy range, so this is just an additional check
 #define kBOT_MAX_RESUPPLY_TRAVEL_TIME 3000
-
 
 //////////////////////////////
 // Combat time constants
@@ -248,15 +245,15 @@ If you have questions concerning this license or the applicable additional terms
 
 // How much to penalize damage ratio based on distance from leader
 // NOTE: 1 == take full damage at max dist, 0 == use scripted ratio
-#define NO_LEADER_DAMAGE_PENALTY ( 0.6f )
+#define NO_LEADER_DAMAGE_PENALTY (0.6f)
 
 // How much to penalize the aiming accuracy based on distance from
 // leader.  1 == can't hit at all, 0 == No penalty
-#define NO_LEADER_MAX_AIM_PENALTY ( 0.5f )
+#define NO_LEADER_MAX_AIM_PENALTY (0.5f)
 
 // how much inaccuracy to remove. e.g. 0.5 = 50% less inaccuracy
-#define AIM_ACCURACY_BONUS_PRONE    0.5
-#define AIM_ACCURACY_BONUS_CROUCH   0.3
-#define AIM_SKILL_BONUS_PRONE       0.5
-#define AIM_ACCURACY_ENEMY_PENALTY_PRONE    0.5
-#define AIM_ACCURACY_ENEMY_PENALTY_CROUCH   0.2
+#define AIM_ACCURACY_BONUS_PRONE 0.5
+#define AIM_ACCURACY_BONUS_CROUCH 0.3
+#define AIM_SKILL_BONUS_PRONE 0.5
+#define AIM_ACCURACY_ENEMY_PENALTY_PRONE 0.5
+#define AIM_ACCURACY_ENEMY_PENALTY_CROUCH 0.2

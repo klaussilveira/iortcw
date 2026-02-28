@@ -2,9 +2,9 @@
 ===========================================================================
 
 Wolfenstein: Enemy Territory GPL Source Code
-Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).  
+This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).
 
 Wolf ET Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -26,7 +26,6 @@ If you have questions concerning this license or the applicable additional terms
 ===========================================================================
 */
 
-
 /*****************************************************************************
  * name:		ai_dmgoal_mp.h
  *
@@ -39,8 +38,7 @@ If you have questions concerning this license or the applicable additional terms
 // MULTIPLAYER GOAL AI
 //
 
-qboolean BotMP_CheckEmergencyGoals( bot_state_t *bs );
-qboolean BotMP_FindGoal( bot_state_t *bs );
+qboolean BotMP_CheckEmergencyGoals(bot_state_t* bs);
+qboolean BotMP_FindGoal(bot_state_t* bs);
 // Gordon: new version
-qboolean BotMP_FindGoal_New( bot_state_t *bs );
-
+qboolean BotMP_FindGoal_New(bot_state_t* bs);

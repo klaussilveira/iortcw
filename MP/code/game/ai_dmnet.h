@@ -2,9 +2,9 @@
 ===========================================================================
 
 Return to Castle Wolfenstein multiplayer GPL Source Code
-Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Return to Castle Wolfenstein multiplayer GPL Source Code (RTCW MP Source Code).  
+This file is part of the Return to Castle Wolfenstein multiplayer GPL Source Code (RTCW MP Source Code).
 
 RTCW MP Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -26,7 +26,6 @@ If you have questions concerning this license or the applicable additional terms
 ===========================================================================
 */
 
-
 /*****************************************************************************
  * name:		ai_dmnet.h
  *
@@ -35,32 +34,31 @@ If you have questions concerning this license or the applicable additional terms
  *
  *****************************************************************************/
 
-#define MAX_NODESWITCHES    50
+#define MAX_NODESWITCHES 50
 
-void AIEnter_Intermission( bot_state_t *bs );
-void AIEnter_Observer( bot_state_t *bs );
-void AIEnter_Respawn( bot_state_t *bs );
-void AIEnter_Stand( bot_state_t *bs );
-void AIEnter_Seek_ActivateEntity( bot_state_t *bs );
-void AIEnter_Seek_NBG( bot_state_t *bs );
-void AIEnter_Seek_LTG( bot_state_t *bs );
-void AIEnter_Seek_Camp( bot_state_t *bs );
-void AIEnter_Battle_Fight( bot_state_t *bs );
-void AIEnter_Battle_Chase( bot_state_t *bs );
-void AIEnter_Battle_Retreat( bot_state_t *bs );
-void AIEnter_Battle_NBG( bot_state_t *bs );
-int AINode_Intermission( bot_state_t *bs );
-int AINode_Observer( bot_state_t *bs );
-int AINode_Respawn( bot_state_t *bs );
-int AINode_Stand( bot_state_t *bs );
-int AINode_Seek_ActivateEntity( bot_state_t *bs );
-int AINode_Seek_NBG( bot_state_t *bs );
-int AINode_Seek_LTG( bot_state_t *bs );
-int AINode_Battle_Fight( bot_state_t *bs );
-int AINode_Battle_Chase( bot_state_t *bs );
-int AINode_Battle_Retreat( bot_state_t *bs );
-int AINode_Battle_NBG( bot_state_t *bs );
+void AIEnter_Intermission(bot_state_t* bs);
+void AIEnter_Observer(bot_state_t* bs);
+void AIEnter_Respawn(bot_state_t* bs);
+void AIEnter_Stand(bot_state_t* bs);
+void AIEnter_Seek_ActivateEntity(bot_state_t* bs);
+void AIEnter_Seek_NBG(bot_state_t* bs);
+void AIEnter_Seek_LTG(bot_state_t* bs);
+void AIEnter_Seek_Camp(bot_state_t* bs);
+void AIEnter_Battle_Fight(bot_state_t* bs);
+void AIEnter_Battle_Chase(bot_state_t* bs);
+void AIEnter_Battle_Retreat(bot_state_t* bs);
+void AIEnter_Battle_NBG(bot_state_t* bs);
+int AINode_Intermission(bot_state_t* bs);
+int AINode_Observer(bot_state_t* bs);
+int AINode_Respawn(bot_state_t* bs);
+int AINode_Stand(bot_state_t* bs);
+int AINode_Seek_ActivateEntity(bot_state_t* bs);
+int AINode_Seek_NBG(bot_state_t* bs);
+int AINode_Seek_LTG(bot_state_t* bs);
+int AINode_Battle_Fight(bot_state_t* bs);
+int AINode_Battle_Chase(bot_state_t* bs);
+int AINode_Battle_Retreat(bot_state_t* bs);
+int AINode_Battle_NBG(bot_state_t* bs);
 
-void BotResetNodeSwitches( void );
-void BotDumpNodeSwitches( bot_state_t *bs );
-
+void BotResetNodeSwitches(void);
+void BotDumpNodeSwitches(bot_state_t* bs);

@@ -2,9 +2,9 @@
 ===========================================================================
 
 Return to Castle Wolfenstein multiplayer GPL Source Code
-Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Return to Castle Wolfenstein multiplayer GPL Source Code (RTCW MP Source Code).  
+This file is part of the Return to Castle Wolfenstein multiplayer GPL Source Code (RTCW MP Source Code).
 
 RTCW MP Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -26,7 +26,6 @@ If you have questions concerning this license or the applicable additional terms
 ===========================================================================
 */
 
-
 /*****************************************************************************
  * name:		be_aas_routealt.h
  *
@@ -36,11 +35,8 @@ If you have questions concerning this license or the applicable additional terms
  *****************************************************************************/
 
 #ifdef AASINTERN
-void AAS_InitAlternativeRouting( void );
-void AAS_ShutdownAlternativeRouting( void );
-#endif //AASINTERN
+void AAS_InitAlternativeRouting(void);
+void AAS_ShutdownAlternativeRouting(void);
+#endif // AASINTERN
 
-
-int AAS_AlternativeRouteGoals( vec3_t start, vec3_t goal, int travelflags,
-							   aas_altroutegoal_t *altroutegoals, int maxaltroutegoals,
-							   int color );
+int AAS_AlternativeRouteGoals(vec3_t start, vec3_t goal, int travelflags, aas_altroutegoal_t* altroutegoals, int maxaltroutegoals, int color);

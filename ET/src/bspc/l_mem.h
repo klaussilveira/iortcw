@@ -2,9 +2,9 @@
 ===========================================================================
 
 Wolfenstein: Enemy Territory GPL Source Code
-Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).  
+This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).
 
 Wolf ET Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -26,33 +26,30 @@ If you have questions concerning this license or the applicable additional terms
 ===========================================================================
 */
 
-
-
 //=============================================================================
 
 // memory.h
-//#define MEMDEBUG
+// #define MEMDEBUG
 #undef MEMDEBUG
 
 #ifndef MEMDEBUG
 
-void *GetClearedMemory( int size );
-void *GetMemory( unsigned long size );
+void* GetClearedMemory(int size);
+void* GetMemory(unsigned long size);
 
 #else
 
-#define GetMemory( size )             GetMemoryDebug( size, # size, __FILE__, __LINE__ );
-#define GetClearedMemory( size )  GetClearedMemoryDebug( size, # size, __FILE__, __LINE__ );
-//allocate a memory block of the given size
-void *GetMemoryDebug( unsigned long size, char *label, char *file, int line );
-//allocate a memory block of the given size and clear it
-void *GetClearedMemoryDebug( unsigned long size, char *label, char *file, int line );
+#define GetMemory(size) GetMemoryDebug(size, #size, __FILE__, __LINE__);
+#define GetClearedMemory(size) GetClearedMemoryDebug(size, #size, __FILE__, __LINE__);
+// allocate a memory block of the given size
+void* GetMemoryDebug(unsigned long size, char* label, char* file, int line);
+// allocate a memory block of the given size and clear it
+void* GetClearedMemoryDebug(unsigned long size, char* label, char* file, int line);
 //
-void PrintMemoryLabels( void );
-#endif //MEMDEBUG
+void PrintMemoryLabels(void);
+#endif // MEMDEBUG
 
-void FreeMemory( void *ptr );
-int MemorySize( void *ptr );
-void PrintMemorySize( unsigned long size );
-int TotalAllocatedMemory( void );
-
+void FreeMemory(void* ptr);
+int MemorySize(void* ptr);
+void PrintMemorySize(unsigned long size);
+int TotalAllocatedMemory(void);

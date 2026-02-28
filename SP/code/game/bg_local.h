@@ -2,9 +2,9 @@
 ===========================================================================
 
 Return to Castle Wolfenstein single player GPL Source Code
-Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Return to Castle Wolfenstein single player GPL Source Code (RTCW SP Source Code).  
+This file is part of the Return to Castle Wolfenstein single player GPL Source Code (RTCW SP Source Code).
 
 RTCW SP Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -28,47 +28,46 @@ If you have questions concerning this license or the applicable additional terms
 
 // bg_local.h -- local definitions for the bg (both games) files
 
-#define MIN_WALK_NORMAL 0.7     // can't walk on very steep slopes
+#define MIN_WALK_NORMAL 0.7 // can't walk on very steep slopes
 
-#define STEPSIZE        18
+#define STEPSIZE 18
 
-#define JUMP_VELOCITY   270
+#define JUMP_VELOCITY 270
 
-#define TIMER_LAND      130
-#define TIMER_GESTURE   ( 34 * 66 + 50 )
+#define TIMER_LAND 130
+#define TIMER_GESTURE (34 * 66 + 50)
 
-
-#define OVERCLIP        1.001
+#define OVERCLIP 1.001
 
 // all of the locals will be zeroed before each
 // pmove, just to make damn sure we don't have
 // any differences when running on client or server
 typedef struct {
-	vec3_t forward, right, up;
-	float frametime;
+    vec3_t forward, right, up;
+    float frametime;
 
-	int msec;
+    int msec;
 
-	qboolean walking;
-	qboolean groundPlane;
-	trace_t groundTrace;
+    qboolean walking;
+    qboolean groundPlane;
+    trace_t groundTrace;
 
-	float impactSpeed;
+    float impactSpeed;
 
-	vec3_t previous_origin;
-	vec3_t previous_velocity;
-	int previous_waterlevel;
+    vec3_t previous_origin;
+    vec3_t previous_velocity;
+    int previous_waterlevel;
 
-	// Ridah, ladders
-	qboolean ladder;
+    // Ridah, ladders
+    qboolean ladder;
 } pml_t;
 
-extern pmove_t     *pm;
+extern pmove_t* pm;
 extern pml_t pml;
 
 // movement parameters
 extern float pm_stopspeed;
-//extern	float	pm_duckScale;
+// extern	float	pm_duckScale;
 
 //----(SA)	modified
 extern float pm_waterSwimScale;
@@ -90,9 +89,8 @@ extern float pm_flightfriction;
 
 extern int c_pmove;
 
-void PM_AddTouchEnt( int entityNum );
-void PM_AddEvent( int newEvent );
+void PM_AddTouchEnt(int entityNum);
+void PM_AddEvent(int newEvent);
 
-qboolean    PM_SlideMove( qboolean gravity );
-void        PM_StepSlideMove( qboolean gravity );
-
+qboolean PM_SlideMove(qboolean gravity);
+void PM_StepSlideMove(qboolean gravity);

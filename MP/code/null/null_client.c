@@ -2,9 +2,9 @@
 ===========================================================================
 
 Return to Castle Wolfenstein multiplayer GPL Source Code
-Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Return to Castle Wolfenstein multiplayer GPL Source Code (RTCW MP Source Code).  
+This file is part of the Return to Castle Wolfenstein multiplayer GPL Source Code (RTCW MP Source Code).
 
 RTCW MP Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -26,87 +26,109 @@ If you have questions concerning this license or the applicable additional terms
 ===========================================================================
 */
 
-
 #include "../qcommon/q_shared.h"
 #include "../qcommon/qcommon.h"
 
-cvar_t *cl_shownet;
+cvar_t* cl_shownet;
 // TTimo: win32 dedicated
-cvar_t  *cl_language;
+cvar_t* cl_language;
 
-void CL_Shutdown(char *finalmsg, qboolean disconnect, qboolean quit) {
+void CL_Shutdown(char* finalmsg, qboolean disconnect, qboolean quit)
+{
 }
 
-void CL_Init( void ) {
-	cl_shownet = Cvar_Get( "cl_shownet", "0", CVAR_TEMP );
-	// TTimo: localisation, prolly not any use in dedicated / null client
-	cl_language = Cvar_Get( "cl_language", "0", CVAR_ARCHIVE );
+void CL_Init(void)
+{
+    cl_shownet = Cvar_Get("cl_shownet", "0", CVAR_TEMP);
+    // TTimo: localisation, prolly not any use in dedicated / null client
+    cl_language = Cvar_Get("cl_language", "0", CVAR_ARCHIVE);
 }
 
-void CL_MouseEvent( int dx, int dy, int time ) {
+void CL_MouseEvent(int dx, int dy, int time)
+{
 }
 
-void Key_WriteBindings( fileHandle_t f ) {
+void Key_WriteBindings(fileHandle_t f)
+{
 }
 
-void CL_Frame( int msec ) {
+void CL_Frame(int msec)
+{
 }
 
-void CL_PacketEvent( netadr_t from, msg_t *msg ) {
+void CL_PacketEvent(netadr_t from, msg_t* msg)
+{
 }
 
-void CL_CharEvent( int key ) {
+void CL_CharEvent(int key)
+{
 }
 
-void CL_Disconnect( qboolean showMainMenu ) {
+void CL_Disconnect(qboolean showMainMenu)
+{
 }
 
-void CL_MapLoading( void ) {
+void CL_MapLoading(void)
+{
 }
 
-qboolean CL_GameCommand( void ) {
-	return qfalse;
+qboolean CL_GameCommand(void)
+{
+    return qfalse;
 }
 
-void CL_KeyEvent( int key, qboolean down, unsigned time ) {
+void CL_KeyEvent(int key, qboolean down, unsigned time)
+{
 }
 
-qboolean UI_GameCommand( void ) {
-	return qfalse;
+qboolean UI_GameCommand(void)
+{
+    return qfalse;
 }
 
-void CL_ForwardCommandToServer( const char *string ) {
+void CL_ForwardCommandToServer(const char* string)
+{
 }
 
-void CL_ConsolePrint( char *txt ) {
+void CL_ConsolePrint(char* txt)
+{
 }
 
-void CL_JoystickEvent( int axis, int value, int time ) {
+void CL_JoystickEvent(int axis, int value, int time)
+{
 }
 
-void CL_InitKeyCommands( void ) {
+void CL_InitKeyCommands(void)
+{
 }
 
-void CL_CDDialog( void ) {
+void CL_CDDialog(void)
+{
 }
 
-void CL_FlushMemory( void ) {
+void CL_FlushMemory(void)
+{
 }
 
-void CL_StartHunkUsers( qboolean rendererOnly ) {
+void CL_StartHunkUsers(qboolean rendererOnly)
+{
 }
 
-void CL_ShutdownAll(qboolean shutdownRef) {
+void CL_ShutdownAll(qboolean shutdownRef)
+{
 }
 
-void CL_InitRef(void) {
+void CL_InitRef(void)
+{
 }
 
-void CL_Snd_Shutdown(void) {
+void CL_Snd_Shutdown(void)
+{
 }
 
-qboolean CL_CDKeyValidate( const char *key, const char *checksum ) { return qtrue; }
+qboolean CL_CDKeyValidate(const char* key, const char* checksum) { return qtrue; }
 
 // TTimo added for win32 dedicated
-void Key_ClearStates( void ) {
+void Key_ClearStates(void)
+{
 }

@@ -2,9 +2,9 @@
 ===========================================================================
 
 Wolfenstein: Enemy Territory GPL Source Code
-Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).  
+This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).
 
 Wolf ET Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -36,38 +36,38 @@ If you have questions concerning this license or the applicable additional terms
 
 // #include "ATIGL.h"
 
-#ifndef  GL_MULTISAMPLE_FILTER_HINT_NV
-#define GL_MULTISAMPLE_FILTER_HINT_NV                    0x8534
+#ifndef GL_MULTISAMPLE_FILTER_HINT_NV
+#define GL_MULTISAMPLE_FILTER_HINT_NV 0x8534
 #endif
 
 typedef struct {
-	CGGammaValue red[256];
-	CGGammaValue green[256];
-	CGGammaValue blue[256];
+    CGGammaValue red[256];
+    CGGammaValue green[256];
+    CGGammaValue blue[256];
 } CGGammaTable;
 
 #define MAX_DEVICES 32
 
 typedef struct {
-	GDHandle devices[MAX_DEVICES];
-	int numDevices;
+    GDHandle devices[MAX_DEVICES];
+    int numDevices;
 
-	GDHandle device;
-	DisplayIDType displayID;
+    GDHandle device;
+    DisplayIDType displayID;
 
-	AGLContext context;
-	AGLContext secondaryContext;
-	AGLPixelFormat fmt;
-	//	WindowRef		window;
+    AGLContext context;
+    AGLContext secondaryContext;
+    AGLPixelFormat fmt;
+    //	WindowRef		window;
 
-	DSpContextReference DSpContext;
-	CGGammaTable gameGamma;
-	Ptr systemGammas;
+    DSpContextReference DSpContext;
+    CGGammaTable gameGamma;
+    Ptr systemGammas;
 
-	GLint textureMemory;
-	GLint videoMemory;
+    GLint textureMemory;
+    GLint videoMemory;
 
-	FILE            *log_fp;
+    FILE* log_fp;
 } aglstate_t;
 
 extern aglstate_t sys_gl;
@@ -75,7 +75,7 @@ extern aglstate_t sys_gl;
 #ifdef __cplusplus
 extern "C" {
 #endif
-extern Boolean QGL_Init( void );
+extern Boolean QGL_Init(void);
 #ifdef __cplusplus
 }
 #endif

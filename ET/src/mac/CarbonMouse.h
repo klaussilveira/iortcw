@@ -2,9 +2,9 @@
 ===========================================================================
 
 Wolfenstein: Enemy Territory GPL Source Code
-Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).  
+This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).
 
 Wolf ET Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -29,10 +29,10 @@ If you have questions concerning this license or the applicable additional terms
 #ifndef CarbonMouse_h
 #define CarbonMouse_h
 
-Boolean Carbon_InitMouse( void );
-void Carbon_ReadMouseDeltas( SInt32 *deltaX, SInt32 *deltaY );
-void Carbon_ReadMouseWheelDelta( SInt32 *delta );
-Boolean Carbon_ReadMouseButton( int inButtonNum );
-void Carbon_EnableMouse( Boolean inState );
+Boolean Carbon_InitMouse(void);
+void Carbon_ReadMouseDeltas(SInt32* deltaX, SInt32* deltaY);
+void Carbon_ReadMouseWheelDelta(SInt32* delta);
+Boolean Carbon_ReadMouseButton(int inButtonNum);
+void Carbon_EnableMouse(Boolean inState);
 
 #endif

@@ -2,9 +2,9 @@
 ===========================================================================
 
 Wolfenstein: Enemy Territory GPL Source Code
-Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).  
+This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).
 
 Wolf ET Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -26,40 +26,37 @@ If you have questions concerning this license or the applicable additional terms
 ===========================================================================
 */
 
-
 #ifndef MAX_MAP_ENTITIES
-#define MAX_MAP_ENTITIES    4096
+#define MAX_MAP_ENTITIES 4096
 #endif
 
-typedef struct epair_s
-{
-	struct epair_s  *next;
-	char    *key;
-	char    *value;
+typedef struct epair_s {
+    struct epair_s* next;
+    char* key;
+    char* value;
 } epair_t;
 
 typedef struct
 {
-	vec3_t origin;
-	int firstbrush;
-	int numbrushes;
-	epair_t     *epairs;
-	// only valid for func_areaportals
-	int areaportalnum;
-	int portalareas[2];
-	int modelnum;           //for bsp 2 map conversion
-	qboolean wasdetail;     //for SIN
+    vec3_t origin;
+    int firstbrush;
+    int numbrushes;
+    epair_t* epairs;
+    // only valid for func_areaportals
+    int areaportalnum;
+    int portalareas[2];
+    int modelnum;       // for bsp 2 map conversion
+    qboolean wasdetail; // for SIN
 } entity_t;
 
 extern int num_entities;
 extern entity_t entities[MAX_MAP_ENTITIES];
 
-void StripTrailing( char *e );
-void SetKeyValue( entity_t *ent, char *key, char *value );
-char *ValueForKey( entity_t *ent, char *key ); // will return "" if not present
-vec_t FloatForKey( entity_t *ent, char *key );
-void GetVectorForKey( entity_t *ent, char *key, vec3_t vec );
-qboolean ParseEntity( script_t *script );
-epair_t *ParseEpair( script_t *script );
-void PrintEntity( entity_t *ent );
-
+void StripTrailing(char* e);
+void SetKeyValue(entity_t* ent, char* key, char* value);
+char* ValueForKey(entity_t* ent, char* key); // will return "" if not present
+vec_t FloatForKey(entity_t* ent, char* key);
+void GetVectorForKey(entity_t* ent, char* key, vec3_t vec);
+qboolean ParseEntity(script_t* script);
+epair_t* ParseEpair(script_t* script);
+void PrintEntity(entity_t* ent);

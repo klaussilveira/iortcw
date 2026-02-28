@@ -2,9 +2,9 @@
 ===========================================================================
 
 Wolfenstein: Enemy Territory GPL Source Code
-Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).  
+This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).
 
 Wolf ET Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -26,10 +26,10 @@ If you have questions concerning this license or the applicable additional terms
 ===========================================================================
 */
 
-#define DEDICATED   1
+#define DEDICATED 1
 
-#define TARGET_API_MAC_CARBON   1
-#define TARGET_RT_MAC_MACHO     1
+#define TARGET_API_MAC_CARBON 1
+#define TARGET_RT_MAC_MACHO 1
 
 #pragma c99 on
 #include "AvailabilityMacros.h"
