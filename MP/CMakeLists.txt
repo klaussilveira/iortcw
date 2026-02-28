@@ -82,8 +82,8 @@ set(CLIENT_SRC
     code/qcommon/huffman.c
     code/qcommon/q_math.c
     code/qcommon/q_shared.c
-    ${PROJECT_SOURCE_DIR}/libs/zlib-1.2.11/unzip.c
-    ${PROJECT_SOURCE_DIR}/libs/zlib-1.2.11/ioapi.c
+    ${PROJECT_SOURCE_DIR}/libs/zlib-1.3.2/contrib/minizip/unzip.c
+    ${PROJECT_SOURCE_DIR}/libs/zlib-1.3.2/contrib/minizip/ioapi.c
     code/qcommon/puff.c
     code/qcommon/vm.c
     code/qcommon/vm_interpreted.c
@@ -348,8 +348,8 @@ set(DEDICATED_SRC
     code/qcommon/huffman.c
     code/qcommon/q_math.c
     code/qcommon/q_shared.c
-    ${PROJECT_SOURCE_DIR}/libs/zlib-1.2.11/unzip.c
-    ${PROJECT_SOURCE_DIR}/libs/zlib-1.2.11/ioapi.c
+    ${PROJECT_SOURCE_DIR}/libs/zlib-1.3.2/contrib/minizip/unzip.c
+    ${PROJECT_SOURCE_DIR}/libs/zlib-1.3.2/contrib/minizip/ioapi.c
     code/qcommon/vm.c
     code/qcommon/vm_interpreted.c
     code/botlib/be_aas_bspq3.c
@@ -701,7 +701,8 @@ if(BUILD_CLIENT)
             code/sys
             code/botlib
             code/splines
-            ${PROJECT_SOURCE_DIR}/libs/zlib-1.2.11
+            ${PROJECT_SOURCE_DIR}/libs/zlib-1.3.2
+            ${PROJECT_SOURCE_DIR}/libs/zlib-1.3.2/contrib/minizip
             ${PROJECT_SOURCE_DIR}/libs
             ${SDL2_INCLUDE_DIR}
     )
@@ -769,7 +770,8 @@ if(BUILD_SERVER)
             code/sys
             code/botlib
             code/null
-            ${PROJECT_SOURCE_DIR}/libs/zlib-1.2.11
+            ${PROJECT_SOURCE_DIR}/libs/zlib-1.3.2
+            ${PROJECT_SOURCE_DIR}/libs/zlib-1.3.2/contrib/minizip
     )
     target_compile_options(iowolfded PRIVATE ${MP_BASE_CFLAGS})
     target_compile_definitions(iowolfded PRIVATE DEDICATED)
