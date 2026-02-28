@@ -4677,6 +4677,74 @@ void CG_FireWeapon( centity_t *cent ) {
 	// RF, kick angles
 	if ( ent->number == cg.snap->ps.clientNum ) {
 		CG_WeaponFireRecoil( ent->weapon );
+
+		// client-side predicted impacts
+		// trace from the predicted viewpoint and show the hit effect
+		// immediately instead of waiting for the server event
+		switch ( ent->weapon ) {
+		case WP_KNIFE:
+		{
+			trace_t tr;
+			vec3_t muzzle, forward, end;
+
+			AngleVectors( cg.predictedPlayerState.viewangles, forward, NULL, NULL );
+			VectorCopy( cg.predictedPlayerState.origin, muzzle );
+			muzzle[2] += cg.predictedPlayerState.viewheight;
+			VectorMA( muzzle, 48, forward, end );
+			CG_Trace( &tr, muzzle, NULL, NULL, end, cg.predictedPlayerState.clientNum, MASK_SHOT );
+
+			if ( tr.fraction < 1.0f ) {
+				if ( tr.entityNum < MAX_CLIENTS ) {
+					CG_Bleed( tr.endpos, tr.entityNum );
+				} else {
+					CG_MissileHitWall( ent->weapon, 0, tr.endpos, tr.plane.normal, 0 );
+				}
+			}
+			break;
+		}
+		case WP_LUGER:
+		case WP_SILENCER:
+		case WP_AKIMBO_LUGER:
+		case WP_AKIMBO_SILENCEDLUGER:
+		case WP_COLT:
+		case WP_SILENCED_COLT:
+		case WP_AKIMBO_COLT:
+		case WP_AKIMBO_SILENCEDCOLT:
+		case WP_MP40:
+		case WP_THOMPSON:
+		case WP_STEN:
+		case WP_GARAND:
+		case WP_GARAND_SCOPE:
+		case WP_K43:
+		case WP_K43_SCOPE:
+		case WP_KAR98:
+		case WP_CARBINE:
+		case WP_FG42:
+		case WP_FG42SCOPE:
+		case WP_MOBILE_MG42:
+		case WP_MOBILE_MG42_SET:
+		{
+			trace_t tr;
+			vec3_t muzzle, forward, end;
+
+			AngleVectors( cg.predictedPlayerState.viewangles, forward, NULL, NULL );
+			VectorCopy( cg.predictedPlayerState.origin, muzzle );
+			muzzle[2] += cg.predictedPlayerState.viewheight;
+			VectorMA( muzzle, 8192, forward, end );
+			CG_Trace( &tr, muzzle, NULL, NULL, end, cg.predictedPlayerState.clientNum, MASK_SHOT );
+
+			if ( tr.fraction < 1.0f ) {
+				if ( tr.entityNum < MAX_CLIENTS ) {
+					CG_Bleed( tr.endpos, tr.entityNum );
+				} else {
+					CG_MissileHitWall( ent->weapon, 1, tr.endpos, tr.plane.normal, tr.surfaceFlags );
+				}
+			}
+			break;
+		}
+		default:
+			break;
+		}
 	}
 
 	if ( ent->weapon == WP_MORTAR_SET ) {
