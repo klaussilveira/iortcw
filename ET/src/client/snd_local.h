@@ -67,6 +67,7 @@ typedef struct sfx_s {
     qboolean soundCompressed; // not in Memory
     int soundCompressionMethod;
     int soundLength;
+    int soundChannels;
     char soundName[MAX_QPATH];
     int lastTimeUsed;
     struct sfx_s* next;
@@ -75,6 +76,7 @@ typedef struct sfx_s {
 typedef struct {
     int channels;
     int samples;          // mono samples in buffer
+    int fullsamples;      // samples with all channels in buffer (samples divided by channels)
     int submission_chunk; // don't mix less than this #
     int samplebits;
     int speed;
@@ -103,7 +105,6 @@ typedef struct loopSound_s {
 
 typedef struct
 {
-    int* prt; // DAJ BUGFIX for freelist/endlist pointer
     int allocTime;
     int startSample; // START_SAMPLE_IMMEDIATE = set immediately on next mix
     int entnum;      // to allow overriding a specific sound
@@ -229,9 +230,6 @@ typedef struct {
 
     qboolean stopSounds;
 
-    channel_t* freelist;
-    channel_t* endflist;
-
     int s_numSfx;
 
     s_pushStack pushPop[MAX_PUSHSTACK];
@@ -280,6 +278,7 @@ qboolean S_LoadSound(sfx_t* sfx);
 void SND_free(sndBuffer* v);
 sndBuffer* SND_malloc();
 void SND_setup();
+void SND_shutdown(void);
 
 void S_PaintChannels(int endtime);
 
@@ -310,7 +309,7 @@ void encodeMuLaw(sfx_t* sfx, short* packets);
 extern short mulawToShort[256];
 
 extern short* sfxScratchBuffer;
-extern const sfx_t* sfxScratchPointer;
+extern sfx_t* sfxScratchPointer;
 extern int sfxScratchIndex;
 
 extern unsigned char s_entityTalkAmplitude[MAX_CLIENTS];

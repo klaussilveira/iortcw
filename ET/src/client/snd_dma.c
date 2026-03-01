@@ -146,8 +146,6 @@ void S_SoundInfo_f(void)
     Com_Printf("----------------------\n");
 }
 
-void S_ChannelSetup();
-
 /*
 ================
 S_Init
@@ -224,7 +222,6 @@ void S_Init(void)
         S_StopAllSounds();
 
         S_SoundInfo_f();
-        S_ChannelSetup();
 
         Sys_LeaveCriticalSection(crit);
     }
@@ -239,15 +236,6 @@ void S_ChannelFree(channel_t* v)
 {
     v->thesfx = NULL;
     v->threadReady = qfalse;
-#ifdef _DEBUG
-    if (v > &s_channels[MAX_CHANNELS] || v < &s_channels[0]) {
-        Com_DPrintf("s_channel OUT OF BOUNDS\n");
-        return;
-    }
-#endif
-    *(channel_t**)snd.endflist = v;
-    snd.endflist = v;
-    *(channel_t**)v = NULL;
 }
 
 /*
@@ -255,51 +243,18 @@ void S_ChannelFree(channel_t* v)
 S_ChannelMalloc
 ================
 */
-channel_t* S_ChannelMalloc()
+channel_t* S_ChannelMalloc(void)
 {
-    channel_t* v;
-    if (snd.freelist == NULL) {
-        return NULL;
-    }
-    // RF, be careful not to lose our freelist
-    if (*(channel_t**)snd.freelist == NULL) {
-        return NULL;
-    }
-#ifdef _DEBUG
-    if (*(channel_t**)snd.freelist > &s_channels[MAX_CHANNELS] || *(channel_t**)snd.freelist < &s_channels[0]) { // DAJ	extra check
-        Com_DPrintf("s_channel OUT OF BOUNDS\n");
-        return NULL;
-    }
-#endif
-    v = snd.freelist;
-    snd.freelist = *(channel_t**)snd.freelist;
-    v->allocTime = Sys_Milliseconds();
-    return v;
-}
+    int i;
 
-/*
-================
-S_ChannelSetup
-================
-*/
-void S_ChannelSetup()
-{
-    channel_t *p, *q;
-
-    // clear all the sounds so they don't
-    Com_Memset(s_channels, 0, sizeof(s_channels));
-
-    p = s_channels;
-    ;
-    q = p + MAX_CHANNELS;
-    while (--q > p) {
-        *(channel_t**)q = q - 1;
+    for (i = 0; i < MAX_CHANNELS; i++) {
+        if (!s_channels[i].thesfx) {
+            s_channels[i].allocTime = Sys_Milliseconds();
+            return &s_channels[i];
+        }
     }
 
-    snd.endflist = q;
-    *(channel_t**)q = NULL;
-    snd.freelist = p + MAX_CHANNELS - 1;
-    Com_DPrintf("Channel memory manager started\n");
+    return NULL;
 }
 
 /*
@@ -316,6 +271,7 @@ void S_Shutdown(void)
     Sys_EnterCriticalSection(crit);
 
     SNDDMA_Shutdown();
+    SND_shutdown();
     snd.s_soundStarted = 0;
     snd.s_soundMute = 1;
 
@@ -1713,7 +1669,7 @@ void S_ClearSounds(qboolean clearStreaming, qboolean clearMusic)
         Sys_LeaveCriticalSection(crit);
 
         // NERVE - SMF - clear out channels so they don't finish playing when audio restarts
-        S_ChannelSetup();
+        Com_Memset(s_channels, 0, sizeof(s_channels));
     } else {
         Sys_LeaveCriticalSection(crit);
     }
